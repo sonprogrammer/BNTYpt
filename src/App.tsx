@@ -1,11 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { TimerComponent } from './components';
+import { NavbarComponent, TimerComponent } from './components';
 
 function App() {
   return (
-    <TimerComponent />
+    <>
+    <NavbarComponent />
+    {/* <TimerComponent /> */}
+    </>
   );
 }
 

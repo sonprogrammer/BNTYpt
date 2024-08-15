@@ -1,9 +1,7 @@
 /* eslint-disable*/
-
-
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { StyledBtns, StyledContainer, StyledTimeBox, StyledTimeSetting } from './style'
+import { StyledBtns, StyledContainer, StyledResetBtn, StyledStartBtn, StyledStopBtn, StyledTimeBox, StyledTimeSetting } from './style'
 
 
 const TimerComponent = () => {
@@ -72,6 +70,8 @@ const TimerComponent = () => {
           )}
         </h2>
         </StyledTimeBox>
+        {!isRunning ? (
+          <>
           <h2>타이머 설정</h2>
         <StyledTimeSetting>
           <input
@@ -89,16 +89,21 @@ const TimerComponent = () => {
             // min="0"
           /> <p>초</p>
         </StyledTimeSetting>
+        </>
+        ) : (
+          <></>
+        )}
+          
       <StyledBtns>
-        <button onClick={startTimer} disabled={isRunning}>
+        <StyledStartBtn onClick={startTimer} disabled={isRunning}>
             start
-        </button>
-        <button onClick={stopTimer} disabled={!isRunning}>
+        </StyledStartBtn>
+        <StyledStopBtn onClick={stopTimer} disabled={!isRunning}>
             stop
-        </button>
-        <button onClick={resetTimer}>
+        </StyledStopBtn>
+        <StyledResetBtn onClick={resetTimer}>
             reset
-        </button>
+        </StyledResetBtn>
       </StyledBtns>
     </StyledContainer>
   )

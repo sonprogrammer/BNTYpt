@@ -13,6 +13,13 @@ export const StyledContainer = styled.div`
         h-[300px]
         rounded-[50px]
     `}
+    h1{
+        ${tw`
+            text-2xl
+            font-bold
+            mb-2
+        `}
+    }
     
 `
 
@@ -67,5 +74,26 @@ export const StyledBtns = styled.div`
         w-[50%]
         flex
         justify-between
+    `}
+`
+export const StyledStartBtn = styled.button`
+    ${tw`
+        
+    `}
+    &:hover{
+        color : red;
+    }
+`
+export const StyledStopBtn = styled.button`
+    ${tw`
+
+    `}
+    &:hover{
+        color : skyblue;
+    }
+`
+export const StyledResetBtn = styled.button`
+    ${tw`
+
     `}
 `
