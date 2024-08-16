@@ -9,10 +9,10 @@ const NavbarComponent = () => {
         {/* logo */}
       </StyledTitle>
       <StyledMenus>
-        <button>bodyCheck</button>
-        <button>food</button>
-        <button>today</button>
-        <button>timer</button>
+        <button>bodyCheck 📸</button>
+        <button>food 🥗</button>
+        <button>today 🏋️</button>
+        <button>timer ⏰</button>
       </StyledMenus>
     </div>
   )
