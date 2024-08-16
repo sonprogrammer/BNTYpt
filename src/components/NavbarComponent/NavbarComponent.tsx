@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyledMenus, StyledTitle } from './style'
+import { Link } from 'react-router-dom'
 
 const NavbarComponent = () => {
   return (
@@ -9,7 +10,9 @@ const NavbarComponent = () => {
         {/* logo */}
       </StyledTitle>
       <StyledMenus>
-        <button>bodyCheck 📸</button>
+        <Link to="/bodycheck">
+          <button>bodyCheck 📸</button>
+        </Link>
         <button>food 🥗</button>
         <button>today 🏋️</button>
         <button>timer ⏰</button>
