@@ -3,7 +3,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { NavbarComponent, TimerComponent } from './components';
+import { LoginComponent, NavbarComponent, TimerComponent } from './components';
 import { MainPage } from './pages';
 import { Route, Routes } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ function App() {
     <>
       <Routes>
         <Route path='/' element={
-          <MainPage />
+          <LoginComponent />
         }/>
       </Routes>
 
