@@ -26,7 +26,7 @@ const LoginComponent = () => {
         <StyledBox>
             <StyledContainer>
                 <h1>bnty login</h1>
-                <StyledLogo src="./logo2.png" alt="" />
+                <StyledLogo src="./logo.png" alt="" />
                 <StyledEmailInput
                     type="email" 
                     placeholder='email'

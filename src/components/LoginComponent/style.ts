@@ -29,7 +29,7 @@ export const StyledContainer = styled.div`
         ${tw`
             text-[77px]
             text-red-900
-            mb-5
+            mb-4
             mt-3
         `}
         font-family : "Anton"
@@ -38,9 +38,9 @@ export const StyledContainer = styled.div`
 
 export const StyledLogo = styled.img`
     ${tw`
-        w-[77px]
-        h-[77px]
-        mb-6
+        w-[100px]
+        h-[100px]
+        mb-7
     `}
 `
 
