@@ -1,19 +1,29 @@
 /* eslint-disable*/
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { LoginComponent, NavbarComponent, TimerComponent } from './components';
-import { MainPage } from './pages';
+import { BodyCheckPage, MainPage, LayoutPage } from './pages';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <>
+
       <Routes>
+        <Route element={
+          <Suspense fallback={<div></div>}>
+              <LayoutPage />
+          </Suspense>
+        }>
         <Route path='/' element={
-          <LoginComponent />
+          <MainPage />
         }/>
+        <Route path='/bodycheck' element={
+          <BodyCheckPage />
+        }/>
+        </Route>
       </Routes>
 
     </>

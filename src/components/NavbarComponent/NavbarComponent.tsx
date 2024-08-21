@@ -7,7 +7,6 @@ const NavbarComponent = () => {
     <div>
       <StyledTitle>
         <h1>BNTY</h1> 
-        {/* logo */}
       </StyledTitle>
       <StyledMenus>
         <Link to="/bodycheck">
