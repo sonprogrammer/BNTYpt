@@ -1,3 +1,6 @@
 export * from './MainPage'
 export * from './BodyCheckPage'
 export * from './LayoutPage'
+export * from './FoodPage'
+export * from './TodayPage'
+export * from './TimerPage'

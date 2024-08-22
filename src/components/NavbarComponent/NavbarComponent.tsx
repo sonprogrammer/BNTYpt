@@ -6,15 +6,23 @@ const NavbarComponent = () => {
   return (
     <div>
       <StyledTitle>
-        <h1>BNTY</h1> 
+        <Link to="/">
+          <h1>BNTY</h1> 
+        </Link>
       </StyledTitle>
       <StyledMenus>
         <Link to="/bodycheck">
           <button>bodyCheck 📸</button>
         </Link>
-        <button>food 🥗</button>
-        <button>today 🏋️</button>
-        <button>timer ⏰</button>
+        <Link to="/food">
+          <button>food 🥗</button>
+        </Link>
+        <Link to="/today">
+          <button>today 🏋️</button>
+        </Link>
+        <Link to="/timer">
+          <button>timer ⏰</button>
+        </Link>
       </StyledMenus>
     </div>
   )

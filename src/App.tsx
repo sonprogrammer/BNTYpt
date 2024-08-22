@@ -4,7 +4,7 @@ import React, { Suspense } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { LoginComponent, NavbarComponent, TimerComponent } from './components';
-import { BodyCheckPage, MainPage, LayoutPage } from './pages';
+import { BodyCheckPage, MainPage, LayoutPage, FoodPage, TodayPage, TimerPage } from './pages';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -22,6 +22,15 @@ function App() {
         }/>
         <Route path='/bodycheck' element={
           <BodyCheckPage />
+        }/>
+        <Route path='/food' element={
+          <FoodPage />
+        }/>
+        <Route path='/today' element={
+          <TodayPage />
+        }/>
+        <Route path='/timer' element={
+          <TimerPage />
         }/>
         </Route>
       </Routes>

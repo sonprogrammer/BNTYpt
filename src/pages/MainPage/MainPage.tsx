@@ -4,7 +4,7 @@ import { NavbarComponent } from '../../components'
 const MainPage = () => {
   return (
     <div>
-      <NavbarComponent />
+      mainpage
     </div>
   )
 }
