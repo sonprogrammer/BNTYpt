@@ -4,7 +4,7 @@ import React, { Suspense } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { LoginComponent, NavbarComponent, TimerComponent } from './components';
-import { BodyCheckPage, MainPage, LayoutPage, FoodPage, TodayPage, TimerPage } from './pages';
+import { BodyCheckPage, MainPage, LayoutPage, FoodPage, TodayPage, TimerPage, LandingPage } from './pages';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -12,6 +12,9 @@ function App() {
     <>
 
       <Routes>
+        <Route path='/landing' element={
+          <LandingPage />
+        }/>
         <Route element={
           <Suspense fallback={<div></div>}>
               <LayoutPage />

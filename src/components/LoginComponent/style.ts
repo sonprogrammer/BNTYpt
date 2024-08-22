@@ -9,6 +9,7 @@ export const StyledBox = styled.div`
         items-center
         justify-center
     `}
+    
 `
 
 export const StyledContainer = styled.div`
@@ -25,6 +26,7 @@ export const StyledContainer = styled.div`
         // p-24
         bg-neutral-600
     `}
+    background-color: rgba(82, 82, 82, 0.8);
     h1{
         ${tw`
             text-[77px]

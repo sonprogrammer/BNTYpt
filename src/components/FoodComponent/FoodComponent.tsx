@@ -1,9 +1,10 @@
 import React from 'react'
+import { PhotoComponent } from '../PhotoComponent'
 
 const FoodComponent = () => {
   return (
     <div>
-      FoodComponent
+      <PhotoComponent />
     </div>
   )
 }

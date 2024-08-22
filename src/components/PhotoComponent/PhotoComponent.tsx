@@ -10,14 +10,14 @@ const PhotoComponent = () => {
             <StyledImage src="logo.png" alt="image" />
             <StyledText>{uploadTime}</StyledText>
         </StyledBox>
-        <StyledBox>
+        {/* <StyledBox>
             <StyledImage src="logo.png" alt="image" />
             <StyledText>{uploadTime}</StyledText>
         </StyledBox>
         <StyledBox>
             <StyledImage src="logo.png" alt="image" />
             <StyledText>{uploadTime}</StyledText>
-        </StyledBox>
+        </StyledBox> */}
     </StyledContainer>
   )
 }
