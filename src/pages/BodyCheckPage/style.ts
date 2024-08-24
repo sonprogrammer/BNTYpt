@@ -3,10 +3,12 @@ import styled from "styled-components";
 
 export const StylecContainer = styled.div`
     ${tw`
-        bg-stone-400
-        relative
+        h-screen
+        // bg-stone-400
+        // relative
         
     `}
-    min-height: 100vh;
-    overflow: hidden;
+    // z-index: 1;
+    // min-height: 100vh;
+    // overflow: hidden;
 `

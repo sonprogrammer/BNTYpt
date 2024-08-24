@@ -22,6 +22,7 @@ export const StyledMenus = styled.div`
         py-4
         text-xl
         font-bold
+        bg-gray-400
     `}
         border-bottom: 1px solid;
     button{

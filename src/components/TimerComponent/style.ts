@@ -1,6 +1,18 @@
 import tw from 'twin.macro'
 import styled from 'styled-components'
 
+
+export const StyledWrapper = styled.div`
+    ${tw`
+        flex
+        items-center
+        justify-center
+        // h-screen
+        w-full
+        mt-40
+    `}
+`
+
 export const StyledContainer = styled.div`
     ${tw`
         flex
@@ -12,6 +24,7 @@ export const StyledContainer = styled.div`
         w-[400px]
         h-[300px]
         rounded-[50px]
+        text-center
     `}
     h1{
         ${tw`
@@ -27,6 +40,7 @@ export const StyledTimeBox = styled.div`
     ${tw`
         flex
         flex-col
+
         items-center
         mb-8
     `}

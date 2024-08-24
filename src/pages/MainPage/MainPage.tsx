@@ -1,10 +1,11 @@
 import React from 'react'
-import { NavbarComponent } from '../../components'
+import { AddPhotoComponent, NavbarComponent } from '../../components'
 
 const MainPage = () => {
   return (
-    <div>
+    <div className='h-screen'>
       mainpage
+
     </div>
   )
 }

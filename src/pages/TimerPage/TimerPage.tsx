@@ -1,9 +1,10 @@
 import React from 'react'
+import { TimerComponent } from '../../components'
 
 const TimerPage = () => {
   return (
-    <div>
-      timer
+    <div className='h-screen'>
+      <TimerComponent />
     </div>
   )
 }

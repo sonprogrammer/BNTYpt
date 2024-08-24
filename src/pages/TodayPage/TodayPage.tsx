@@ -2,8 +2,8 @@ import React from 'react'
 
 const TodayPage = () => {
   return (
-    <div>
-      today
+    <div className='h-screen'>
+      todaydfdfsadfads
     </div>
   )
 }

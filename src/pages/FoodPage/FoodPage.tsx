@@ -3,7 +3,7 @@ import { FoodComponent } from '../../components'
 
 const FoodPage = () => {
   return (
-    <div>
+    <div className='h-screen'>
       <FoodComponent />
     </div>
   )
