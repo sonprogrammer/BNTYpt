@@ -2,11 +2,15 @@ import React from 'react'
 import { PhotoComponent } from '../PhotoComponent'
 import { AddPhotoComponent } from '../AddPhotoComponent'
 
-const FoodComponent = () => {
+interface AddPhotoComponentProps {
+  onClick: () => void;
+}
+
+const FoodComponent = ({onClick} : AddPhotoComponentProps) => {
   return (
     <div>
       <PhotoComponent />
-      <AddPhotoComponent />
+      <AddPhotoComponent onClick={onClick}/>
     </div>
   )
 }

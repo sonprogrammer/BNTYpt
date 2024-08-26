@@ -1,9 +1,13 @@
 import React from 'react'
 import { StyledAdd } from './style'
 
-const AddPhotoComponent = () => {
+interface AddPhotoComponentProps {
+  onClick: () => void;
+}
+
+const AddPhotoComponent = ({onClick} : AddPhotoComponentProps) => {
   return (
-    <StyledAdd>
+    <StyledAdd onClick={onClick}>
       +
     </StyledAdd>
   )

@@ -1,12 +1,22 @@
-import React from 'react'
-import { AddPhotoComponent, BodyCheckComponent } from '../../components'
+import React, { useState } from 'react'
+import { AddPhotoComponent, BodyCheckComponent, UploadModalComponent } from '../../components'
 import { StylecContainer } from './style'
 
 const BodyCheckPage = () => {
+  const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
+
+  const handleAddPhotoClick = () => {
+    setShowUploadModal(true)
+  }
+  const handleCloseModal = () => {
+    setShowUploadModal(false);
+  };
+  
   return (
     <StylecContainer>
         <BodyCheckComponent />
-        <AddPhotoComponent/>
+        <AddPhotoComponent onClick={handleAddPhotoClick}/>
+        {showUploadModal && <UploadModalComponent onClose={handleCloseModal}/>}
     </StylecContainer>
   )
 }

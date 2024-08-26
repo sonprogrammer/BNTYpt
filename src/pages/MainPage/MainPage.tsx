@@ -5,7 +5,6 @@ const MainPage = () => {
   return (
     <div className='h-screen'>
       mainpage
-    <UploadModalComponent />
     </div>
   )
 }
