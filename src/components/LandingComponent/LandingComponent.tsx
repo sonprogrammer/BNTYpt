@@ -1,10 +1,8 @@
-/* eslint-disable */
-
 import React, { useState } from 'react'
 import KakaoLogin from 'react-kakao-login'
-import { StyledBox, StyledContainer, StyledEmailInput, StyledLoginBtn, StyledLogo, StyledPasswordInput, StyledSubmitBtns } from './style'
+import { StyledBox, StyledContainer } from './style'
 
-const LoginComponent = () => {
+const LandingComponent = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     
@@ -23,41 +21,26 @@ const LoginComponent = () => {
         console.log(error);
     };
     return (
-        <StyledBox>
-            <StyledContainer>
+        <StyledContainer>
+            <StyledBox>
                 <h1>BNTY</h1>
-                <StyledLogo src="./logo.png" alt="" />
-                <StyledEmailInput
-                    type="email" 
-                    placeholder='email'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                     />
-                <StyledPasswordInput 
-                    type="password" 
-                    placeholder='password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                     />
-                <StyledSubmitBtns>
-                    <StyledLoginBtn type="submit">로그인하기</StyledLoginBtn>
+                <img src="./logo.png" alt="" />
                     <KakaoLogin
                         token={kakaoClientId}
                         onSuccess={kakaoOnSuccess}
                         onFail={kakaoOnFailure}
                         style={{
+                            // backgroundColor: 'rgb(69 10 10)',
                             backgroundColor: 'rgb(153 27 27)',
                             color: 'white',
                             borderRadius: '5px',
-                            padding: '10px 30px'
+                            padding: '10px 30px',
+                            
                         }}
                     />
-                </StyledSubmitBtns>
+                </StyledBox>
             </StyledContainer>
-        </StyledBox>
     )
 }
 
-export default LoginComponent
+export default LandingComponent

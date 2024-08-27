@@ -19,7 +19,7 @@ export const StyledContainer = styled.div`
         flex-col
         items-center
         justify-center
-        bg-blue-900
+        bg-blue-950
         text-white
         w-[400px]
         h-[300px]

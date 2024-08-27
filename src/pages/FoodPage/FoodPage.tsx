@@ -14,7 +14,12 @@ const FoodPage = () => {
   return (
     <div className='h-screen'>
       <FoodComponent onClick={handleAddPhotoClick}/>
-      {showUploadModal && <UploadModalComponent onClose={handleCloseModal}/>}
+      {showUploadModal && 
+      <>
+        <div className='fixed inset-0 bg-black bg-opacity-50'></div>
+        <UploadModalComponent onClose={handleCloseModal}/>
+      </>
+        }
     </div>
   )
 }

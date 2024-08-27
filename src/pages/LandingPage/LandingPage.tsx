@@ -1,6 +1,7 @@
 import React from 'react'
-import { LoginComponent } from '../../components'
+import { LandingComponent, LoginComponent } from '../../components'
 import { StyledContainer, StyledLogin } from './style'
+
 
 const LandingPage = () => {
   return (
@@ -10,7 +11,8 @@ const LandingPage = () => {
                 your browser does not support
         </video>
         <StyledLogin>
-            <LoginComponent />
+            {/* <LoginComponent /> */}
+            <LandingComponent />
         </StyledLogin>
     </StyledContainer>
   )

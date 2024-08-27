@@ -3,7 +3,7 @@ import tw from "twin.macro";
 
 export const StyledContainer = styled.div`
     ${tw`
-       bg-white
+       bg-stone-400
        flex
        flex-col
        h-[50%]
