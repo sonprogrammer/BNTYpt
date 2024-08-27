@@ -12,7 +12,7 @@ function App() {
     <>
 
       <Routes>
-        <Route path='/landing' element={
+        <Route path='/' element={
           <LandingPage />
         }/>
         <Route element={
@@ -20,7 +20,7 @@ function App() {
               <LayoutPage />
           </Suspense>
         }>
-        <Route path='/' element={
+        <Route path='/browse' element={
           <MainPage />
         }/>
         <Route path='/bodycheck' element={
@@ -29,7 +29,7 @@ function App() {
         <Route path='/food' element={
           <FoodPage />
         }/>
-        <Route path='/today' element={
+        <Route path='/workout' element={
           <TodayPage />
         }/>
         <Route path='/timer' element={

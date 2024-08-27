@@ -6,7 +6,7 @@ const NavbarComponent = () => {
   return (
     <div>
       <StyledTitle>
-        <Link to="/">
+        <Link to="/browse">
           <h1>BNTY</h1> 
         </Link>
       </StyledTitle>
@@ -17,8 +17,8 @@ const NavbarComponent = () => {
         <Link to="/food">
           <button>food 🥗</button>
         </Link>
-        <Link to="/today">
-          <button>today 🏋️</button>
+        <Link to="/workout">
+          <button>work out 🏋️</button>
         </Link>
         <Link to="/timer">
           <button>timer ⏰</button>
