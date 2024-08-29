@@ -8,18 +8,12 @@ export const StyledBox = styled.div`
     ${tw`
         flex
         flex-col
-        lg:w-full
-        lg:flex-row
-        lg:items-start
+        lg:w-[100vw]
+        lg:items-center
         lg:gap-4
+        p-2
+        mt-2
     `}
-    @media(max-width: 768px){
-        ${tw`
-            grid
-            grid-rows-2
-
-        `}
-    }
 `
 
 export const StyledContainer = styled.div`
@@ -29,9 +23,12 @@ export const StyledContainer = styled.div`
         mx-auto
         mb-4
     `}
+    max-width: 320px;
+    min-width: 320px;
     display: flex;
     flex-direction: column;
-    max-width: 1200px;
+    width: 100%;
+    flex-grow: 0;
 `
 export const StyledHeader = styled.header`
     ${tw`
@@ -58,6 +55,7 @@ export const StyledGrid = styled.div`
         grid
         grid-cols-7
         gap-1
+        w-[100%]
     `}
 `
 export const StyledDay = styled.div`
@@ -79,7 +77,7 @@ export const DotWrapper = styled.div`
         left-1/2 
         transform -translate-x-1/2 
         flex 
-        space-x-3
+        space-x-2
     `}
 
 `;
@@ -95,16 +93,21 @@ export const Dot = styled.div<{ color : string }>`
 
 export const StyledDetail = styled.div`
     ${tw`
-        w-full
         p-4
         bg-stone-400
         rounded-lg
-        lg:w-1/3
+        w-[320px]
+        flex-shrink-0
+
     `}
+
+    max-height: 220px;
+    overflow-y: auto;
     @media (max-width:768px) {
         ${tw`
             mt-4
-        `}
-        // height: calc(100vh-3rem);
-    }    
+            w-[320px]
+        `
+       }    
+}
 `
