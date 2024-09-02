@@ -26,13 +26,13 @@ function App() {
         <Route path='/bodycheck' element={
           <BodyCheckPage />
         }/>
-        <Route path='/food' element={
+        <Route path='/calendar' element={
           <FoodPage />
         }/>
-        <Route path='/workout' element={
+        <Route path='/chat' element={
           <TodayPage />
         }/>
-        <Route path='/timer' element={
+        <Route path='/note' element={
           <TimerPage />
         }/>
         </Route>
