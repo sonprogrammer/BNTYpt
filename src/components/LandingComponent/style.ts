@@ -17,7 +17,7 @@ export const StyledBox = styled.div`
         p-10
         rounded-xl
         w-[50%]
-        h-[50%]
+        h-[70%]
         border-[2px]
         border-red-950
         flex
@@ -42,17 +42,17 @@ export const StyledBox = styled.div`
     img{
         width: 100px;
     }
-    @media(max-width:1024px){
+    @media(max-width:1224px){
         ${tw`
             w-[70%]
-            h-[50%]
+            h-[70%]
         `}
     }
 
     @media(max-width:768px){
         ${tw`
             w-[80%]
-            h-[50%]
+            h-[70%]
         `}
     }
     @media(max-width:480px){
@@ -60,8 +60,20 @@ export const StyledBox = styled.div`
         h-[60%]
     }
 `
-export const dfd = styled.div`
+export const StyledRadios = styled.div`
     ${tw`
-
+        flex
+        flex-col
+        items-start
     `}
+    label{
+        ${tw`
+            flex
+            gap-5
+            text-lg
+            text-white
+            font-bold
+        `}
+    }
+
 `

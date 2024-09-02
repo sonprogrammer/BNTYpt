@@ -1,27 +1,34 @@
 import React from 'react'
-import { StyledMenus, StyledTitle } from './style'
+import { StyledMenus } from './style'
 import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendar, faClipboard, faComment } from '@fortawesome/free-solid-svg-icons';
+import { faImage } from '@fortawesome/free-solid-svg-icons';
+
 
 const NavbarComponent = () => {
   return (
     <div>
-      <StyledTitle>
-        <Link to="/browse">
-          <h1>BNTY</h1> 
-        </Link>
-      </StyledTitle>
       <StyledMenus>
         <Link to="/bodycheck">
-          <button>bodyCheck 📸</button>
+          <button>
+          <FontAwesomeIcon icon={faImage} />
+          </button>
         </Link>
-        <Link to="/food">
-          <button>food 🥗</button>
+        <Link to="/calendar">
+          <button>
+            <FontAwesomeIcon icon={faCalendar} />
+          </button>
         </Link>
-        <Link to="/workout">
-          <button>work out 🏋️</button>
+        <Link to="/chat">
+          <button>
+            <FontAwesomeIcon icon={faComment} />
+          </button>
         </Link>
-        <Link to="/timer">
-          <button>timer ⏰</button>
+        <Link to="/note">
+          <button>
+            <FontAwesomeIcon icon={faClipboard}/>
+          </button>
         </Link>
       </StyledMenus>
     </div>

@@ -1,17 +1,20 @@
 import React from 'react'
-import { NavbarComponent } from '../../components'
+import { LogoComponent, NavbarComponent } from '../../components'
 import { Outlet } from 'react-router-dom'
-import { StyledContainer, StyledOutlet } from './style'
+import { StyledContainer, StyledMenus, StyledOutlet } from './style'
 
 function LayoutPage() {
   return (
     <>
       <StyledContainer>
-        <NavbarComponent />
+        <LogoComponent />
         <StyledOutlet>
         <Outlet />
         </StyledOutlet>
       </StyledContainer>
+      <StyledMenus>
+        <NavbarComponent />
+      </StyledMenus>
     </>
   )
 }

@@ -18,3 +18,12 @@ export const StyledOutlet = styled.div`
     bg-stone-500
     `}
 `
+
+export const StyledMenus = styled.div`
+    ${tw`
+        fixed
+        bottom-0
+        left-0
+        w-full
+    `}
+`

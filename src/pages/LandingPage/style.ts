@@ -29,7 +29,7 @@ export const StyledLogin = styled.div`
 
         justify-center
         items-center
-        h-full
+        h-screen
         `}
         z-index: 1;
 `
