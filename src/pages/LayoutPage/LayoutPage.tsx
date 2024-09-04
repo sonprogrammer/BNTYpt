@@ -5,17 +5,16 @@ import { StyledContainer, StyledMenus, StyledOutlet } from './style'
 
 function LayoutPage() {
   return (
-    <>
-      <StyledContainer>
+
+    <StyledContainer>
         <LogoComponent />
-        <StyledOutlet>
+      <StyledOutlet>
         <Outlet />
-        </StyledOutlet>
-      </StyledContainer>
+      </StyledOutlet>
       <StyledMenus>
         <NavbarComponent />
       </StyledMenus>
-    </>
+    </StyledContainer>
   )
 }
 

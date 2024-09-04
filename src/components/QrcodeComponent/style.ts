@@ -6,7 +6,7 @@ export const StyledContainer = styled.div`
         flex
         justify-center
         items-center
-        h-screen
+        h-full
         w-full
     `}
 `
