@@ -3,7 +3,7 @@ import { CalendarComponent } from '../../components'
 
 const CalendarPage = () => {
   return (
-    <div className='h-screen flex flex-col items-center'>
+    <div className='h-full flex flex-col items-center'>
       <CalendarComponent />
     </div>
   )
