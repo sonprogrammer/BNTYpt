@@ -4,7 +4,6 @@ import { ChatRoomComponent } from '../../components'
 const ChatPage = () => {
   return (
     <div className='h-full'>
-      chatPage
       <ChatRoomComponent />
     </div>
   )

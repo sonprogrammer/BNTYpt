@@ -5,12 +5,13 @@ import tw from "twin.macro";
 export const StyledContainer = styled.div`
     ${tw`
         flex
-        border
+        border-b
         border-black
         p-7
+        
     `}
     hover:{
-        
+        background-color: black;
     }
 `
 export const StyledProfile = styled.div`
