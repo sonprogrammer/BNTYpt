@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { QrReader, OnResultFunction } from 'react-qr-reader'
-import { StyledContainer, StyledMemberBox, StyledTrainerBox } from './style'
+import { StyledContainer, StyledMemberBox, StyledQrReader, StyledTrainerBox } from './style'
 
 // usestate훅으로 만약 로그인한 사람이 회원이면 출석체크하기 버튼이 나와서 카메라가 활성화되는 버튼이
 // 나오고 트레이너면 qr코드가 떠있는다
@@ -72,14 +72,19 @@ const QrcodeComponent = () => {
                 <StyledMemberBox>
                     {memberClicked ?
                         <div className='w-[100%]'>
-                            <QrReader
+                            <StyledQrReader
                                 constraints={{ facingMode: 'user' }}
                                 onResult={handleResult}
                             />
-                            <div onClick={handleClick}>go back</div>
+                            <div className='mb-7 text-center hover:font-bold hover:text-red-500 hover:cursor-pointer' onClick={handleClick}>go back</div>
                         </div>
                         :
-                        <div onClick={handleClick}>scan Qr code</div>
+                        <div 
+                            onClick={handleClick}
+                            className='font-bold text-xl hover:cursor-pointer hover:text-red-900'
+                            >
+                        scan Qr code
+                        </div>
                     }
 
                     {scannedData && <p>스캔된 데이터: {scannedData}</p>}

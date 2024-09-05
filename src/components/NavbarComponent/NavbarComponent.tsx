@@ -8,7 +8,6 @@ import { faImage } from '@fortawesome/free-solid-svg-icons';
 
 const NavbarComponent = () => {
   return (
-    <div>
       <StyledMenus>
         <Link to="/bodycheck">
           <button>
@@ -31,7 +30,6 @@ const NavbarComponent = () => {
           </button>
         </Link>
       </StyledMenus>
-    </div>
   )
 }
 

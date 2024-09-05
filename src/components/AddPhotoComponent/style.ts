@@ -4,8 +4,8 @@ import tw from "twin.macro";
 export const StyledAdd = styled.div`
     ${tw`
         fixed
-        bottom-10
-        right-10
+        bottom-20
+        right-5
         w-20
         h-20
         text-center
@@ -16,6 +16,7 @@ export const StyledAdd = styled.div`
         rounded-full
         cursor-pointer
     `}
+    opacity: 0.7;
     z-index: 1000;
     transition: transform 0.3s;
     &:hover{

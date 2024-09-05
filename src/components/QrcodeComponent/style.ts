@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import tw from "twin.macro";
+import { QrReader } from 'react-qr-reader';
 
 export const StyledContainer = styled.div`
     ${tw`
@@ -17,7 +18,7 @@ export const StyledTrainerBox = styled.div`
         justify-center
         items-center
         p-4
-        bg-white
+        bg-gray-700
         rounded-lg
         shadow-lg
     `}
@@ -36,10 +37,18 @@ export const StyledMemberBox = styled.div`
         justify-center
         items-center
         p-4
-        bg-white
+        bg-gray-700
         rounded-lg
         shadow-lg
     `}
     width: 300px;
     height: 300px;
 `
+
+export const StyledQrReader = styled(QrReader)`
+    ${tw`
+        p-0
+        m-0
+        box-border
+    `}
+`;

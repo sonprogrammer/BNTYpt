@@ -4,9 +4,9 @@ import tw from "twin.macro"
 
 export const StyledTitle = styled.div`
     ${tw`
-       fixed 
-       top-0
-       left-0
+    //    fixed 
+    //    top-0
+    //    left-0
        w-full
         text-center
         py-4

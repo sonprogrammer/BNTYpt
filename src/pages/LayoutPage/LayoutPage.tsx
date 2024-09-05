@@ -7,7 +7,7 @@ function LayoutPage() {
   return (
 
     <StyledContainer>
-        <LogoComponent />
+      <LogoComponent />
       <StyledOutlet>
         <Outlet />
       </StyledOutlet>

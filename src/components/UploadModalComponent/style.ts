@@ -47,13 +47,6 @@ export const StyledTitle = styled.div`
         }
     }
 `
-// export const StyledCloseBtn = styled.div`
-//     ${tw`
-        
-//         // font-bold
-//         // text-2xl
-//     `}
-// `
 
 export const StyledInput = styled.div`
     ${tw`
@@ -71,7 +64,6 @@ export const StyledInput = styled.div`
             resize-none
             w-full
         `}
-        min-width: 300px;
     }
     
     input[type="file"]{
