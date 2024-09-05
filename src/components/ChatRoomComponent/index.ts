@@ -1,0 +1,1 @@
+export { default as ChatRoomComponent } from './ChatRoomComponent'
