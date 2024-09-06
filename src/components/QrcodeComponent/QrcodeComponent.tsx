@@ -63,6 +63,7 @@ const QrcodeComponent = () => {
 
     return (
         <StyledContainer>
+            
             {role === 'trainer' ? (
                 <StyledTrainerBox>
                     <h2>create qr code</h2>

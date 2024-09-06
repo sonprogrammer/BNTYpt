@@ -1,0 +1,1 @@
+export { default as  PostListComponent } from './PostListComponent'

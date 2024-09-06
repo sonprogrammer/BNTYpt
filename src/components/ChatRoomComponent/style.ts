@@ -10,8 +10,9 @@ export const StyledContainer = styled.div`
         p-7
         
     `}
-    hover:{
-        background-color: black;
+    &:hover{
+        background-color: rgba(0, 0, 0, 0.5);
+        transition: background-color 0.3s;
     }
 `
 export const StyledProfile = styled.div`
