@@ -29,7 +29,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded-md shadow-md">
       <textarea
-        placeholder="무슨 생각을 하고 있나요?"
+        placeholder="무슨 운동을 했나요?"
         value={text}
         onChange={handleTextChange}
         className="w-full p-2 border rounded-md"
