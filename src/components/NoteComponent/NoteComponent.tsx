@@ -16,7 +16,7 @@ const NoteComponent = () => {
 
     useEffect(() => {
         const fetchUserRole = async () => {
-            setRole('trainer')
+            setRole('member')
 
             // 목업
             const mockPosts: Post[] = [

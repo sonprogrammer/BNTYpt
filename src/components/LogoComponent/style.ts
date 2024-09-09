@@ -4,17 +4,17 @@ import tw from "twin.macro"
 
 export const StyledTitle = styled.div`
     ${tw`
-    //    fixed 
-    //    top-0
-    //    left-0
-       w-full
+        flex
+        justify-center
+        w-full
         text-center
         py-4
         text-[56px]
         bg-slate-900
-    `}
-    h1{
-        ${tw`
+        `}
+        h1{
+            ${tw`
+            text-center
             text-red-500
             `}
             font-family : "Anton"

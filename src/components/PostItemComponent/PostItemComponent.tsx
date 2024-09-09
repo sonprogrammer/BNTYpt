@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyledContainer } from './style';
+import { StyledBox, StyledContainer, StyledContent, StyledImg } from './style';
 import dayjs from 'dayjs';
 
 interface Post {
@@ -16,10 +16,11 @@ const PostItemComponent = ({post} : PostItemProps) => {
   const formattedDate = dayjs(post.date).format('YY.MM.DD(dd)')
   return (
     <StyledContainer>
-      <p className='absolute left-5 top-5'>{formattedDate}</p>
-      {post.text && <p>{post.text}</p>}
+      <p className='mt-3'>{formattedDate}</p>
+      <StyledBox>
+      {post.text && <StyledContent>{post.text}</StyledContent>}
       {post.images.length > 0 && (
-        <div>
+        <StyledImg>
           {post.images.map((image, index) => (
             <img 
               key={index}
@@ -28,8 +29,9 @@ const PostItemComponent = ({post} : PostItemProps) => {
               style={{ maxWidth: '100%', height: 'auto', marginTop: '10px' }} 
             />
           ))}
-        </div>
+        </StyledImg>
       )}
+      </StyledBox>
     </StyledContainer>
   )
 }
