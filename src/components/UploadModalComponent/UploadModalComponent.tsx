@@ -43,7 +43,6 @@ const UploadModalComponent = ({onClose} : UploadModalComponentProps) => {
         <textarea 
           name="description" 
           rows={2} 
-          // cols={10} 
           placeholder='type something...' />
         <button>upload</button>
       </StyledInput>

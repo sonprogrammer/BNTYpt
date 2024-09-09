@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 interface Post {
     text: string;
-    image: File | null;
+    images: File[];
     date: Date;
 }
 
@@ -18,8 +18,17 @@ const PostItemComponent = ({post} : PostItemProps) => {
     <StyledContainer>
       <p className='absolute left-5 top-5'>{formattedDate}</p>
       {post.text && <p>{post.text}</p>}
-      {post.image && (
-        <img src={URL.createObjectURL(post.image)} alt="Post" />
+      {post.images.length > 0 && (
+        <div>
+          {post.images.map((image, index) => (
+            <img 
+              key={index}
+              src={URL.createObjectURL(image)} 
+              alt={`Post image ${index + 1}`} 
+              style={{ maxWidth: '100%', height: 'auto', marginTop: '10px' }} 
+            />
+          ))}
+        </div>
       )}
     </StyledContainer>
   )

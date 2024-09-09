@@ -5,7 +5,7 @@ import { PostListComponent } from '../PostListComponent';
 
 interface Post{
     text: string;
-    image: File | null;
+    images: File[];
     date: Date;
 }
 
@@ -16,23 +16,23 @@ const NoteComponent = () => {
 
     useEffect(() => {
         const fetchUserRole = async () => {
-            setRole('member')
+            setRole('trainer')
 
             // 목업
             const mockPosts: Post[] = [
                 {
                   text: '오늘은 하체 운동을 집중적으로 했어요!',
-                  image: null, // 이미지가 없는 경우
+                  images: [], // 이미지가 없는 경우
                   date: new Date()
                 },
                 {
                   text: '상체 운동 루틴을 공유합니다.',
-                  image: new File([], 'mock-image.jpg'), // 이미지가 있는 경우 (실제 파일 경로는 없으므로 대체 데이터)
+                  images: [new File([], 'mock-image.jpg')], // 이미지가 있는 경우 (실제 파일 경로는 없으므로 대체 데이터)
                   date: new Date()
                 },
                 {
                   text: '스트레칭 중요성에 대한 글입니다.',
-                  image: null,
+                  images: [],
                   date: new Date()
                 },
               ];
