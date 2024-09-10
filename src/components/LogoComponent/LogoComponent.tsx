@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyledTitle } from './style'
+import { StyledLogoutModal, StyledTitle } from './style'
 import { Link } from 'react-router-dom'
 
 const LogoComponent = () => {
@@ -9,6 +9,9 @@ const LogoComponent = () => {
         <Link to="/browse">
           <h1>BNTY</h1> 
         </Link>
+        <StyledLogoutModal>
+          <h3>logout</h3>
+        </StyledLogoutModal>
       </StyledTitle>
     </div>
   )

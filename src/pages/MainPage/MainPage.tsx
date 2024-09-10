@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { CalendarComponent, QrcodeComponent } from '../../components'
+import { CalendarComponent, LogoutModalComponent, QrcodeComponent } from '../../components'
 
 
 

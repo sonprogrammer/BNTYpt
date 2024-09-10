@@ -19,4 +19,22 @@ export const StyledTitle = styled.div`
             `}
             font-family : "Anton"
     }
+    h3{
+        ${tw`
+            absolute
+            text-white
+            right-12
+        `}
+        &:hover{
+            cursor: pointer;
+        }
+    }
+`
+
+export const StyledLogoutModal = styled.div`
+    ${tw`
+        flex
+        justify-center
+        items-center
+    `}
 `
