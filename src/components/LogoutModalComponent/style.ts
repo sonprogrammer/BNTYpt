@@ -29,7 +29,7 @@ export const StyledContent = styled.div`
         font-size: 24px;
         margin-bottom: 16px;
     }
-    // z-index: 1000;
+
 `
 export const StyledBtns = styled.div`
     ${tw`
