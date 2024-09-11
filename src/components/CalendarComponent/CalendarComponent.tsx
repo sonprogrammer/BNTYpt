@@ -1,7 +1,7 @@
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isSameMonth, isSameDay, getDay, addDays } from 'date-fns'
 import styles from './Calendar.module.css'
 import React, { useState } from 'react'
-import { Dot, DotWrapper, StyledBox, StyledCell, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon } from './style'
+import { Dot, DotWrapper, StyledBox, StyledCell, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon, StyledTitle } from './style'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
 type Records = {
@@ -17,6 +17,7 @@ const CalendarComponent = () => {
         { date: '2024-08-28', diet: '아침: 샐러드, 점심: 닭가슴ddd살,수프,가나다ㄹㅇㄴㅁㄹㄴㅁㅇㄹㄴㅇㅁㄹㄴㅇㅁㄹㄴㅇㅁㄹㄴㅇㅁㄹㄴㅇㅁㄹㄴㅁㅇㄹㄴㅁㅇㄹㅁㄴㅇㄹㅇㄴㅁ라 마바사아자 차카타파하, 저녁: 야채스프', workout: '가슴 운동, 하체 운동' },
         { date: '2024-08-29', diet: '아침: 오트밀, 점심: 생선구이, 저녁: 채소 볶음', workout: '등 운동, 유산소' }
     ])
+    const [add, setAdd] = useState<boolean>(false)
 
     const firstDayOfMonth = startOfMonth(currentDate)
     const lastDayOfMonth = endOfMonth(currentDate)
@@ -42,10 +43,18 @@ const CalendarComponent = () => {
 
     const selectedRecord = selectedDate ? getRecordForDate(selectedDate) : null
 
+    const handleAddClicked = () => {
+        setAdd(!add)
+    }
+    
     return (
+        <div className='flex'>
         <StyledBox>
             <StyledContainer>
-                <h1 className='text-center font-bold text-3xl mb-2 text-slate-900'>운동, 식단 기록</h1>
+                <StyledTitle>
+                    <h1 className='font-bold text-3xl text-slate-900'>운동, 식단 기록</h1>
+                    <p onClick={handleAddClicked}>추가하기</p>
+                </StyledTitle>
                 <StyledHeader>
                     <StyledIcon onClick={handlePreviousMonth}>
                         <FaChevronLeft />
@@ -102,6 +111,10 @@ const CalendarComponent = () => {
                 </StyledDetail>
             )}
         </StyledBox>
+        {add && (
+                <div className='white'>hidfdasfdsfds</div>
+            )}
+        </div>
     )
 }
 

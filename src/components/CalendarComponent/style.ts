@@ -30,6 +30,31 @@ export const StyledContainer = styled.div`
     width: 100%;
     flex-grow: 0;
 `
+
+export const StyledTitle = styled.div`
+    ${tw`
+        flex
+        justify-between
+        items-center
+        mb-3
+        border-b
+        p-3
+    `}
+    p{
+        ${tw`
+            cursor-pointer
+            text-slate-600
+            font-extrabold
+        `}
+        &:hover{
+            background-color: rgb(185 28 28);
+            color: white;
+            padding: 3px;
+            border-radius: 30px;
+        }
+    }
+`
+
 export const StyledHeader = styled.header`
     ${tw`
         flex
