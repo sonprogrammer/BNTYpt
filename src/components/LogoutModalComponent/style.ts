@@ -13,8 +13,9 @@ export const StyledContainer = styled.div`
         items-center
         bg-black
         bg-opacity-40
-        z-50
+
     `}
+    z-index: 9999;
 `
 
 export const StyledContent = styled.div`
@@ -28,17 +29,18 @@ export const StyledContent = styled.div`
         font-size: 24px;
         margin-bottom: 16px;
     }
-    z-index: 1000;
+    // z-index: 1000;
 `
 export const StyledBtns = styled.div`
     ${tw`
         flex
         justify-around
         mt-2
+        text-3xl
     `}
     button{
         ${tw`
-            px-4
+            px-3
             py-1
             transition-all
             duration-300
