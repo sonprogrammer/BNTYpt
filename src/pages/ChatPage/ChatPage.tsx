@@ -1,10 +1,10 @@
 import React from 'react'
-import { ChatRoomComponent } from '../../components'
+import { ChattingBoxComponent } from '../../components'
 
 const ChatPage = () => {
   return (
     <div className='h-full'>
-      <ChatRoomComponent />
+      <ChattingBoxComponent />
     </div>
   )
 }

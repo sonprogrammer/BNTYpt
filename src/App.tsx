@@ -4,13 +4,12 @@ import React, { Suspense } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { LoginComponent, NavbarComponent, TimerComponent } from './components';
-import { BodyCheckPage, MainPage, LayoutPage, TodayPage, TimerPage, LandingPage, CalendarPage, ChatPage, NotePage } from './pages';
+import { BodyCheckPage, MainPage, LayoutPage, TodayPage, TimerPage, LandingPage, CalendarPage, ChatPage, NotePage, ChatRoomPage } from './pages';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <>
-
       <Routes>
         <Route path='/' element={
           <LandingPage />
@@ -31,6 +30,9 @@ function App() {
         }/>
         <Route path='/chat' element={
           <ChatPage />
+        }/>
+        <Route path='/chat/:userId' element={
+          <ChatRoomPage />
         }/>
         <Route path='/note' element={
             <NotePage />
