@@ -8,7 +8,7 @@ export const StyledBox = styled.div`
     ${tw`
         flex
         flex-col
-        lg:w-[100vw]
+        // lg:w-[100vw]
         lg:items-center
         lg:gap-4
         p-2
@@ -135,4 +135,94 @@ export const StyledDetail = styled.div`
         `
        }    
 }
+`
+
+export const StyledModal = styled.div`
+    ${tw`
+        fixed
+        top-0
+        left-0
+        w-full
+        h-full
+        flex
+        justify-center
+        items-center
+        bg-black
+        bg-opacity-50
+    `}
+`
+
+export const StyledModalBox = styled.div`
+    ${tw`
+        bg-stone-500
+        p-5
+        rounded-lg
+        w-[50%]
+        h-[70%]
+        shadow-2xl
+        relative
+    `}
+    @media(max-width:700px){
+        width: 90%;
+    }
+    display: grid;
+`
+
+
+export const StyledCloseBtn = styled.div`
+    ${tw`
+        absolute
+        right-5
+        top-5
+        cursor-pointer
+    `}
+    &:hover{
+        color: red;
+    }
+`
+
+export const StyledModalContents = styled.div`
+    ${tw`
+        flex-1
+        p-4
+    `}
+    flex: 1;
+    overflow: none;
+    h1{
+        ${tw`
+            text-xl
+            font-bold
+            text-red-900
+        `}
+    }
+`
+export const StyledModalTextArea = styled.textarea`
+    ${tw`
+        w-full
+        border-[1px]
+        border-red-900
+        rounded-md
+        resize-none
+        h-[80%]
+        outline-none
+        font-bold
+        mt-3
+        p-3
+        bg-stone-400
+    `}
+`
+
+export const StyledBtn = styled.button`
+    ${tw`
+        px-4
+        py-2
+        mt-auto
+        rounded-md
+        text-red-600
+        font-bold
+        bg-blue-950
+    `}
+    &:hover{
+        background-color: rgb(30 58 138);
+    }
 `

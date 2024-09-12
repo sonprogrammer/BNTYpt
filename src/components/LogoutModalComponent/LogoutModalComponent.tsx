@@ -10,7 +10,7 @@ interface LogoutModalProps {
 const LogoutModalComponent = ({ onConfirm, onCancel }: LogoutModalProps) => {
     return (
         <StyledContainer onClick={onCancel}>
-            <StyledContent >
+            <StyledContent onClick={(e) => e.stopPropagation()}>
                 <p>정말 로그아웃하시겠습니까?</p>
                 <StyledBtns>
                     <button onClick={onConfirm}>확인</button>

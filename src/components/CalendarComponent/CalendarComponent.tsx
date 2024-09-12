@@ -1,8 +1,10 @@
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isSameMonth, isSameDay, getDay, addDays } from 'date-fns'
 import styles from './Calendar.module.css'
 import React, { useState } from 'react'
-import { Dot, DotWrapper, StyledBox, StyledCell, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon, StyledTitle } from './style'
+import { Dot, DotWrapper, StyledBox, StyledBtn, StyledCell, StyledCloseBtn, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon, StyledModal, StyledModalBox, StyledModalContents, StyledModalTextArea, StyledTitle } from './style'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 type Records = {
     date: string;
@@ -46,75 +48,99 @@ const CalendarComponent = () => {
     const handleAddClicked = () => {
         setAdd(!add)
     }
-    
-    return (
-        <div className='flex'>
-        <StyledBox>
-            <StyledContainer>
-                <StyledTitle>
-                    <h1 className='font-bold text-3xl text-slate-900'>운동, 식단 기록</h1>
-                    <p onClick={handleAddClicked}>추가하기</p>
-                </StyledTitle>
-                <StyledHeader>
-                    <StyledIcon onClick={handlePreviousMonth}>
-                        <FaChevronLeft />
-                    </StyledIcon>
-                    <h2>{format(currentDate, 'MMM yyyy')}</h2>
-                    <StyledIcon onClick={handleNextMonth}>
-                        <FaChevronRight />
-                    </StyledIcon>
-                </StyledHeader>
-                <StyledGrid>
-                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                        <StyledDay>{day}</StyledDay>
-                    ))}
-                    {leadingEmptyDays.map((_, i) => (
-                        <div></div>
-                    ))}
-                    {days.map(day => {
-                        const record = getRecordForDate(day)
-                        return (
-                            <StyledCell
-                                onClick={() => handleDayClick(day)}
-                                isToday={isToday(day)}
-                                isSelected={isSameDay(day, selectedDate || new Date())}
-                                isDisabled={!isSameMonth(day, currentDate)}
-                            >
-                                {format(day, 'd')}
-                                <DotWrapper>
-                                    {record?.diet && <Dot color='yellow' />}
-                                    {record?.workout && <Dot color='blue' />}
-                                </DotWrapper>
-                            </StyledCell>
-                        )
-                    })}
-                </StyledGrid>
-            </StyledContainer>
 
-            {selectedRecord && (
-                <StyledDetail>
-                    <h2 className='mb-2 text-center'>{format(selectedDate!, 'yy년 M월 d일')}</h2>
-                    <div className='border border-stone-300 ' />
-                    {selectedRecord.diet && (
-                        <div className='my-3'>
-                            <h1 className='text-lg text-yellow-300 font-bold'>식단:</h1>
-                            <p>{selectedRecord.diet}</p>
-                        </div>
-                    )}
-                    <div className='border border-stone-300 ' />
-                    {selectedRecord.workout && (
-                        <div className='my-3'>
-                            <h1 className='text-lg text-blue-600 font-bold'>운동:</h1>
-                            <p>{selectedRecord.workout}</p>
-                        </div>
-                    )}
-                </StyledDetail>
+
+    return (
+        <>
+            <StyledBox>
+                <StyledContainer>
+                    <StyledTitle>
+                        <h1 className='font-bold text-3xl text-slate-900'>운동, 식단 기록</h1>
+                        <p onClick={handleAddClicked}>추가하기</p>
+                    </StyledTitle>
+                    <StyledHeader>
+                        <StyledIcon onClick={handlePreviousMonth}>
+                            <FaChevronLeft />
+                        </StyledIcon>
+                        <h2>{format(currentDate, 'MMM yyyy')}</h2>
+                        <StyledIcon onClick={handleNextMonth}>
+                            <FaChevronRight />
+                        </StyledIcon>
+                    </StyledHeader>
+                    <StyledGrid>
+                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                            <StyledDay>{day}</StyledDay>
+                        ))}
+                        {leadingEmptyDays.map((_, i) => (
+                            <div></div>
+                        ))}
+                        {days.map(day => {
+                            const record = getRecordForDate(day)
+                            return (
+                                <StyledCell
+                                    onClick={() => handleDayClick(day)}
+                                    isToday={isToday(day)}
+                                    isSelected={isSameDay(day, selectedDate || new Date())}
+                                    isDisabled={!isSameMonth(day, currentDate)}
+                                >
+                                    {format(day, 'd')}
+                                    <DotWrapper>
+                                        {record?.diet && <Dot color='yellow' />}
+                                        {record?.workout && <Dot color='blue' />}
+                                    </DotWrapper>
+                                </StyledCell>
+                            )
+                        })}
+                    </StyledGrid>
+                </StyledContainer>
+
+                {selectedRecord && (
+                    <StyledDetail>
+                        <h2 className='mb-2 text-center'>{format(selectedDate!, 'yy년 M월 d일')}</h2>
+                        <div className='border border-stone-300 ' />
+                        {selectedRecord.diet && (
+                            <div className='my-3'>
+                                <h1 className='text-lg text-yellow-300 font-bold'>식단:</h1>
+                                <p>{selectedRecord.diet}</p>
+                            </div>
+                        )}
+                        <div className='border border-stone-300 ' />
+                        {selectedRecord.workout && (
+                            <div className='my-3'>
+                                <h1 className='text-lg text-blue-600 font-bold'>운동:</h1>
+                                <p>{selectedRecord.workout}</p>
+                            </div>
+                        )}
+                    </StyledDetail>
+                )}
+            </StyledBox>
+            {add && (
+                <StyledModal onClick={handleAddClicked}>
+                    <StyledModalBox onClick={(e) => e.stopPropagation()}>
+                        <StyledCloseBtn onClick={handleAddClicked}>
+                            <FontAwesomeIcon icon={faXmark} size='xl' />
+                        </StyledCloseBtn>
+                        <StyledModalContents>
+                            <h1>운동</h1>
+                            <StyledModalTextArea 
+                                placeholder='당신의 운동을 기록하세요'
+                                className='placeholder:text-red-950 placeholder:opacity-50'
+                                >
+                            </StyledModalTextArea>
+                        </StyledModalContents>
+                        <StyledModalContents>
+                            <h1>식단</h1>
+                            <StyledModalTextArea 
+                                placeholder='당신의 식단을 기록하세요'
+                                className='placeholder:text-red-950 placeholder:opacity-50'
+                                >
+                            </StyledModalTextArea>
+                        </StyledModalContents>
+                        <StyledBtn>등록하기</StyledBtn>
+                    </StyledModalBox>
+                </StyledModal>
             )}
-        </StyledBox>
-        {add && (
-                <div className='white'>hidfdasfdsfds</div>
-            )}
-        </div>
+        </>
     )
 }
 
