@@ -8,16 +8,6 @@ export const StyledContainer = styled.div`
         flex
         flex-col
     `}
-    // h2{
-    //     ${tw`
-    //         text-center
-    //         text-3xl
-    //         font-bold
-    //         p-5
-    //         border-b-2
-    //         border-red-950
-    //     `}
-    // }
 `
 export const Styledupper = styled.div`
     ${tw`
@@ -31,12 +21,14 @@ export const Styledupper = styled.div`
 `
 export const StyledMessageBox = styled.div`
     ${tw`
+        flex
+        flex-col
         flex-1
         overflow-y-auto
         bg-stone-400
     `}
 `
-export const StyledMessage = styled.div`
+export const StyledMessage = styled.div<{ isMine: boolean}>`
     ${tw`
         p-4
         my-2
@@ -44,6 +36,10 @@ export const StyledMessage = styled.div`
         rounded-lg
         max-w-[70%]
     `}
+    background-color: ${({isMine}) => (isMine ? 'orange' : 'gray')};
+    align-self: ${({isMine}) => (isMine ? 'flex-end' : 'flex-start')};
+    color: ${({isMine}) => (isMine ? 'black' : 'white')};
+
 `
 
 export const StyledSendEl = styled.div`
@@ -90,11 +86,13 @@ export const StyledPlus = styled.div`
         justify-center
         transition-all
         duration-100
+        
     `}
     &:hover{
         ${tw`
             bg-gray-500
         `}
         opacity: 0.7;
+        cursor: pointer;
     }
 `
