@@ -92,7 +92,7 @@ export const StyledPlus = styled.div`
         ${tw`
             bg-gray-500
         `}
-        opacity: 0.7;
+        opacity: 0.8;
         cursor: pointer;
     }
 `
