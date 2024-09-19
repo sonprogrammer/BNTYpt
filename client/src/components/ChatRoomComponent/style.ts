@@ -42,6 +42,7 @@ export const StyledMessage = styled.div<{ isMine: boolean}>`
     ${tw`
         p-4
         my-2
+        mx-3
         bg-gray-200
         rounded-lg
         max-w-[70%]
@@ -49,7 +50,6 @@ export const StyledMessage = styled.div<{ isMine: boolean}>`
     background-color: ${({isMine}) => (isMine ? 'orange' : 'gray')};
     align-self: ${({isMine}) => (isMine ? 'flex-end' : 'flex-start')};
     color: ${({isMine}) => (isMine ? 'black' : 'white')};
-
 `
 
 export const StyledSendEl = styled.div`
