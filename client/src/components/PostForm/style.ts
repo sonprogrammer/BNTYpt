@@ -1,23 +1,18 @@
-import { addDays } from 'date-fns';
 import styled from "styled-components";
 import tw from "twin.macro";
 
 export const StyledContainerForm  = styled.form`
     ${tw`
-        p-4
-        m-5
+        p-5
         border-[2px]
         border-red-950
         rounded-md
         shadow-md
         h-full
-        w-[50%]
+        w-full
         flex
         flex-col
     `}
-    @media (max-width:700px){
-        width: 90%;
-    }
 `
 
 export const StyledTitle = styled.h1`

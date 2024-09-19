@@ -5,10 +5,12 @@ import { StyledContainer, StyledInput, StyledTitle } from './style'
 
 interface UploadModalComponentProps{
   onClose: () => void;
+  addPost: (post: { text: string; images: File[]; date: Date; }) => void;
+}
+interface PostFormProps {
 }
 
-
-const UploadModalComponent = ({onClose} : UploadModalComponentProps) => {
+const UploadModalComponent = ({onClose, addPost} : UploadModalComponentProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [showAddModal, setShowAddModal] = useState<boolean>(false)
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {

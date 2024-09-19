@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { PostForm } from '../PostForm'
 import { PostListComponent } from '../PostListComponent';
+import { AddPhotoComponent } from '../AddPhotoComponent';
+import { StyledClose, StyledPostBox, StyledPostForm } from './style';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 
 interface Post{
@@ -12,6 +16,7 @@ interface Post{
 const NoteComponent = () => {
     const [role, setRole] = useState<string>('trainer')
     const [posts, setPosts] = useState<Post[]>([])
+    const [modalOpen, setModalOpen] = useState<boolean>(false)
 
 
     useEffect(() => {
@@ -45,11 +50,36 @@ const NoteComponent = () => {
         setPosts([post, ...posts])
     }
 
+    const handleModalOpen = () => {
+        setModalOpen(true)
+    }
+
+    const handleClostModal = () =>{
+        setModalOpen(false)
+    }
 
     return (
         <>
             {role === 'trainer' ? (
-                <PostForm addPost={addPost}/>
+                <>
+                <PostListComponent posts={posts}/>
+                {modalOpen ? (
+                    <></>
+                    ):(
+                        <AddPhotoComponent onClick={handleModalOpen}/>
+                    )
+                }
+                {modalOpen && (
+                    <StyledPostBox onClick={handleClostModal}>
+                        <StyledPostForm onClick={(e) => e.stopPropagation()}>
+                            <StyledClose onClick={handleClostModal}>
+                                <FontAwesomeIcon icon={faXmark} size='xl' />
+                            </StyledClose>
+                            <PostForm addPost={addPost}/>
+                        </StyledPostForm>
+                    </StyledPostBox>
+                )}
+                </>
             ) : (
                 <PostListComponent posts={posts} />
             )
