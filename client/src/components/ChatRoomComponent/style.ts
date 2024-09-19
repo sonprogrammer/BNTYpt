@@ -17,8 +17,18 @@ export const Styledupper = styled.div`
         p-5
         text-3xl
         font-bold
+        relative
     `}
 `
+
+export const StyledArrow = styled.div`
+    ${tw`
+        absolute
+        left-3
+    `}
+`
+
+
 export const StyledMessageBox = styled.div`
     ${tw`
         flex
