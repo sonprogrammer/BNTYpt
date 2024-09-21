@@ -15,16 +15,9 @@ const QrcodeComponent = () => {
 
     // 사용자의 역할과 로그인 상태를 가져오는 함수
     useEffect(() => {
-        // 여기에 실제 인증 로직을 추가
         const fetchUserRole = async () => {
-            // 예시: API 요청으로 사용자 역할을 가져옴
-            // const response = await fetch('/api/user-role');
-            // const data = await response.json();
-            // setRole(data.role);
-            // setIsLoggedIn(data.isLoggedIn);
-
-            // 예제를 위해 하드코딩된 역할과 로그인 상태
-            setRole('member'); // 'trainer' 또는 'member'로 테스트
+         
+            setRole('member'); // 'trainer'/ 'member'로 테스트
             setIsLoggedIn(true);
         };
 
@@ -42,7 +35,7 @@ const QrcodeComponent = () => {
         console.error('QR Scan Error:', err);
     };
 
-    const handleResult: OnResultFunction = (result, error) => {
+    const handleResult: OnResultFunction = (result: any, error: any) => {
         if (result) {
             const text = result.getText();
             handleScan(text);

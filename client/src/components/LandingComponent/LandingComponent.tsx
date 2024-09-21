@@ -2,10 +2,20 @@ import React, { useState } from 'react'
 import KakaoLogin from 'react-kakao-login'
 import { StyledBox, StyledContainer, StyledRadios } from './style'
 import axios from 'axios'
+import { useRecoilState } from 'recoil';
+import { userState } from '../../utils/userState';
+import { useNavigate } from 'react-router-dom';
+
+
+
+
 
 const LandingComponent = () => {
-    const [selectedRole, setSelectedRole] = useState<String>('')
+    const [selectedRole, setSelectedRole] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
+    const [user, setUser] = useRecoilState(userState)
+    
+    const navigate = useNavigate()
     
     // 나중에 env파일에 집어 넣기
     const kakaoClientId = '748f4b889898873bb1a6d613886ebdf5'
@@ -15,7 +25,6 @@ const LandingComponent = () => {
    }
     
     const kakaoOnSuccess = async (data: any) => {
-        console.log('sucss',data)
         const accessToken = data.response.access_token 
         if(!selectedRole){
             alert('Please select your role')
@@ -28,7 +37,13 @@ const LandingComponent = () => {
                 role: selectedRole
             })
             if(res.data.success){
-                window.location.href = '/browse'
+                setUser({
+                    kakaoId: res.data.kakaoId,
+                    name: res.data.name,
+                    role: selectedRole,
+                });
+
+                navigate('/browse')
             }else{
                 console.error('login failed :', res.data.message)
             }

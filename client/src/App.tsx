@@ -1,7 +1,6 @@
 /* eslint-disable*/
 
 import React, { Suspense } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { LoginComponent, NavbarComponent, TimerComponent } from './components';
 import { BodyCheckPage, MainPage, LayoutPage, TodayPage, TimerPage, LandingPage, CalendarPage, ChatPage, NotePage, ChatRoomPage } from './pages';

@@ -11,7 +11,6 @@ const LandingPage = () => {
                 your browser does not support
         </video>
         <StyledLogin>
-            {/* <LoginComponent /> */}
             <LandingComponent />
         </StyledLogin>
     </StyledContainer>

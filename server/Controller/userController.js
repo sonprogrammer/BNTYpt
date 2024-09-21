@@ -7,7 +7,6 @@ const loginUser = async (req, res) => {
     const { accessToken, role } = req.body;
     
     try {
-        // const userInfoRes = await verifyKakaoAccessToken(accessToken);
         const userInfoRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -15,31 +14,41 @@ const loginUser = async (req, res) => {
         });
 
         const userInfo = userInfoRes.data;
-        // const kakaoId = userInfo.id
-        // const name = userInfo.properties ? userInfo.properties.nickname : 'no name';
+        const  kakaoId = userInfo.id
 
-        let user = await User.findOne({ kakaoId: userInfo.id, role: role}) 
+
+        let user = await User.findOne({ kakaoId, role}) 
         
         if(!user){
             user = new User({
-                kakaoId: userInfo.id,
+                kakaoId,
                 name: userInfo.properties.nickname,
-                role: role
+                role
             })
             await user.save()
         }
-        
-        // const user1 = await User.findOneAndUpdate(
-        //     { kakaoId}, 
-        //     { kakaoId, role, name }, 
-        //     { upsert: true, new: true }, 
-        // );
 
-        res.status(200).json({ success: true, message: 'login successful' });
+        res.status(200).json({ 
+            success: true, 
+            message: 'login successful', 
+            kakaoId: user.kakaoId, 
+            name: user.name, 
+            role: user.role
+         })
     } catch (error) {
         console.error('error verifying access token', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
 
-module.exports = { loginUser };
+const getUser = async (req, res, next) => {
+    const { kakaoId } = req.query
+    try {
+        let user = await User.findOne({ kakaoId }) 
+        res.status(200).json(user);
+    } catch (error) {
+        next('error', error)
+    }
+}
+
+module.exports = { loginUser, getUser };
