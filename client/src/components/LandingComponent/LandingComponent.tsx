@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import KakaoLogin from 'react-kakao-login'
 import { StyledBox, StyledContainer, StyledRadios } from './style'
+import axios from 'axios'
 
 const LandingComponent = () => {
     const [selectedRole, setSelectedRole] = useState<String>('')
+    const [loading, setLoading] = useState<boolean>(false)
     
+    // 나중에 env파일에 집어 넣기
     const kakaoClientId = '748f4b889898873bb1a6d613886ebdf5'
 
    const handleRadioChage = (e : React.ChangeEvent<HTMLInputElement>) =>{
@@ -12,12 +15,37 @@ const LandingComponent = () => {
    }
     
     const kakaoOnSuccess = async (data: any) => {
-        console.log(data)
-        const idToken = data.response.access_token  // 엑세스 토큰 백엔드로 전달
+        console.log('sucss',data)
+        const accessToken = data.response.access_token 
+        if(!selectedRole){
+            alert('Please select your role')
+            return
+        }
+        try{
+            setLoading(true)
+            const res = await axios.post('http://localhost:4000/api/user/login', {
+                accessToken,
+                role: selectedRole
+            })
+            if(res.data.success){
+                window.location.href = '/browse'
+            }else{
+                console.error('login failed :', res.data.message)
+            }
+        }catch(error){
+            alert('❌❌check your Email or Password❌❌')
+            console.error('error login : ', error)
+        }finally{
+            setLoading(false)
+        }
     }
+
     const kakaoOnFailure = (error: any) => {
-        console.log(error);
+        console.log('카톡 로그인 오류',error);
     };
+
+    
+
     return (
         <StyledContainer>
             <StyledBox>
@@ -54,7 +82,6 @@ const LandingComponent = () => {
                             color: 'white',
                             borderRadius: '5px',
                             padding: '10px 30px',
-                            
                         }}
                     />
                 </StyledBox>
