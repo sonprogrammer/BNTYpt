@@ -49,6 +49,7 @@ const LandingComponent = () => {
             }
         }catch(error){
             alert('❌❌check your Email or Password❌❌')
+            
             console.error('error login : ', error)
         }finally{
             setLoading(false)
