@@ -7,15 +7,18 @@ interface UploadModalComponentProps{
   onClose: () => void;
   addPost: (post: { text: string; images: File[]; date: Date; }) => void;
 }
-interface PostFormProps {
-}
+
 
 const UploadModalComponent = ({onClose, addPost} : UploadModalComponentProps) => {
+  const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [description, setDescription] = useState<string>('')
   const [showAddModal, setShowAddModal] = useState<boolean>(false)
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setImageFile(file)
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -24,9 +27,30 @@ const UploadModalComponent = ({onClose, addPost} : UploadModalComponentProps) =>
     }
   };
 
-  const handleCloseClick = () => {
-    setShowAddModal(!showAddModal)
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>{
+    setDescription(e.target.value)
   }
+
+  const handleUpload =() => {
+    if(!imageFile || !description){
+      alert('please provide a description and a file to upload')
+      return
+    }
+
+    addPost({
+      text: description,
+      images: [imageFile],
+      date: new Date()
+    })
+
+    setImageFile(null)
+    setImagePreview(null)
+    setDescription('')
+    onClose()
+  }
+
+  
 
   
   return (
@@ -45,8 +69,11 @@ const UploadModalComponent = ({onClose, addPost} : UploadModalComponentProps) =>
         <textarea 
           name="description" 
           rows={2} 
-          placeholder='type something...' />
-        <button>upload</button>
+          placeholder='type something...'
+          value={description}
+          onChange={handleDescriptionChange}
+           />
+        <button onClick={handleUpload}>upload</button>
       </StyledInput>
     </StyledContainer>
   )

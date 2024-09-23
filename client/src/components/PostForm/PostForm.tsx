@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { StyledBtn, StyledContainerForm, StyledSubmitEl, StyledTextArea, StyledTitle } from './style';
+import axios from 'axios';
 
 interface PostFormProps {
   addPost: (post: { text: string; images: File[]; date: Date; }) => void;
@@ -21,16 +22,36 @@ const PostForm = ({ addPost } : PostFormProps) => {
     }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text && images.length === 0) return;
 
-    const currentDate = new Date()
-    
-    addPost({ text, images, date: currentDate});
-    setText('');
-    setImages([]);
-    setImagePreview([])
+    const formData = new FormData();
+    formData.append('text', text);
+    images.forEach((image) => {
+      formData.append('images', image)
+    })
+    try{
+      const res = await axios.post('http://localhost:4000/api/posts', formData,{
+        headers: {
+          'Content-Type' : 'multipart/form-data'
+        }
+      })
+
+      if(res.data.success){
+        const currentDate = new Date()
+        
+        addPost({ text, images, date: currentDate});
+        setText('');
+        setImages([]);
+        setImagePreview([])
+      }else{
+        console.error('Error', res.data.message)
+      }
+    }catch(error){
+      console.error('Error', error)
+    }
+
   };
 
   return (

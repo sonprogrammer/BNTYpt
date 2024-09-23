@@ -6,23 +6,15 @@ import { StyledContainer, StyledMemberBox, StyledQrReader, StyledTrainerBox } fr
 // usestate훅으로 만약 로그인한 사람이 회원이면 출석체크하기 버튼이 나와서 카메라가 활성화되는 버튼이
 // 나오고 트레이너면 qr코드가 떠있는다
 
-const QrcodeComponent = () => {
-    const [role, setRole] = useState<string>('trainer')
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+interface QrcodeComponentProps {
+    role: string;
+}
+
+const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
+    // const [role, setRole] = useState<string>('trainer')
     const [scannedData, setScannedData] = useState<string>('');
     const [memberClicked, setMemberClicked] = useState<boolean>(false)
 
-
-    // 사용자의 역할과 로그인 상태를 가져오는 함수
-    useEffect(() => {
-        const fetchUserRole = async () => {
-         
-            setRole('member'); // 'trainer'/ 'member'로 테스트
-            setIsLoggedIn(true);
-        };
-
-        fetchUserRole();
-    }, []);
 
     const handleScan = (data: string) => {
         if (data) {
@@ -45,21 +37,16 @@ const QrcodeComponent = () => {
         }
     };
 
-    if (!isLoggedIn) {
-        return <div>로그인이 필요합니다.</div>;
-    }
 
     const handleClick = (e: React.MouseEvent<HTMLElement>) => {
         setMemberClicked(!memberClicked)
     }
-
 
     return (
         <StyledContainer>
             
             {role === 'trainer' ? (
                 <StyledTrainerBox>
-                    <h2>create qr code</h2>
                     <QRCodeCanvas value="https://example.com/attendance" />
                 </StyledTrainerBox>
             ) : (

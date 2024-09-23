@@ -2,10 +2,9 @@ const mongoose = require('mongoose')
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const axios = require('axios');
-
-const User = require('./Models/userModel');
+const path = require('path');
 const userRouter = require('./Routes/userRouter');
+const postRouter = require('./Routes/postRouter');
 
 
 dotenv.config()
@@ -14,8 +13,10 @@ const app = express();
 app.use(express.json())
 app.use(cors())
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/user', userRouter)
+app.use('/api/posts', postRouter)
 
 
 

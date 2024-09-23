@@ -8,14 +8,19 @@ import { userState } from '../../utils/userState'
 
 
 const MainPage = () => {
+  const [trainerRole, setTrainerRole] = useState<boolean>(false)
   const [user] = useRecoilState(userState)
   console.log('user', user)
-  
+
 
   return (
     <div className='h-full flex flex-col items-center'>
-      <h1 className='absolute top-[30%] text-xl font-bold'>{user.name}님의 남은 pt횟수</h1>
-      <QrcodeComponent />
+      {user.role === 'trainer' ? (
+        <h1 className='absolute top-[30%] text-xl font-bold'>{user.name}트레이너님</h1>
+      ) : (
+        <h1 className='absolute top-[30%] text-xl font-bold'>{user.name}님의 남은 pt횟수</h1>
+      )}
+      <QrcodeComponent role={user.role}/>
     </div>
   )
 }

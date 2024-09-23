@@ -2,20 +2,19 @@ import React from 'react'
 import { StyledBox, StyledContainer, StyledImage, StyledText } from './style'
 import dayjs from 'dayjs'
 
-const PhotoComponent = () => {
-    const uploadTime = dayjs().format('YYYY-MM-DD:mm:ss')
+interface PhotoComponentProps {
+    imageUrl: string,
+    uploadTime: string
+    text: string
+}
+
+const PhotoComponent = ({ imageUrl, uploadTime, text} : PhotoComponentProps) => {
+
   return (
     <StyledContainer>
         <StyledBox>
-            <StyledImage src="logo.png" alt="image" />
-            <StyledText>{uploadTime}</StyledText>
-        </StyledBox>
-        <StyledBox>
-            <StyledImage src="logo.png" alt="image" />
-            <StyledText>{uploadTime}</StyledText>
-        </StyledBox>
-        <StyledBox>
-            <StyledImage src="logo.png" alt="image" />
+            <StyledImage src={imageUrl} alt="image" />
+            <p>{text}</p>
             <StyledText>{uploadTime}</StyledText>
         </StyledBox>
     </StyledContainer>

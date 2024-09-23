@@ -5,6 +5,7 @@ import axios from 'axios'
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import { useNavigate } from 'react-router-dom';
+import { saveUserToLocalStorage } from '../../utils/localStorage';
 
 
 
@@ -37,19 +38,20 @@ const LandingComponent = () => {
                 role: selectedRole
             })
             if(res.data.success){
-                setUser({
+                const newUser = ({
                     kakaoId: res.data.kakaoId,
                     name: res.data.name,
                     role: selectedRole,
                 });
-
+                setUser(newUser)
+                saveUserToLocalStorage(newUser)
                 navigate('/browse')
             }else{
                 console.error('login failed :', res.data.message)
             }
         }catch(error){
             alert('❌❌check your Email or Password❌❌')
-            
+
             console.error('error login : ', error)
         }finally{
             setLoading(false)
