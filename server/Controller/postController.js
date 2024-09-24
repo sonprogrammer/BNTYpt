@@ -1,13 +1,22 @@
 const Post = require('../Models/postModel')
+const cloudinary = require('cloudinary')
 
 const createPost = async (req, res) => {
     try {
         const { text } = req.body
-        const images = req.files.map(file => file.path)
+        let images = []
+
+        if (req.files) {
+            for (let file of req.files) {
+                const result = await cloudinary.uploader.upload(file.path); // Cloudinary에 업로드
+                images.push(result.secure_url); // 업로드된 이미지의 URL을 배열에 추가
+            }
+        }
 
         const newPost = new Post({
             text,
-            images
+            images,
+            createdAt: new Date()
         })
 
         await newPost.save()

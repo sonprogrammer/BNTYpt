@@ -3,26 +3,33 @@ import styled from "styled-components";
 
 export const StyledContainer = styled.div`
     ${tw`
-        grid
-        gap-6
-        p-5
-
+        flex
+        flex-wrap
+        justify-around
+        gap-10
+        m-5
     `}
-
+    display: grid;
     grid-template-columns: repeat(1, 1fr);
 
-    @media(min-width: 640px){
-        grid-template-columns: repeat(2, 1fr);
+    @media (min-width: 640px) {
+        grid-template-columns: repeat(1, 1fr);
     }
 
-    @media(min-width:1024px){
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    @media (min-width: 1024px) {
         grid-template-columns: repeat(3, 1fr);
     }
+
 `
 
 export const StyledBox = styled.div`
     ${tw`
         flex
+        w-[100%]
         flex-col
         items-center
         bg-gray-300

@@ -6,7 +6,7 @@ export const StyledContainer = styled.div`
         grid
         gap-6
         p-5
-
+        h-[50%]
     `}
 
     grid-template-columns: repeat(1, 1fr);

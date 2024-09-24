@@ -10,6 +10,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
   const [text, setText] = useState<string>('');
   const [images, setImages] = useState<File[]>([]);
   const [imagePreview, setImagePreview] = useState<string[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => setText(e.target.value);
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +42,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
       if(res.data.success){
         const currentDate = new Date()
         
-        addPost({ text, images, date: currentDate});
+        addPost({ text, images: res.data.post.images, date: currentDate});
         setText('');
         setImages([]);
         setImagePreview([])
@@ -53,6 +54,10 @@ const PostForm = ({ addPost } : PostFormProps) => {
     }
 
   };
+
+  const closeModal = () =>{
+    setIsModalOpen(false)
+  }
 
   return (
     <StyledContainerForm onSubmit={handleSubmit}>
@@ -70,7 +75,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
           <img key={index} src={preview} alt={`미리보기 ${index + 1}`} className="my-2 w-[30%] overflow-auto mr-5"/>
         ))}
         </div>
-      <StyledBtn type="submit">
+      <StyledBtn type="submit" onClick={closeModal}>
         게시하기
       </StyledBtn>
       </StyledSubmitEl>

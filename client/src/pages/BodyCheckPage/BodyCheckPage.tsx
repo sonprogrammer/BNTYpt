@@ -3,6 +3,7 @@ import { AddPhotoComponent, BodyCheckComponent, PostForm, UploadModalComponent }
 import { StylecContainer, StyledClose, StyledPostBox, StyledPostForm } from './style'
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect } from 'react';
 
 interface Post{
   text: string;
@@ -13,6 +14,7 @@ interface Post{
 const BodyCheckPage = () => {
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
   const [posts, setPosts] = useState<Post[]>([])
+  const [refresh, setRefresh] = useState<boolean>(false)
 
   const handleAddPhotoClick = () => {
     setShowUploadModal(true)
@@ -22,11 +24,14 @@ const BodyCheckPage = () => {
   };
   const addPost = (post:Post) => {
     setPosts([post, ...posts])
+    handleCloseModal()
+    setRefresh(p => !p)
 }
+
   
   return (
     <StylecContainer>
-        <BodyCheckComponent />
+        <BodyCheckComponent refresh={refresh}/>
         {showUploadModal ? (
                     <></>
                     ):(
@@ -36,7 +41,6 @@ const BodyCheckPage = () => {
         {showUploadModal && 
         <>
         <div className='fixed inset-0 bg-black bg-opacity-50'></div>
-        {/* <UploadModalComponent onClose={handleCloseModal} addPost={addPost}/> */}
         <StyledPostBox onClick={handleCloseModal}>
                         <StyledPostForm onClick={(e) => e.stopPropagation()}>
                             <StyledClose onClick={handleCloseModal}>
