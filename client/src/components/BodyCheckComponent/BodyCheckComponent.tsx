@@ -5,18 +5,29 @@ import { PhotoComponent } from '../PhotoComponent'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import axios from 'axios'
+import { useRecoilState } from 'recoil'
+import { userState } from '../../utils/userState'
 
 function BodyCheckComponent( {refresh} : { refresh: boolean}) {
   const [photos, setPhotos] = useState<{ imageUrl: string, uploadTime: string, text: string}[]>([])
-  
+  const [user] = useRecoilState(userState)
+
+  console.log('user token', user.token)
+
 
     useEffect(() => {
-      fetchPost()
-    }, [refresh])
+      if(user){
+        fetchPost()
+      }
+    }, [refresh, user])
 
     const fetchPost = async () =>{
       try {
-        const res = await axios.get('http://localhost:4000/api/posts')
+        const res = await axios.get('http://localhost:4000/api/posts',{
+          headers: {
+            Authorization: `Bearer ${user.token}`
+          }
+        })
         const formatedPost = res.data.posts.map((post:any) => ({
           imageUrl: post.images[0],
           uploadTime: dayjs(post.date).format('YYYY-MM-DD'),

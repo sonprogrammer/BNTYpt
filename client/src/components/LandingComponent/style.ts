@@ -24,7 +24,7 @@ export const StyledBox = styled.div`
         flex-col
         justify-between
         items-center
-        gap-5
+        gap-3
     `}
     background-color: rgba(82, 82, 82, 0.5);
     box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.5);
@@ -60,6 +60,33 @@ export const StyledBox = styled.div`
         h-[60%]
     }
 `
+
+
+export const StyledLoginInput = styled.div`
+    ${tw`
+        flex
+        flex-col
+        gap-5
+        w-[80%]
+    `}
+    input{
+        ${tw`
+            p-3
+            rounded-md
+        `}
+    }
+`
+
+export const StyledLoginBtn = styled.button`
+    ${tw`
+        bg-blue-900
+        text-white
+    `}
+    border-radius: 5px;
+    padding: 10px 30px;
+    width: 188.7px;
+`
+
 export const StyledRadios = styled.div`
     ${tw`
         flex
@@ -76,4 +103,16 @@ export const StyledRadios = styled.div`
         `}
     }
 
+`
+
+export const StyledSignUpBtn = styled.button`
+    ${tw`
+        // bg-stone-600
+        text-white
+        p-2
+    `}
+    &:hover{
+        text-decoration: underline;
+
+    }
 `

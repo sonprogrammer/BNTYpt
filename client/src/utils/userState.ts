@@ -7,5 +7,6 @@ export const userState = atom({
         kakaoId: null,
         name: null,
         role: null as string | null,
+        token: null as string | null,
     }
 })
