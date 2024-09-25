@@ -34,7 +34,7 @@ mongoose.connect(process.env.MONGODB_URI)
     .catch(() => console.log('mongodb connect faild'))
 
 app.listen(4000, () => {
-    // console.log('listening on http://localhost:4000');
+    console.log('listening on http://localhost:4000');
 })
 
 app.get('/', (req, res) => {

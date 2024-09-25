@@ -14,6 +14,7 @@ export const StyledContainer = styled.div`
 `
 export const StyledBox = styled.div`
     ${tw`
+        relative
         p-10
         rounded-xl
         w-[50%]
@@ -66,7 +67,7 @@ export const StyledLoginInput = styled.div`
     ${tw`
         flex
         flex-col
-        gap-5
+        gap-3
         w-[80%]
     `}
     input{
@@ -105,9 +106,22 @@ export const StyledRadios = styled.div`
 
 `
 
+export const StyledBackBtn = styled.div`
+    ${tw`
+        absolute
+        left-5
+        top-5
+        text-3xl
+        cursor-pointer
+    `}
+    &:hover{
+        color: red;
+    }
+`
+
+
 export const StyledSignUpBtn = styled.button`
     ${tw`
-        // bg-stone-600
         text-white
         p-2
     `}
@@ -116,3 +130,62 @@ export const StyledSignUpBtn = styled.button`
 
     }
 `
+
+export const StyledEmail = styled.div`
+    ${tw`
+        relative
+        w-full
+    `}
+    input{
+        ${tw`
+            w-full
+        `}
+    }
+`
+
+export const StyledCheckBtn = styled.button`
+    ${tw`
+        absolute
+        right-2
+        top-2
+        bg-red-800
+        text-white
+        p-1
+        rounded-xl
+    `}
+    .icon{
+        display: none;
+    }
+    @media(max-width:500px){
+        .text{
+            display: none;
+        }
+        .icon {
+            display: block;
+            margin-top: 3px;
+            padding: 1px;
+        }
+    }
+`
+
+
+export const StyledPassword = styled.div`
+    ${tw`
+        flex
+        flex-col
+        gap-3
+    `}
+`
+
+
+
+export const StyledSignUp = styled.button`
+    ${tw`
+        bg-blue-900
+        text-white
+    `}
+    border-radius: 5px;
+    padding: 10px 30px;
+    width: 188.7px;
+`
+
