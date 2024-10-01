@@ -11,9 +11,12 @@ import { getUserFromLocalStorage } from "./localStorage"
 //         token: null as string | null,
 //     }
 // })
+
+const defaultUser = getUserFromLocalStorage()
+
 export const userState = atom({
     key: 'userState',
-    default: getUserFromLocalStorage() || {
+    default: defaultUser && defaultUser.token ? defaultUser :{
         kakaoId: null,
         email: null,
         name: null,

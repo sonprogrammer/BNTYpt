@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   kakaoId: {
     type: String,
-    sparse: true,
+    partial: true,
     unique: true
   },
   email: {
@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema({
     enum: [
       'trainer', 'member'
     ],
-    //* 멤버일 경우 남은 피티수업 횟수 보여주는거
     
     required: true
   }

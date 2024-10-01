@@ -8,6 +8,7 @@ import axios from 'axios';
 const SignupComponent = () => {
     const [selectedRole, setSelectedRole] = useState<string>('')
     const [email, setEmail] = useState<string>('')
+    const [name, setName] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [passwordMismatch, setPasswordMismatch] = useState<boolean>(false);
@@ -15,6 +16,9 @@ const SignupComponent = () => {
 
     const handleEamil = (e: React.ChangeEvent<HTMLInputElement>) =>{
         setEmail(e.target.value)
+    }
+    const handleName = (e: React.ChangeEvent<HTMLInputElement>) =>{
+        setName(e.target.value)
     }
 
     const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +99,7 @@ const SignupComponent = () => {
                 </StyledCheckBtn>
 
             </StyledEmail>
+                <input type="name" placeholder='name' onChange={handleName}/>
             <StyledPassword>
                 <input type="password" placeholder='PASSWORD'onChange={handlePassword}/>
                 <input type="password" placeholder='PASSWORD Check' onChange={handledConfirmPassword}/>

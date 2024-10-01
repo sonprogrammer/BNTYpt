@@ -38,7 +38,7 @@ const LandingComponent = () => {
         }
         try {
             setLoading(true)
-            const res = await axios.post('http://localhost:4000/api/user/login', {
+            const res = await axios.post('http://localhost:4000/api/user/login/kakao', {
                 accessToken,
                 role: selectedRole
             })
@@ -81,7 +81,7 @@ const LandingComponent = () => {
 
         try {
             setLoading(true);
-            const res = await axios.post('http://localhost:4000/api/user/login', {
+            const res = await axios.post('http://localhost:4000/api/user/login/regular', {
                 email,
                 password,
                 role: selectedRole
@@ -117,8 +117,8 @@ const LandingComponent = () => {
             <StyledBox>
                 <h1>BNTY</h1>
                 <StyledLoginInput>
-                        <input type="email" placeholder='ID'/>
-                        <input type="password" placeholder='PASSWORD'/>
+                        <input type="email" placeholder='ID' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        <input type="password" placeholder='PASSWORD' value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </StyledLoginInput>
                 <StyledRadios>
                     <label style={{ color: selectedRole === 'trainer' ? 'red' : 'white' }}>
