@@ -78,6 +78,10 @@ const LandingComponent = () => {
             alert('이메일과 비밀번호를 입력하세요.');
             return;
         }
+        if(!selectedRole){
+            alert('role을 선택하세요')
+            return;
+        }
 
         try {
             setLoading(true);
@@ -86,21 +90,29 @@ const LandingComponent = () => {
                 password,
                 role: selectedRole
             });
+            console.log('res', res);
             if (res.data.success) {
                 const newUser = {
-                    email: res.data.email,
-                    role: res.data.role,
-                    token: res.data.token // 필요한 경우 토큰을 추가
+                    email: res.data.user.email,
+                    name: res.data.user.name,
+                    role: res.data.user.role,
+                    token: res.data.user.token 
                 };
                 setUser(newUser);
                 saveUserToLocalStorage(newUser);
                 navigate('/browse');
+                
             } else {
-                alert(res.data.message);
+                    alert(res.data.message);
+    
             }
         } catch (error) {
             console.error('로그인 중 오류 발생:', error);
-            alert('로그인에 실패했습니다. 다시 시도해주세요.');
+            if (axios.isAxiosError(error) && error.response) {
+                alert(error.response.data.message || '로그인에 실패했습니다. 다시 시도해주세요.');
+            } else {
+                alert('로그인에 실패했습니다. 다시 시도해주세요.');
+            }
         } finally {
             setLoading(false);
         }

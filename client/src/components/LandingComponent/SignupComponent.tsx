@@ -3,6 +3,7 @@ import { StyledBackBtn, StyledBox, StyledCheckBtn, StyledContainer, StyledEmail,
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCheck, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const SignupComponent = () => {
@@ -13,6 +14,7 @@ const SignupComponent = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [passwordMismatch, setPasswordMismatch] = useState<boolean>(false);
 
+    const navigate = useNavigate()
 
     const handleEamil = (e: React.ChangeEvent<HTMLInputElement>) =>{
         setEmail(e.target.value)
@@ -71,16 +73,18 @@ const SignupComponent = () => {
         try {
             const res = await axios.post('http://localhost:4000/api/user/signup',{
                 email,
+                name,
                 password,
                 role: selectedRole
             })
             if(res.data.success){
                 alert('congraturation~~~')
                 handleRefresh()
+                // navigate('/')
             }
         } catch (error) {
             console.log('error', error)
-
+            alert('가입 중 오류가 발생했습니다. 다시 시도해주세요.')
         }
     }
     
@@ -99,7 +103,7 @@ const SignupComponent = () => {
                 </StyledCheckBtn>
 
             </StyledEmail>
-                <input type="name" placeholder='name' onChange={handleName}/>
+                <input type="text" placeholder='name' onChange={handleName}/>
             <StyledPassword>
                 <input type="password" placeholder='PASSWORD'onChange={handlePassword}/>
                 <input type="password" placeholder='PASSWORD Check' onChange={handledConfirmPassword}/>
