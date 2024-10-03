@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 
 
 //*일반 로그인
-const loginRegularUser = async (req, res) => {
+const loginRegularUser = async (req, res, next) => {
     const { role, email, password} = req.body;
 
     try {
@@ -118,41 +118,58 @@ const checkEmail = async(req, res) => {
     }
 }
 
-
-const signupUser = async(req, res) => {
-    const { email, password, role, name} = req.body;
-
+const signupUser = async (req, res, next) => {
+    const { email, password, role, name } = req.body
     try {
-        const user = await regularUser.findOne({ email})
-        if(user){
-            return res.status(400).json({ success: false, message: 'email already exists' })
-        }
-        const hashedPassword = await bcrypt.hash(password, 10)
-
-        const newUser = new regularUser({
+        let hashedPassword = await bcrypt.hash(password, 10)
+        const newUser = await regularUser.create({
             email,
             password: hashedPassword,
             role,
             name
         })
-
-        await newUser.save()
-
-        const token = jwt.sign({
-            id: newUser.id,
-            email: newUser.email,
-            role: newUser.role,
-            name: newUser.name
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '24h'}
-    )
-        
-        res.status(200).json({success: true, message: 'success to signup', token: token})
+        console.log('newUser', newUser)
+        res.status(200).json({ success: true, user: newUser })
     } catch (error) {
-        console.error(error)
-        res.status(500).json({success: false, message:'internal server error'})
+        next(error)
     }
 }
+
+
+// const signupUser = async(req, res) => {
+//     const { email, password, role, name} = req.body;
+
+//     try {
+//         const user = await regularUser.findOne({ email})
+//         if(user){
+//             return res.status(400).json({ success: false, message: 'email already exists' })
+//         }
+//         const hashedPassword = await bcrypt.hash(password, 10)
+
+//         const newUser = new regularUser({
+//             email,
+//             password: hashedPassword,
+//             role,
+//             name
+//         })
+
+//         await newUser.save()
+
+//         const token = jwt.sign({
+//             id: newUser.id,
+//             email: newUser.email,
+//             role: newUser.role,
+//             name: newUser.name
+//         },
+//         process.env.JWT_SECRET,
+//         { expiresIn: '24h'}
+//     )
+        
+//         res.status(200).json({success: true, message: 'success to signup', token: token})
+//     } catch (error) {
+//         console.error(error)
+//         res.status(500).json({success: false, message:'internal server error'})
+//     }
+// }
 
 module.exports = { getUser, signupUser, checkEmail, loginRegularUser, loginKakaoUser };

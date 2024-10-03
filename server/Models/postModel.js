@@ -11,6 +11,16 @@ const postSchema = new mongoose.Schema({
     date : { 
         type : Date, 
         default : Date.now()
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        refpath: 'userType',
+        required: true
+    },
+    userType: {
+        type: String, 
+        enum: ['regularUser', 'kakaoUser'],
+        // required: true
     }
 })
 

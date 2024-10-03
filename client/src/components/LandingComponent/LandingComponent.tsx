@@ -10,6 +10,7 @@ import SignupComponent from './SignupComponent';
 
 
 
+
 const LandingComponent = () => {
     const [selectedRole, setSelectedRole] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
@@ -24,7 +25,7 @@ const LandingComponent = () => {
     const navigate = useNavigate()
 
     // 나중에 env파일에 집어 넣기
-    const kakaoClientId = '748f4b889898873bb1a6d613886ebdf5'
+    const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID || '';
 
     const handleRadioChage = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedRole(e.target.value)
@@ -89,6 +90,10 @@ const LandingComponent = () => {
                 email,
                 password,
                 role: selectedRole
+            },{
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
             console.log('res', res);
             if (res.data.success) {

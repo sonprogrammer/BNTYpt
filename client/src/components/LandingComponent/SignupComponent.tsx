@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { StyledBackBtn, StyledBox, StyledCheckBtn, StyledContainer, StyledEmail, StyledLoginInput, StyledPassword, StyledRadios, StyledSignUp, StyledSignUpBtn } from './style'
+import { StyledBackBtn, StyledBox, StyledCheckBtn, StyledEmail, StyledLoginInput, StyledPassword, StyledRadios, StyledSignUp, StyledSignUpBtn } from './style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCheck, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 
 const SignupComponent = () => {
@@ -14,7 +13,6 @@ const SignupComponent = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [passwordMismatch, setPasswordMismatch] = useState<boolean>(false);
 
-    const navigate = useNavigate()
 
     const handleEamil = (e: React.ChangeEvent<HTMLInputElement>) =>{
         setEmail(e.target.value)
@@ -77,10 +75,10 @@ const SignupComponent = () => {
                 password,
                 role: selectedRole
             })
+            console.log('res', res)
             if(res.data.success){
                 alert('congraturation~~~')
                 handleRefresh()
-                // navigate('/')
             }
         } catch (error) {
             console.log('error', error)

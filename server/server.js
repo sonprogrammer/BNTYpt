@@ -7,7 +7,10 @@ const userRouter = require('./Routes/userRouter');
 const postRouter = require('./Routes/postRouter');
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
-
+const passport = require('passport');
+const regularUser = require('./Models/regularUserModel')
+const LocalStrategy = require('passport-local')
+const session = require('express-session');
 
 
 dotenv.config()
@@ -15,6 +18,16 @@ dotenv.config()
 const app = express();
 app.use(express.json())
 app.use(cors())
+app.use(passport.initialize())
+app.use(session({
+    secret: 'secret', 
+    resave: true,
+    saveUninitialized: false,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 
 cloudinary.config({
@@ -23,6 +36,32 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
   });
   
+passport.use(new LocalStrategy(
+    async (email, password, done) => {
+        try {
+            const user = await regularUser.findOne({ email})
+            if(!user){
+                return done(null, false, { message: 'incorrect email'})
+            }
+            const isMatch = await user.comparePassword(password)
+            if(!isMatch){
+                return done(null, false, { message: 'incorrect password'})
+            }
+            return done(null, user)
+        } catch (error) {
+            return done(error)
+        }
+    }
+))
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    const user = await User.findById(id);
+    done(null, user);
+});
+
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

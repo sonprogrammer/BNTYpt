@@ -12,7 +12,9 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
   const [photos, setPhotos] = useState<{ imageUrl: string, uploadTime: string, text: string}[]>([])
   const [user] = useRecoilState(userState)
 
-  console.log('user token', user.token)
+  console.log('user email', user.email)
+
+  //user.email이용해서 사용하면댐
 
 
     useEffect(() => {
@@ -23,7 +25,7 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
 
     const fetchPost = async () =>{
       try {
-        const res = await axios.get('http://localhost:4000/api/posts',{
+        const res = await axios.get('http://localhost:4000/api/posts/user/${user.email}',{
           headers: {
             Authorization: `Bearer ${user.token}`
           }

@@ -1,6 +1,8 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { StyledBtn, StyledContainerForm, StyledSubmitEl, StyledTextArea, StyledTitle } from './style';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../utils/userState';
 
 interface PostFormProps {
   addPost: (post: { text: string; images: File[]; date: Date; }) => void;
@@ -11,6 +13,9 @@ const PostForm = ({ addPost } : PostFormProps) => {
   const [images, setImages] = useState<File[]>([]);
   const [imagePreview, setImagePreview] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [user, setUser] = useRecoilState(userState)
+
+  console.log('user', user)
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => setText(e.target.value);
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,12 +31,15 @@ const PostForm = ({ addPost } : PostFormProps) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text && images.length === 0) return;
+    console.log('user', user.email)
 
     const formData = new FormData();
     formData.append('text', text);
+    formData.append('email', user.email);
     images.forEach((image) => {
       formData.append('images', image)
     })
+    console.log('formData', formData);
     try{
       const res = await axios.post('http://localhost:4000/api/posts', formData,{
         headers: {
