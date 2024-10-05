@@ -5,26 +5,27 @@ const kakaoUser = require('../Models/kakaoUserModel')
 
 const createPost = async (req, res) => {
     try {
-        const { text, email } = req.body
-        console.log('req.user', req.user)
-        let images = []
+        const { text, email, images } = req.body
+        // let images = []
 
-        if (req.files && req.files.length > 0) {
-            for (let file of req.files) {
-                const result = await cloudinary.uploader.upload(file.path); // Cloudinary에 업로드
-                images.push(result.secure_url); // 업로드된 이미지의 URL을 배열에 추가
-            }
-            console.log('Uploaded images:', images);
+        const user = await regularUser.findOne({ email })
+
+        if(!user){
+            return res.status(404).json({ success: false, message: 'user not found' })
         }
 
 
-        const user = await regularUser.findOne({ email: req.user.email }); 
-
+        // if (req.files && req.files.length > 0) {
+        //     for (let file of req.files) {
+        //         const result = await cloudinary.uploader.upload(file.path); // Cloudinary에 업로드
+        //         images.push(result.secure_url); // 업로드된 이미지의 URL을 배열에 추가
+        //     }
+        // }
 
         const newPost = new Post({
             text,
             images,
-            userId : email,
+            userId : user._id,
             createdAt: new Date()
         })
 
@@ -32,6 +33,7 @@ const createPost = async (req, res) => {
         res.status(200).json({ success: true, post: newPost })
         
     } catch (error) {
+        console.log('error in createPost', error)
         res.status(500).json({ success: false, message: error.message })
     }
 }
@@ -48,16 +50,26 @@ const getPost = async(req, res) =>{
 const getUserPosts = async (req, res) => {
     try {
         const { email } = req.params
-        const user = await regularUser.findOne({ email }) || kakaoUser.findOne({ email })
-        console.log('req.user', req.user)
+
+        const [regularUserFound, kakaoUserFound] = await Promise.all([
+            regularUser.findOne({ email }),
+            kakaoUser.findOne({ email })
+        ])
+
+        const user = regularUserFound || kakaoUserFound
 
         if(!user){
             return res.status(404).json({ success: false, message: 'user not found' })
         }
         
-        const posts = await Post.findOne({ userId: user._id }).populate('userId', 'name role')
+        const posts = await Post.find({ userId: user._id }).populate('userId', 'name role')
+        if (!posts || posts.length === 0) {
+            return res.status(404).json({ success: false, message: 'No posts found for this user' });
+        }
+
         res.status(200).json({ success: true, posts})
     } catch (error) {
+        console.error('Error in getUserPosts:', error); 
         res.status(500).json({ success: false, message: error.message })
     }
 }

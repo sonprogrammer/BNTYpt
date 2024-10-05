@@ -1,8 +1,7 @@
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
-const passport = require('passport');
-const { createPost, getPost, getUserPosts } = require('../Controller/postController')
+const { createPost, getUserPosts } = require('../Controller/postController')
 const postRouter = express.Router();
 
 
@@ -17,8 +16,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-postRouter.post('/', passport.authenticate('jwt', {session: false}),upload.array('images'), createPost)
-postRouter.get('/', getPost)
+postRouter.post('/', upload.array('images'), createPost)
 postRouter.get('/user/:email', getUserPosts)
 
 module.exports = postRouter

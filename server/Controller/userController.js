@@ -90,17 +90,6 @@ const loginKakaoUser = async (req, res) => {
     }
 }
 
-const getUser = async (req, res, next) => {
-    const { kakaoId } = req.query
-    try {
-        let user = await User.findOne({ kakaoId }) 
-        res.status(200).json(user);
-    } catch (error) {
-        next('error', error)
-    }
-}
-
-
 
 const checkEmail = async(req, res) => {
     const { email } = req.query
@@ -128,7 +117,6 @@ const signupUser = async (req, res, next) => {
             role,
             name
         })
-        console.log('newUser', newUser)
         res.status(200).json({ success: true, user: newUser })
     } catch (error) {
         next(error)
@@ -136,40 +124,4 @@ const signupUser = async (req, res, next) => {
 }
 
 
-// const signupUser = async(req, res) => {
-//     const { email, password, role, name} = req.body;
-
-//     try {
-//         const user = await regularUser.findOne({ email})
-//         if(user){
-//             return res.status(400).json({ success: false, message: 'email already exists' })
-//         }
-//         const hashedPassword = await bcrypt.hash(password, 10)
-
-//         const newUser = new regularUser({
-//             email,
-//             password: hashedPassword,
-//             role,
-//             name
-//         })
-
-//         await newUser.save()
-
-//         const token = jwt.sign({
-//             id: newUser.id,
-//             email: newUser.email,
-//             role: newUser.role,
-//             name: newUser.name
-//         },
-//         process.env.JWT_SECRET,
-//         { expiresIn: '24h'}
-//     )
-        
-//         res.status(200).json({success: true, message: 'success to signup', token: token})
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({success: false, message:'internal server error'})
-//     }
-// }
-
-module.exports = { getUser, signupUser, checkEmail, loginRegularUser, loginKakaoUser };
+module.exports = { signupUser, checkEmail, loginRegularUser, loginKakaoUser };

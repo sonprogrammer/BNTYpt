@@ -20,7 +20,6 @@ const postSchema = new mongoose.Schema({
     userType: {
         type: String, 
         enum: ['regularUser', 'kakaoUser'],
-        // required: true
     }
 })
 
