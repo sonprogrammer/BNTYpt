@@ -6,6 +6,7 @@ export const StyledContainer = styled.div`
         flex
         flex-wrap
         justify-around
+        h-full
         gap-10
         m-5
     `}
@@ -24,6 +25,19 @@ export const StyledContainer = styled.div`
         grid-template-columns: repeat(3, 1fr);
     }
 
+`
+
+export const StyledNothing = styled.div`
+    ${tw`
+        w-[100vw]
+        h-full
+        flex
+        justify-center
+        items-center
+        text-center
+        text-3xl
+        font-bold
+    `}
 `
 
 export const StyledBox = styled.div`

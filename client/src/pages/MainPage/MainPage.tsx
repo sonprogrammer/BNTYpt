@@ -8,7 +8,7 @@ import { userState } from '../../utils/userState'
 
 
 const MainPage = () => {
-  const [trainerRole, setTrainerRole] = useState<boolean>(false)
+  // const [trainerRole, setTrainerRole] = useState<boolean>(false)
   const [user] = useRecoilState(userState)
   console.log('user', user)
 

@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 interface Post{
   text: string;
-  images: File[];
+  images: string[];
   date: Date;
 }
 

@@ -18,13 +18,9 @@ const LandingComponent = () => {
     const [signup, setSignup] = useState<boolean>(false)
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-
-
-    console.log('user', user)
     
     const navigate = useNavigate()
 
-    // 나중에 env파일에 집어 넣기
     const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID || '';
 
     const handleRadioChage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +91,6 @@ const LandingComponent = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log('res', res);
             if (res.data.success) {
                 const newUser = {
                     email: res.data.user.email,
@@ -116,7 +111,7 @@ const LandingComponent = () => {
             if (axios.isAxiosError(error) && error.response) {
                 alert(error.response.data.message || '로그인에 실패했습니다. 다시 시도해주세요.');
             } else {
-                alert('로그인에 실패했습니다. 다시 시도해주세요.');
+                alert('로그인에 실패했습니다 시도해주세요.');
             }
         } finally {
             setLoading(false);

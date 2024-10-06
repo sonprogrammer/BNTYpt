@@ -77,7 +77,7 @@ const SignupComponent = () => {
             })
             console.log('res', res)
             if(res.data.success){
-                alert('congraturation~~~')
+                alert('congraturation~~~🥳')
                 handleRefresh()
             }
         } catch (error) {

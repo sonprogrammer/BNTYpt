@@ -8,6 +8,10 @@ interface LogoutModalProps {
 }
 
 const LogoutModalComponent = ({ onConfirm, onCancel }: LogoutModalProps) => {
+
+
+    
+    
     return (
         <StyledContainer onClick={onCancel}>
             <StyledContent onClick={(e) => e.stopPropagation()}>

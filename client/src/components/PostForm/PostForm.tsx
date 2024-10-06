@@ -4,18 +4,21 @@ import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 
+
 interface PostFormProps {
-  addPost: (post: { text: string; images: File[]; date: Date; }) => void;
+  addPost: (post: { text: string; images: string[]; date: Date; }) => void;
 }
+// interface PostFormProps {
+//   addPost: (post: { text: string; images: File[]; date: Date; }) => void;
+// }
 
 const PostForm = ({ addPost } : PostFormProps) => {
   const [text, setText] = useState<string>('');
   const [images, setImages] = useState<File[]>([]);
   const [imagePreview, setImagePreview] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [user, setUser] = useRecoilState(userState)
+  const [user] = useRecoilState(userState)
 
-  console.log('user', user)
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => setText(e.target.value);
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -28,19 +31,41 @@ const PostForm = ({ addPost } : PostFormProps) => {
     }
   };
 
+//*추가
+  const uploadImageToCloudinary = async(file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file)
+    formData.append('upload_preset', 'ods04138@gmail.com')
+    const res = await axios.post('https://api.cloudinary.com/v1_1/dqrsksfho/image/upload', formData);
+    console.log('res', res.data.secure_url)
+    return res.data.secure_url
+  }
+
+
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text && images.length === 0) return;
-    console.log('user', user.email)
 
-    const formData = new FormData();
+    // const formData = new FormData();
+    // formData.append('text', text);
+    // formData.append('email', user.email);
+    // images.forEach((image) => {
+    //   formData.append('images', image)
+    // })
+    try{
+
+      const uploadedImageUrls = await Promise.all(
+        images.map(image => uploadImageToCloudinary(image))
+      )
+      
+      const formData = new FormData();
     formData.append('text', text);
     formData.append('email', user.email);
-    images.forEach((image) => {
-      formData.append('images', image)
+    uploadedImageUrls.forEach(url => {
+      formData.append('images', url)
     })
-    console.log('formData', formData);
-    try{
+      
       const res = await axios.post('http://localhost:4000/api/posts', formData,{
         headers: {
           'Content-Type' : 'multipart/form-data'

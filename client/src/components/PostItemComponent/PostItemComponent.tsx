@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 interface Post {
     text: string;
-    images: File[];
+    images: string[];
     date: Date;
 }
 
@@ -24,7 +24,8 @@ const PostItemComponent = ({post} : PostItemProps) => {
           {post.images.map((image, index) => (
             <img 
               key={index}
-              src={URL.createObjectURL(image)} 
+              src={image}
+              // src={URL.createObjectURL(image)} 
               alt={`Post image ${index + 1}`} 
               style={{ maxWidth: '100%', height: 'auto', marginTop: '10px' }} 
             />

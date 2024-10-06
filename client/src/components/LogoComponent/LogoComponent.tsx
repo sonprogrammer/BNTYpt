@@ -4,11 +4,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import { LogoutModalComponent } from '../LogoutModalComponent'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { useRecoilState } from 'recoil'
+import { userState } from '../../utils/userState'
 
 
 const LogoComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [isWidth, setIsWidth] = useState<boolean>(window.innerWidth <= 800)
+  const [user, setUser] = useRecoilState(userState)
+
 
   const navigate = useNavigate()
   
@@ -23,7 +26,8 @@ const LogoComponent = () => {
   }
 
   const handleConfirmModal = () => {
-    //로그아웃 api
+    setUser(null)
+    localStorage.removeItem('user')
     console.log('success to logout')
     handleCloseModal()
     navigate('/')

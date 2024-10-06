@@ -4,7 +4,7 @@ import { StyledContainer } from './style';
 
 interface Post {
     text: string;
-    images: File[];
+    images: string[];
     date: Date;
 }
 

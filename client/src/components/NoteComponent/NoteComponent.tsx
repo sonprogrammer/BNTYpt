@@ -9,7 +9,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 interface Post{
     text: string;
-    images: File[];
+    images: string[];
     date: Date;
 }
 
@@ -30,11 +30,11 @@ const NoteComponent = () => {
                   images: [], // 이미지가 없는 경우
                   date: new Date()
                 },
-                {
-                  text: '상체 운동 루틴을 공유합니다.',
-                  images: [new File([], 'mock-image.jpg')], // 이미지가 있는 경우 (실제 파일 경로는 없으므로 대체 데이터)
-                  date: new Date()
-                },
+                // {
+                //   text: '상체 운동 루틴을 공유합니다.',
+                //   images: [new File([], 'mock-image.jpg')], // 이미지가 있는 경우 (실제 파일 경로는 없으므로 대체 데이터)
+                //   date: new Date()
+                // },
                 {
                   text: '스트레칭 중요성에 대한 글입니다.',
                   images: [],
