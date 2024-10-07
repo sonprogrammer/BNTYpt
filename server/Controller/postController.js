@@ -5,22 +5,35 @@ const kakaoUser = require('../Models/kakaoUserModel')
 
 const createPost = async (req, res) => {
     try {
-        const { text, email, images } = req.body
+        const { text, email, kakaoId, images } = req.body
         // let images = []
 
-        const user = await regularUser.findOne({ email })
+
+
+        // const user = await regularUser.findOne({ email })
+
+        let user
+
+        if(email){
+            user = await regularUser.findOne({ email })
+            if(!user){
+                return res.status(404).json({ success: false, message: 'user not found' })
+            }
+        }
+
+        if(kakaoId){
+            user = await kakaoUser.findOne({ kakaoId })
+            if(!user){
+                return res.status(404).json({ success: false, message: 'user not found' })
+            }
+        }
 
         if(!user){
-            return res.status(404).json({ success: false, message: 'user not found' })
+            return res.status(404).json({ success: false, message: 'user not found'})
         }
 
 
-        // if (req.files && req.files.length > 0) {
-        //     for (let file of req.files) {
-        //         const result = await cloudinary.uploader.upload(file.path); // Cloudinary에 업로드
-        //         images.push(result.secure_url); // 업로드된 이미지의 URL을 배열에 추가
-        //     }
-        // }
+    
 
         const newPost = new Post({
             text,
@@ -49,14 +62,17 @@ const getPost = async(req, res) =>{
 
 const getUserPosts = async (req, res) => {
     try {
-        const { email } = req.params
+        const { email, kakaoId } = req.params
+        
 
-        const [regularUserFound, kakaoUserFound] = await Promise.all([
-            regularUser.findOne({ email }),
-            kakaoUser.findOne({ email })
-        ])
 
-        const user = regularUserFound || kakaoUserFound
+        let user
+        if(email){
+            user = await regularUser.findOne({ email})
+        }else if(kakaoId){
+            user = await kakaoUser.findOne({ kakaoId })
+        }
+        
 
         if(!user){
             return res.status(404).json({ success: false, message: 'user not found' })

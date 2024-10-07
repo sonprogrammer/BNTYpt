@@ -46,42 +46,78 @@ const PostForm = ({ addPost } : PostFormProps) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text && images.length === 0) return;
-
-    // const formData = new FormData();
-    // formData.append('text', text);
-    // formData.append('email', user.email);
-    // images.forEach((image) => {
-    //   formData.append('images', image)
-    // })
+    console.log('user',user)
     try{
 
       const uploadedImageUrls = await Promise.all(
         images.map(image => uploadImageToCloudinary(image))
       )
       
-      const formData = new FormData();
-    formData.append('text', text);
-    formData.append('email', user.email);
-    uploadedImageUrls.forEach(url => {
-      formData.append('images', url)
-    })
-      
-      const res = await axios.post('http://localhost:4000/api/posts', formData,{
-        headers: {
-          'Content-Type' : 'multipart/form-data'
-        }
-      })
-
-      if(res.data.success){
-        const currentDate = new Date()
-        
-        addPost({ text, images: res.data.post.images, date: currentDate});
-        setText('');
-        setImages([]);
-        setImagePreview([])
-      }else{
-        console.error('Error', res.data.message)
+      const formData: Record<string, any> = {
+        text,
+        images: uploadedImageUrls
       }
+
+      if(user.kakaoId){
+        formData['kakaoId'] = user.kakaoId
+        const res = await axios.post('http://localhost:4000/api/posts', formData,{
+          headers: {
+            'Content-Type' : 'application/json',
+            Authorization: `Bearer ${user.kakaoAccessToken}`
+          }
+        })
+
+        if(res.data.success){
+          addPost({ text, images: res.data.post.images, date: new Date() })
+          setText('')
+          setImages([])
+          setImagePreview([])
+        }else{
+          console.error('errror', res.data.message)
+        }
+      }
+      //*일반 로그인 
+      else{
+        formData['email'] = user.email
+        const res = await axios.post('http://localhost:4000/api/posts', formData, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user.token}`
+          }
+        })
+        if(res.data.success){
+          addPost({ text, images: res.data.post.images, date: new Date()})
+          setText('')
+          setImages([])
+          setImagePreview([])
+        }else{
+          console.error('errror', res.data.message)
+        }
+      }
+
+    //   const formData = new FormData();
+    // formData.append('text', text);
+    // formData.append('email', user.email);
+    // uploadedImageUrls.forEach(url => {
+    //   formData.append('images', url)
+    // })
+      
+    //   const res = await axios.post('http://localhost:4000/api/posts', formData,{
+    //     headers: {
+    //       'Content-Type' : 'multipart/form-data'
+    //     }
+    //   })
+
+    //   if(res.data.success){
+    //     const currentDate = new Date()
+        
+    //     addPost({ text, images: res.data.post.images, date: currentDate});
+    //     setText('');
+    //     setImages([]);
+    //     setImagePreview([])
+    //   }else{
+    //     console.error('Error', res.data.message)
+    //   }
     }catch(error){
       console.error('Error', error)
     }

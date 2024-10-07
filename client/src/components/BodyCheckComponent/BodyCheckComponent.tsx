@@ -12,6 +12,7 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
   const [photos, setPhotos] = useState<{ imageUrl: string, uploadTime: string, text: string}[]>([])
   const [user] = useRecoilState(userState)
 
+  
     useEffect(() => {
       if(user){
         fetchPost()
@@ -20,11 +21,25 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
 
     const fetchPost = async () =>{
       try {
-        const res = await axios.get(`http://localhost:4000/api/posts/user/${user.email}`,{
+        let url = ``
+
+        if(user.email){
+          url = `http://localhost:4000/api/posts/user/email/${user.email}`
+        }else if(user.kakaoId){
+          url = `http://localhost:4000/api/posts/user/kakao/${user.kakaoId}`
+        }
+
+        const res = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${user.token}`
           }
         })
+
+        // const res = await axios.get(`http://localhost:4000/api/posts/user/${user.email}`,{
+        //   headers: {
+        //     Authorization: `Bearer ${user.token}`
+        //   }
+        // })
         const formatedPost = res.data.posts.map((post:any) => ({
           imageUrl: post.images[0],
           uploadTime: dayjs(post.createdAt).format('YYYY-MM-DD'),

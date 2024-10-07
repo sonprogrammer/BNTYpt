@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 postRouter.post('/', upload.array('images'), createPost)
-postRouter.get('/user/:email', getUserPosts)
+postRouter.get('/user/email/:email', getUserPosts)
+postRouter.get('/user/kakao/:kakaoId', getUserPosts)
 
 module.exports = postRouter
