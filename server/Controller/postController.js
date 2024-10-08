@@ -6,11 +6,7 @@ const kakaoUser = require('../Models/kakaoUserModel')
 const createPost = async (req, res) => {
     try {
         const { text, email, kakaoId, images } = req.body
-        // let images = []
-
-
-
-        // const user = await regularUser.findOne({ email })
+       
 
         let user
 

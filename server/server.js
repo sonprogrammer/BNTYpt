@@ -11,6 +11,7 @@ const passport = require('passport');
 const regularUser = require('./Models/regularUserModel')
 const LocalStrategy = require('passport-local')
 const session = require('express-session');
+const calendarRouter = require('./Routes/calendarRouter');
 
 
 dotenv.config()
@@ -67,6 +68,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/user', userRouter)
 app.use('/api/posts', postRouter)
+app.use('/api/calendar', calendarRouter)
 
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('mongodb connect'))
