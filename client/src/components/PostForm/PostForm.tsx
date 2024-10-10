@@ -95,29 +95,6 @@ const PostForm = ({ addPost } : PostFormProps) => {
         }
       }
 
-    //   const formData = new FormData();
-    // formData.append('text', text);
-    // formData.append('email', user.email);
-    // uploadedImageUrls.forEach(url => {
-    //   formData.append('images', url)
-    // })
-      
-    //   const res = await axios.post('http://localhost:4000/api/posts', formData,{
-    //     headers: {
-    //       'Content-Type' : 'multipart/form-data'
-    //     }
-    //   })
-
-    //   if(res.data.success){
-    //     const currentDate = new Date()
-        
-    //     addPost({ text, images: res.data.post.images, date: currentDate});
-    //     setText('');
-    //     setImages([]);
-    //     setImagePreview([])
-    //   }else{
-    //     console.error('Error', res.data.message)
-    //   }
     }catch(error){
       console.error('Error', error)
     }

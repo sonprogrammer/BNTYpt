@@ -35,11 +35,6 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
           }
         })
 
-        // const res = await axios.get(`http://localhost:4000/api/posts/user/${user.email}`,{
-        //   headers: {
-        //     Authorization: `Bearer ${user.token}`
-        //   }
-        // })
         const formatedPost = res.data.posts.map((post:any) => ({
           imageUrl: post.images[0],
           uploadTime: dayjs(post.createdAt).format('YYYY-MM-DD'),

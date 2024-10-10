@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react';
 import './App.css';
-import { LoginComponent, NavbarComponent, TimerComponent } from './components';
+import { LoginComponent, NavbarComponent, NotFoundComponent, TimerComponent } from './components';
 import { BodyCheckPage, MainPage, LayoutPage, TodayPage, TimerPage, LandingPage, CalendarPage, ChatPage, NotePage, ChatRoomPage } from './pages';
 import { Route, Routes } from 'react-router-dom';
 
@@ -13,6 +13,11 @@ function App() {
         <Route path='/' element={
           <LandingPage />
         }/>
+        <Route path='*' element={
+          <Suspense fallback={<div></div>}>
+            <NotFoundComponent />
+          </Suspense>
+        } />
         <Route element={
           <Suspense fallback={<div></div>}>
               <LayoutPage />

@@ -11,5 +11,6 @@ export const userState = atom({
         name: null,
         role: null as string | null,
         token: null as string | null, 
+        objectId: null as string | null,
     }
 })
