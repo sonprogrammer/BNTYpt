@@ -1,6 +1,21 @@
+
 import { addDays } from 'date-fns';
 import styled from "styled-components";
 import tw from "twin.macro";
+
+
+
+export const StyledNothing = styled.div`
+    ${tw`
+        h-full
+        flex
+        justify-center
+        items-center
+        font-bold
+        text-3xl
+    `}
+`
+
 
 export const StyledPostBox = styled.div`
     ${tw`

@@ -12,6 +12,7 @@ const regularUser = require('./Models/regularUserModel')
 const LocalStrategy = require('passport-local')
 const session = require('express-session');
 const calendarRouter = require('./Routes/calendarRouter');
+const chatRouter = require('./Routes/chatRouter');
 
 
 dotenv.config()
@@ -66,9 +67,11 @@ passport.deserializeUser(async (id, done) => {
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// app.use('/api/friend',)
 app.use('/api/user', userRouter)
 app.use('/api/posts', postRouter)
 app.use('/api/calendar', calendarRouter)
+app.use('/api/chat', chatRouter)
 
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('mongodb connect'))
