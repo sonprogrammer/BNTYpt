@@ -32,6 +32,7 @@
     "react-router-dom": "^6.26.1",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.7",
+    "socket.io-client": "^4.8.0",
     "styled-components": "^6.1.12",
     "twin.macro": "^3.4.1",
     "web-vitals": "^2.1.4"

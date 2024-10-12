@@ -29,7 +29,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
             console.log('QR Code Scanned:', trainerId);
             try {
                 const res = await axios.post('http://localhost:4000/api/chat', {
-                    trinerInfo: trainerId,
+                    trainerInfo: trainerId,
                     memberInfo: user.email || user.kakaoId
                 })
                 console.log('respose', res.data)

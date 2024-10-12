@@ -5,7 +5,15 @@ const chatSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    trainerName:{
+        type: String,
+        required: true
+    },
     memberId:{
+        type: String,
+        required: true
+    },
+    memberName: {
         type: String,
         required: true
     },

@@ -13,13 +13,27 @@ const LocalStrategy = require('passport-local')
 const session = require('express-session');
 const calendarRouter = require('./Routes/calendarRouter');
 const chatRouter = require('./Routes/chatRouter');
+const http = require('http');
+const socketIo = require('socket.io');
+const { Server} = require('socket.io')
 
 
 dotenv.config()
 
 const app = express();
+const server = http.createServer(app)
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+        credentials: true
+    }
+});
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST']
+}))
 app.use(passport.initialize())
 app.use(session({
     secret: 'secret', 
@@ -30,7 +44,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+io.on('connection', (socket) => {
+    console.log('connected', socket.id); // 연결된 소켓 ID 출력
+    socket.on('sendMessage', (message) => {
+        io.emit('receiveMessage', message);
+    });
+    socket.on('disconnect', () => {
+        console.log('disconnected', socket.id);
+    });
+});
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -60,7 +82,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-    const user = await User.findById(id);
+    const user = await regularUser.findById(id);
     done(null, user);
 });
 

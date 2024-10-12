@@ -5,39 +5,60 @@ import axios from 'axios'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 
+
+interface ChatRoom {
+    _id: string; 
+    memberId?: string; 
+    trainerId?: string; 
+    memberName?: string; 
+    trainerName?: string; 
+    opponentName?: string;
+    lastMessage?: string; 
+    messages?: {
+        content: string;
+        createdAt: string;
+        senderId: string;
+    }[]
+}
+
 const ChattingBoxComponent = () => {
-    const [chatRooms, setChatRooms] = useState([])
+    const [chatRooms, setChatRooms] = useState<ChatRoom[]>([])
     const navigate = useNavigate()
     const [user] = useRecoilState(userState)
 
     const fetchChatRooms = async(userId: string) => {
         try {
-            const res = await axios.get(`http://localhost/api/chatrooms/${userId}`)
+            const res = await axios.get(`http://localhost:4000/api/chat/chatrooms/${userId}`)
             setChatRooms(res.data.chatRooms)
+            const roomsWithLastMessage = res.data.chatRooms.map((room: ChatRoom) => {
+                const lastMessage = room.messages && room.messages.length > 0 ? room.messages[room.messages.length - 1].content : null;
+                return { ...room, lastMessage }; // 마지막 메시지를 새로운 속성으로 추가
+            });
+
+            setChatRooms(roomsWithLastMessage); // 마지막 메시지가 포함된 chatRooms 설정
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
     }
-
     useEffect(() => {
         const userId = user.email || user.kakaoId
         fetchChatRooms(userId)
     },[user])
     
-    
-    const handleNavigate = (userId: number | string) => {
-        navigate(`/chat/${userId}`)
+
+    const handleNavigate = (room: ChatRoom) => {
+        navigate(`/chat/${room.opponentName}`)
     }
     return (
         <>
             {chatRooms.map((room) => (
-                <StyledContainer key={room._id} onClick={() => handleNavigate(room.memberId || room.trainerId)}>
+                <StyledContainer key={room._id} onClick={() => handleNavigate(room)}>
                     <StyledProfile>
                         <img src="./logo2.png" alt="프로필사진" />
                     </StyledProfile>
                     <StyledContent>
-                        <h2>{room.memberName || '이름'}</h2> {/* 이름 필드 수정 필요 */}
-                        <p>{room.lastMessage || '대화내용'}</p> {/* 마지막 메시지 필드 수정 필요 */}
+                        <h2>{room.opponentName || '이름'}</h2> 
+                        <p>{room.lastMessage || '대화내용'}</p>
                     </StyledContent>
                 </StyledContainer>
             ))}

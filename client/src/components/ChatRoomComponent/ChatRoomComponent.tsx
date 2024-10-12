@@ -2,8 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { StyledArrow, StyledContainer, StyledMessage, StyledMessageBox, StyledPlus, StyledSendEl, Styledupper } from './style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faArrowLeft, faUser} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { io } from 'socket.io-client'
+import { useRecoilState } from 'recoil';
+import { userState } from '../../utils/userState';
+import axios from 'axios';
+
 
 
 interface User {
@@ -15,30 +20,48 @@ interface User {
 interface Message {
     text: string;
     isMine: boolean;
-    userId: string;
+    sender: string;
 }
-const users: User[] = [
-    { id: '1', name: 'User1', profile: './logo1.png' },
-    { id: '2', name: 'User2' },
-];
-
 
 const ChatRoomComponent = () => {
     const { userId } = useParams<{userId: string}>()
     const[messages, setMessages] = useState<Message[]>([])
     const [input, setInput] = useState<string>('')
     const messageBoxRef = useRef<HTMLDivElement>(null)
+    const [user] = useRecoilState(userState)
+    const [socket, setSocket] = useState<any>(null); 
+    const [chatRoomId, setChatRoomId] = useState<string | null>(null);
 
-    //mockup data -> 나중에 지우기
+
+    console.log('user', user.name)
+    
     useEffect(() => {
-        const mockMessages: Message[] = [
-            { text: '안녕하세요!', isMine: false, userId: '1'},
-            { text: '안녕하세요! 어떻게 도와드릴까요?', isMine: true, userId: '2' },
-            { text: '새로운 프로젝트에 대해 이야기해볼까요?', isMine: false, userId: '1' },
-            { text: '좋아요, 시작해봅시다!', isMine: true, userId: '2' },
-            { text: '안녕하세요!', isMine: false, userId: '1' },
-        ];
-        setMessages(mockMessages);
+        const fetchChatRoom = async () => {
+            try {
+                const response = await axios.get(`http://localhost:4000/api/chat/chatrooms/${userId}`); 
+                setChatRoomId(response.data._id); 
+                console.log('res', response.data)
+            } catch (error) {
+                console.error('Error fetching chat room:', error);
+            }
+        };
+
+        fetchChatRoom();
+    }, [userId]);
+    
+    
+    useEffect(() => {
+        const newSocket = io('http://localhost:4000', {secure:true, reconnection : false, rejectUnauthorized: false, transports:['websocket']});
+        setSocket(newSocket)
+        newSocket.on('connect', () => {
+            console.log('connected to socket sever')
+        })
+        newSocket.on('receiveMessage', (message: Message) => {
+            setMessages(prev => [...prev, message])
+        })
+        return () => {
+            newSocket.disconnect()
+        }
     }, []);
 
 
@@ -53,11 +76,24 @@ const ChatRoomComponent = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value)
     }
-
-    const handleSendMessage = () => {
+    const handleSendMessage = async() => {
         if(input.trim() !== ''){
-            setMessages([...messages, { text: input, isMine: true , userId: '2'}])
-            setInput('')
+            const newMessage = { text: input, isMine: true, sender: user.name};
+            console.log('Sending message:', newMessage); 
+            try {
+                await axios.post('http://localhost:4000/api/chat/send', {
+                    chatRoomId: chatRoomId, 
+                    sender: newMessage.sender,
+                    message: newMessage.text,
+                })
+            
+                
+                socket.emit('sendMessage', newMessage);
+                setInput('')
+                
+            } catch (error) {
+                console.error('Error sending message:', error); 
+            }
         }
     }
 
