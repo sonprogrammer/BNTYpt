@@ -34,10 +34,12 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
             Authorization: `Bearer ${user.token}`
           }
         })
+        console.log('API 응답 데이터:', res.data.posts); // 응답 데이터 확인
+
 
         const formatedPost = res.data.posts.map((post:any) => ({
           imageUrl: post.images[0],
-          uploadTime: dayjs(post.createdAt).format('YYYY-MM-DD'),
+          uploadTime: dayjs(post.date).format('YYYY-MM-DD'),
           text: post.text
         }))
         setPhotos(formatedPost)

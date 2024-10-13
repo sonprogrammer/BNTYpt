@@ -63,10 +63,6 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
             {role === 'trainer' ? (
                 <StyledTrainerBox>
                     <QRCodeCanvas value={user.email || user.kakaoId} />
-                    {/* <QRCodeCanvas value={JSON.stringify({ email: user.email || user.kakaoId })} /> */}
-                    {/* <QRCodeCanvas value={'https://www.naver.com'} /> */}
-
-                    <p>{user.email || user.kakaoId}</p>
                 </StyledTrainerBox>
             ) : (
                 <StyledMemberBox>
@@ -87,8 +83,6 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                         scan Qr code
                         </div>
                     }
-
-                    {scannedData ? <p>스캔된 데이터: {scannedData}</p> : <p>no scandata</p>}
                 </StyledMemberBox>
             )}
         </StyledContainer>

@@ -6,7 +6,7 @@ import { userState } from '../../utils/userState';
 
 
 interface PostFormProps {
-  addPost: (post: { text: string; images: string[]; date: Date; }) => void;
+  addPost: (post: { text: string; images: string[]; uploadTime: string; }) => void;
 }
 // interface PostFormProps {
 //   addPost: (post: { text: string; images: File[]; date: Date; }) => void;
@@ -68,7 +68,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
         })
 
         if(res.data.success){
-          addPost({ text, images: res.data.post.images, date: new Date() })
+          addPost({ text, images: res.data.post.images, uploadTime: res.data.post.date })
           setText('')
           setImages([])
           setImagePreview([])
@@ -86,7 +86,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
           }
         })
         if(res.data.success){
-          addPost({ text, images: res.data.post.images, date: new Date()})
+          addPost({ text, images: res.data.post.images, uploadTime: res.data.post.date})
           setText('')
           setImages([])
           setImagePreview([])

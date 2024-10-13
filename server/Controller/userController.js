@@ -39,6 +39,7 @@ const loginRegularUser = async (req, res, next) => {
             success: true,
             message: 'login successfully',
             user: {
+                objectId: user._id,
                 email: user.email,
                 name: user.name,
                 role: user.role,
@@ -81,6 +82,7 @@ const loginKakaoUser = async (req, res) => {
         res.status(200).json({ 
             success: true, 
             message: 'login successful', 
+            objectId: user._id, 
             kakaoId: user.kakaoId, 
             name: user.name, 
             role: user.role
@@ -117,7 +119,12 @@ const signupUser = async (req, res, next) => {
             role,
             name
         })
-        res.status(200).json({ success: true, user: newUser })
+        res.status(200).json({ success: true, user: {
+            objectId: newUser._id, 
+            email: newUser.email,
+            name: newUser.name,
+            role: newUser.role
+        }});
     } catch (error) {
         next(error)
     }

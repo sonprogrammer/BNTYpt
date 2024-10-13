@@ -35,10 +35,12 @@ const createChatRoom = async(req, res)=> {
 
 const getChatRooms = async(req, res) => {
     const { userId } = req.params
+    console.log(userId)
     try {
-        const user = await kakaoUser.findOne({ kakaoId: userId }) || await regularUser.findOne({email: userId}) //현재 로그인된사용자의 정보
+        const user = await kakaoUser.findById(userId) || await regularUser.findById(userId) //현재 로그인된사용자의 정보
+        console.log('user', user)
         if(!user){
-            res.status(404).json({success: false, message: 'not found user'})
+            return res.status(404).json({success: false, message: 'not found user'})
         }
         const chatRooms = await ChatRoom.find({
             $or: [{trainerId: user._id}, { memberId: user._id}]
@@ -76,19 +78,34 @@ const getChatRooms = async(req, res) => {
     }
 }
 
+const getMessages = async (req, res) => {
+    const { chatRoomId } = req.params
+    try {
+        const chatRoom = await ChatRoom.findById(chatRoomId)
+        if(!chatRoom){
+            return res.status(404).json({ success: false, message: 'chat room not found'})
+        }
+        if (!chatRoom.messages || chatRoom.messages.length === 0) {
+            return res.status(200).json({ success: true, messages: [] });
+        }
+        res.status(200).json({ success: true, message: chatRoom.messages})
+    } catch (error) {
+        console.error(error)
+        res.status(404).json({ success: false, message:'server error'})
+    }
+}
+
 
 const sendMessage = async(req, res) => {
     const { chatRoomId, sender, message} = req.body
 
     try {
         const chatRoom = await ChatRoom.findById(chatRoomId)
-        console.log('chatRoom', chatRoom)
-        console.log('chatRoomId', chatRoomId)
         if(!chatRoom){
             return res.status(404).json({ message: 'can not find chattingroom'})
         }
 
-        chatRoom.messages.push({ sender, message})
+        chatRoom.messages.push({ sender, message, timestamp: new Date()})
         await chatRoom.save()
         res.status(200).json(chatRoom)
     } catch (error) {
@@ -96,4 +113,4 @@ const sendMessage = async(req, res) => {
     }
 }
 
-module.exports = { createChatRoom, getChatRooms, sendMessage}
+module.exports = { createChatRoom, getChatRooms, sendMessage,getMessages}

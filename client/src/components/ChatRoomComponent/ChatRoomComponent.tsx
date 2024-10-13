@@ -5,9 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { io } from 'socket.io-client'
+// import socket from '../../socket'
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
+import { timeStamp } from 'console';
 
 
 
@@ -24,119 +26,173 @@ interface Message {
 }
 
 const ChatRoomComponent = () => {
-    const { userId } = useParams<{userId: string}>()
-    const[messages, setMessages] = useState<Message[]>([])
+    const { userId } = useParams<{ userId: string }>()
+    const [messages, setMessages] = useState<Message[]>([])
     const [input, setInput] = useState<string>('')
     const messageBoxRef = useRef<HTMLDivElement>(null)
     const [user] = useRecoilState(userState)
-    const [socket, setSocket] = useState<any>(null); 
+    const [socket, setSocket] = useState<any>(null);
     const [chatRoomId, setChatRoomId] = useState<string | null>(null);
 
+    useEffect(() => {
+        const socketInstance = io('http://localhost:4000')
+        setSocket(socketInstance)
+        return () => {
+            socketInstance.disconnect()
+        }
+    }, [])
 
-    console.log('user', user.name)
-    
     useEffect(() => {
         const fetchChatRoom = async () => {
             try {
-                const response = await axios.get(`http://localhost:4000/api/chat/chatrooms/${userId}`); 
-                setChatRoomId(response.data._id); 
-                console.log('res', response.data)
+                const response = await axios.get(`http://localhost:4000/api/chat/chatrooms/${user.objectId}`);
+                const chatRooms = response.data.chatRooms;
+
+                const currentChatRoom = chatRooms.find((room: any) =>
+                    (room.trainerId === user.objectId && room.opponentName === userId) ||
+                    (room.memberId === user.objectId && room.opponentName === userId)
+                );
+                console.log('currentChatRoom', currentChatRoom)
+                if (currentChatRoom) {
+                    setChatRoomId(currentChatRoom._id);
+                    socket.emit('joinRoom', currentChatRoom._id)
+                } else {
+                    console.log(`No chat room found with ${userId}.`);
+                }
+
             } catch (error) {
                 console.error('Error fetching chat room:', error);
             }
         };
 
-        fetchChatRoom();
-    }, [userId]);
-    
-    
+        if (user.objectId) {
+            fetchChatRoom();
+        }
+    }, [user.objectId, socket]);
+
+    console.log('chatroomid', chatRoomId)
+
     useEffect(() => {
-        const newSocket = io('http://localhost:4000', {secure:true, reconnection : false, rejectUnauthorized: false, transports:['websocket']});
-        setSocket(newSocket)
-        newSocket.on('connect', () => {
-            console.log('connected to socket sever')
-        })
-        newSocket.on('receiveMessage', (message: Message) => {
-            setMessages(prev => [...prev, message])
-        })
-        return () => {
-            newSocket.disconnect()
-        }
-    }, []);
+        const fetchMessages = async () => {
+            if (chatRoomId) {
+                try {
+                    const res = await axios.get(`http://localhost:4000/api/chat/messages/${chatRoomId}`)
+                    console.log('res', res.data)
+                    if (res.data.success) {
+                        const fetchedMessages = res.data.message.map((msg: any) => ({
+                            text: msg.message,
+                            isMine: msg.sender === user.name,
+                            sender: msg.sender,
+                            timestamp: msg.timestamp
+                        }));
+                        setMessages(fetchedMessages);
+                    }
+
+                } catch (error) {
+                    console.error('Error chat room:', error);
+                }
+            }
+        };
+
+        fetchMessages();
+    }, [chatRoomId]);
 
 
-    useEffect(()=>{
-        if(messageBoxRef.current){
-            messageBoxRef.current.scrollIntoView({ behavior: 'smooth'})
+    useEffect(() => {
+        if (chatRoomId && socket) {
+            socket.emit('joinRoom', chatRoomId);
+
+            socket.on('newMessage', (message: any) => {
+                setMessages((prevMessages) => [...prevMessages, {
+                    text: message.message,
+                    isMine: message.sender === user.name,
+                    sender: message.sender
+                }]);
+            });
+
+            return () => {
+                socket.off('newMessage');
+            };
         }
-    },[messages])
+    }, [chatRoomId, socket]);
+
+    useEffect(() => {
+        if (messageBoxRef.current) {
+            messageBoxRef.current.scrollIntoView({ behavior: 'smooth' })
+        }
+    }, [messages])
 
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value)
     }
-    const handleSendMessage = async() => {
-        if(input.trim() !== ''){
-            const newMessage = { text: input, isMine: true, sender: user.name};
-            console.log('Sending message:', newMessage); 
+    const handleSendMessage = async () => {
+        if (input.trim() !== '') {
+            const newMessage = { text: input, isMine: true, sender: user.name };
+            console.log('Sending message:', newMessage);
             try {
                 await axios.post('http://localhost:4000/api/chat/send', {
-                    chatRoomId: chatRoomId, 
+                    chatRoomId,
                     sender: newMessage.sender,
                     message: newMessage.text,
                 })
-            
-                
+
+
                 socket.emit('sendMessage', newMessage);
+                setMessages(prevMessages => [...prevMessages, newMessage]);
                 setInput('')
-                
+
             } catch (error) {
-                console.error('Error sending message:', error); 
+                console.error('Error sending message:', error);
             }
         }
     }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            e.preventDefault(); 
+            e.preventDefault();
             handleSendMessage();
         }
     }
-    
+
     return (
-      <StyledContainer>
-          <Styledupper>
-            <StyledArrow>
-                <Link to='/chat'>
-                    <FontAwesomeIcon icon={faArrowLeft} />
-                </Link>
-            </StyledArrow>
-            <h2>{userId} chat</h2>
-          </Styledupper>
-          <StyledMessageBox>
-            {messages.map((message, i) => (
+        <StyledContainer>
+            <Styledupper>
+                <StyledArrow>
+                    <Link to='/chat'>
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                    </Link>
+                </StyledArrow>
+                <h2>{userId} chat</h2>
+            </Styledupper>
+            <StyledMessageBox>
                 <>
-                <StyledMessage key={i} isMine={message.isMine}>
-                    {message.text}
-                    </StyledMessage>
-                    </>
-            ))}
-            <div ref={messageBoxRef}/>
-          </StyledMessageBox>
-          <StyledSendEl>
-            <input 
-                type="text"
-                value={input}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
+                    {messages.length > 0 ? (
+                        messages.map((message, i) => (
+                            <StyledMessage key={i} isMine={message.isMine}>
+                                {message.text}
+                            </StyledMessage>
+                        ))
+                    ) : (
+                        <p className='text-center flex items-center justify-center h-full font-bold text-2xl text-red-900'>there is no message.</p>
+                    )}
+                </>
+                <div ref={messageBoxRef} />
+            </StyledMessageBox>
+            <StyledSendEl>
+                <input
+                    type="text"
+                    value={input}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
                 />
-            <StyledPlus>
-                <FontAwesomeIcon icon={faPlus} />
-            </StyledPlus>
-            <button onClick={handleSendMessage}>send</button>
-          </StyledSendEl>
-      </StyledContainer>
+                <StyledPlus>
+                    <FontAwesomeIcon icon={faPlus} />
+                </StyledPlus>
+                <button onClick={handleSendMessage}>send</button>
+            </StyledSendEl>
+        </StyledContainer>
     )
 }
 

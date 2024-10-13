@@ -18,17 +18,19 @@ const socketIo = require('socket.io');
 const { Server} = require('socket.io')
 
 
+
 dotenv.config()
 
 const app = express();
 const server = http.createServer(app)
-const io = new Server(server, {
+const io = socketIo(server, {
     cors: {
         origin: '*',
         methods: ['GET', 'POST'],
         credentials: true
     }
 });
+
 app.use(express.json())
 app.use(cors({
     origin: '*',
@@ -45,13 +47,21 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 io.on('connection', (socket) => {
-    console.log('connected', socket.id); // 연결된 소켓 ID 출력
+    // console.log('connected', socket.id);
     socket.on('sendMessage', (message) => {
         io.emit('receiveMessage', message);
+        socket.to(message.chatRoomId).emit('receiveMessage', message);
+
+
     });
+    socket.on('joinRoom', (chatRoomId) => {
+        socket.join(chatRoomId);
+        console.log('User joined room:', chatRoomId);
+      });
     socket.on('disconnect', () => {
         console.log('disconnected', socket.id);
     });
+
 });
 
 cloudinary.config({
@@ -99,8 +109,9 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('mongodb connect'))
     .catch(() => console.log('mongodb connect faild'))
 
-app.listen(4000, () => {
+server.listen(4000, () => {
     console.log('listening on http://localhost:4000');
+
 })
 
 app.get('/', (req, res) => {

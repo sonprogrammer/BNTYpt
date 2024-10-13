@@ -5,10 +5,11 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect } from 'react';
 
-interface Post{
+interface Post {
   text: string;
   images: string[];
-  date: Date;
+  uploadTime: string;
+  imageUrl?: string; 
 }
 
 const BodyCheckPage = () => {

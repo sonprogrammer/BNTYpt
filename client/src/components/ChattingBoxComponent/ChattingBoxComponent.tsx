@@ -15,7 +15,7 @@ interface ChatRoom {
     opponentName?: string;
     lastMessage?: string; 
     messages?: {
-        content: string;
+        message: string;
         createdAt: string;
         senderId: string;
     }[]
@@ -25,17 +25,21 @@ const ChattingBoxComponent = () => {
     const [chatRooms, setChatRooms] = useState<ChatRoom[]>([])
     const navigate = useNavigate()
     const [user] = useRecoilState(userState)
+    console.log('user', user)
 
     const fetchChatRooms = async(userId: string) => {
         try {
-            const res = await axios.get(`http://localhost:4000/api/chat/chatrooms/${userId}`)
+            const res = await axios.get(`http://localhost:4000/api/chat/chatrooms/${user.objectId}`)
             setChatRooms(res.data.chatRooms)
+            console.log('chatrooms', chatRooms)
             const roomsWithLastMessage = res.data.chatRooms.map((room: ChatRoom) => {
-                const lastMessage = room.messages && room.messages.length > 0 ? room.messages[room.messages.length - 1].content : null;
-                return { ...room, lastMessage }; // 마지막 메시지를 새로운 속성으로 추가
+                const lastMessage = room.messages && room.messages.length > 0 
+                ? room.messages[room.messages.length - 1].message : null;
+                console.log('lastMessage', lastMessage)
+                return { ...room, lastMessage };
             });
 
-            setChatRooms(roomsWithLastMessage); // 마지막 메시지가 포함된 chatRooms 설정
+            setChatRooms(roomsWithLastMessage); 
         } catch (error) {
             console.error(error);
         }

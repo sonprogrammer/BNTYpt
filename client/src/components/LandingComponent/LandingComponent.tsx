@@ -44,7 +44,8 @@ const LandingComponent = () => {
                     kakaoId: res.data.kakaoId,
                     name: res.data.name,
                     role: selectedRole,
-                    token: accessToken
+                    token: accessToken,
+                    objectId: res.data.objectId 
                 });
                 setUser(newUser)
                 saveUserToLocalStorage(newUser)
@@ -96,7 +97,8 @@ const LandingComponent = () => {
                     email: res.data.user.email,
                     name: res.data.user.name,
                     role: res.data.user.role,
-                    token: res.data.user.token 
+                    token: res.data.user.token,
+                    objectId: res.data.user.objectId  
                 };
                 setUser(newUser);
                 saveUserToLocalStorage(newUser);

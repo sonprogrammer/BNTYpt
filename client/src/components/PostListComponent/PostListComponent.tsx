@@ -3,9 +3,10 @@ import { PostItemComponent } from '../PostItemComponent';
 import { StyledContainer } from './style';
 
 interface Post {
-    text: string;
-    images: string[];
-    date: Date;
+  text: string;
+  images: string[];
+  uploadTime: string;
+  imageUrl?: string; 
 }
 
 interface PostListProps{
