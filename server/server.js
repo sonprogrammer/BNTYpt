@@ -15,7 +15,8 @@ const calendarRouter = require('./Routes/calendarRouter');
 const chatRouter = require('./Routes/chatRouter');
 const http = require('http');
 const socketIo = require('socket.io');
-const { Server} = require('socket.io')
+const { Server} = require('socket.io');
+const recordRouter = require('./Routes/recordRouter');
 
 
 
@@ -99,11 +100,12 @@ passport.deserializeUser(async (id, done) => {
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// app.use('/api/friend',)
+
 app.use('/api/user', userRouter)
 app.use('/api/posts', postRouter)
 app.use('/api/calendar', calendarRouter)
 app.use('/api/chat', chatRouter)
+app.use('/api/records', recordRouter)
 
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('mongodb connect'))

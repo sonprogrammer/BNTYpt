@@ -1,16 +1,24 @@
 import React from 'react'
-import { StyledContainer, StyledInput, StyledInputIcon, StyledMembers } from './style'
+import { StyledBox, StyledBtn, StyledContainer, StyledInput, StyledInputIcon, StyledMembers } from './style'
 
 const AddMemeberComponent = () => {
   return (
     <StyledContainer>
-      <StyledInput>
-        <input type="text" />
-        <StyledInputIcon>icon</StyledInputIcon>
-      </StyledInput>
-      <StyledMembers>
-        names
-      </StyledMembers>
+      <StyledBox>
+        <StyledMembers>
+          names 회원님
+        </StyledMembers>
+        <StyledInput>
+          <p>PT횟수 : </p>
+          <input type="number" className='p-3' />
+          {/* <StyledInputIcon>icon</StyledInputIcon> */}
+        </StyledInput>
+        {/* 서버로부터 받아온 이름 가져올꺼임 */}
+
+        <StyledBtn>
+            PT 저장하기
+        </StyledBtn>
+      </StyledBox>
     </StyledContainer>
   )
 }

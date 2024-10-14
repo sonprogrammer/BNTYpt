@@ -9,6 +9,7 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { NotePostFormComponent } from '../NotePostFormComponent';
 
 
 interface Post {
@@ -19,40 +20,50 @@ interface Post {
 }
 
 const NoteComponent = () => {
-    const [role, setRole] = useState<string>('trainer')
+    const [role, setRole] = useState<string>('')
     const [posts, setPosts] = useState<Post[]>([])
     const [modalOpen, setModalOpen] = useState<boolean>(false)
     const [user] = useRecoilState(userState)
 
     useEffect(() => {
+        if(user.role){
+            setRole(user.role)
+        }
+    },[user.role])
+
+
+    
+    useEffect(() => {
         const fetchPost = async () => {
+        if(user.role === 'trainer'){
             try {
-                let loginedUser: string | undefined;
-                let url = '';
-
-                // 유저에 따라 URL 설정
-                if (user.email) {
-                    loginedUser = user.email;
-                    url = `http://localhost:4000/api/posts/user/email/${loginedUser}`;
-                } else if (user.kakaoId) {
-                    loginedUser = user.kakaoId;
-                    url = `http://localhost:4000/api/posts/user/kakao/${loginedUser}`;
-                }
-
-                const res = await axios.get(url);
-                console.log('res', res);
-
-                 const formattedPost = res.data.posts.map((post: any) => ({
-                    imageUrl: post.images && post.images.length > 0 ? post.images[0] : '',
-                    uploadTime: dayjs(post.date).format('YYYY-MM-DD'),
-                    text: post.text,
+                const res = await axios.get(`http://localhost:4000/api/records/${user.objectId}`)
+                const formattedPosts = res.data.records.map((post: any) => ({
+                    ...post,
+                    uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'), 
                 }));
-
-                setPosts(formattedPost);
+                
+                setPosts(formattedPosts);
+            
             } catch (error) {
                 console.error('Error fetching posts:', error); 
             }
+        }else if(user.role === 'member'){
+            try {
+                const res = await axios.get(`http://localhost:4000/api/records/member/${user.objectId}`)
+                console.log('res', res)
+                const formattedPosts = res.data.records.map((post: any) => ({
+                    ...post,
+                    uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'), // 포맷팅
+                }));
+                
+                setPosts(formattedPosts);
+            } catch (error) {
+                console.error('Error fetching posts:', error); 
+            }
+        }
         };
+        
 
         if (user.email || user.kakaoId) {
             fetchPost(); 
@@ -94,7 +105,7 @@ const NoteComponent = () => {
                                 <StyledClose onClick={handleClosModal}>
                                     <FontAwesomeIcon icon={faXmark} size='xl' />
                                 </StyledClose>
-                                <PostForm addPost={addPost} />
+                                <NotePostFormComponent addPost={addPost} closeModal={handleClosModal} />
                             </StyledPostForm>
                         </StyledPostBox>
                     )}

@@ -8,9 +8,7 @@ import { userState } from '../../utils/userState';
 interface PostFormProps {
   addPost: (post: { text: string; images: string[]; uploadTime: string; }) => void;
 }
-// interface PostFormProps {
-//   addPost: (post: { text: string; images: File[]; date: Date; }) => void;
-// }
+
 
 const PostForm = ({ addPost } : PostFormProps) => {
   const [text, setText] = useState<string>('');
