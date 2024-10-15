@@ -98,7 +98,8 @@ const LandingComponent = () => {
                     name: res.data.user.name,
                     role: res.data.user.role,
                     token: res.data.user.token,
-                    objectId: res.data.user.objectId  
+                    objectId: res.data.user.objectId,
+                    ptCount: res.data.user.ptCount
                 };
                 setUser(newUser);
                 saveUserToLocalStorage(newUser);

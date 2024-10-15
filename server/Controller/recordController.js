@@ -5,7 +5,6 @@ const Record = require('../Models/recordModel')
 const createRecord = async(req, res) => {
     try {
         const { text, userObjectId, images, opponentName } = req.body
-       console.log('image',images)
         let user = await regularUser.findById(userObjectId);
         if (!user) {
             user = await kakaoUser.findById(userObjectId);
@@ -36,7 +35,6 @@ const createRecord = async(req, res) => {
 //*trainer가 작성한 모든 게시글  -> 자신이 작성한 모든 포스트를 보는것
 const getRecordsByT = async(req, res) => {
     const { userObjectId } = req.params
-    console.log('user object',userObjectId)
     try {
         const records = await Record.find({ trainerId: userObjectId})
         return res.status(200).json({ success: true, records })
@@ -48,9 +46,9 @@ const getRecordsByT = async(req, res) => {
 //*trainer가 작성한 모든 게시글 - > 트레이너가 각 멤버에대해 작성해준 포스트를 자신것만 보는것
 const getMemberRecords = async(req, res) => {
     const { userObjectId } = req.params
-    console.log('user object',userObjectId)
     try {
         const records = await Record.find({ memberId: userObjectId})
+
         return res.status(200).json({ success: true, records })
     } catch (error) {
         return res.status(500).json({ error: error})

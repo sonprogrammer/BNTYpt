@@ -16,6 +16,10 @@ const kakaoUserSchema = new mongoose.Schema({
         ],
         
         required: true
+      },
+      ptCount: {  
+        type: Number,
+        default: 0 
       }
     }, {timestamps: true})
 

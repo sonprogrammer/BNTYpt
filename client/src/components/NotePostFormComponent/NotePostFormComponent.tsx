@@ -26,7 +26,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [selectedMember, setSelectedMember] = useState<string | null>(null);
     const [chatRooms, setChatRooms] = useState<any[]>([]);
-
+console.log('selected',selectedMember)
 
     const [user] = useRecoilState(userState)
 
@@ -92,7 +92,8 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
                 images: uploadedImageUrls,
                 uploadTime: new Date().toISOString(),
                 userObjectId: user.objectId,
-                opponentName: selectedMember
+                opponentName: selectedMember,
+
               }
               const res = await axios.post('http://localhost:4000/api/records', formData,{
                 headers: {
@@ -126,7 +127,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
                 >
                 <option value="nametag" disabled>member</option>
                 {chatRooms.map((room) => (
-                    <option key={room.memberId} value={room.opponentName}>
+                    <option key={room.memberId} value={room.memberId}>
                         {room.memberName}
                     </option>
                 ))}

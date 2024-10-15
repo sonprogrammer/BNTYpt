@@ -12,8 +12,6 @@ const createChatRoom = async(req, res)=> {
         if(!trainer || !member){
             return res.status(404).json({ success: false, message: 'not found User'})
         }
-        console.log('trainer', trainer)
-            console.log('member', member)
 
         let existChatRoom = await ChatRoom.findOne({ trainerId: trainer._id, memberId: member._id })
 
@@ -35,10 +33,10 @@ const createChatRoom = async(req, res)=> {
 
 const getChatRooms = async(req, res) => {
     const { userId } = req.params
-    console.log(userId)
+
     try {
         const user = await kakaoUser.findById(userId) || await regularUser.findById(userId) //현재 로그인된사용자의 정보
-        console.log('user', user)
+
         if(!user){
             return res.status(404).json({success: false, message: 'not found user'})
         }
@@ -50,7 +48,6 @@ const getChatRooms = async(req, res) => {
             return res.status(200).json({success: true, message: 'no chatting room'})
         }
 
-        console.log('chatRoom', chatRooms)
 
         const roomsWithNames = await Promise.all(chatRooms.map(async (room) => {
             let opponentName;
@@ -113,4 +110,47 @@ const sendMessage = async(req, res) => {
     }
 }
 
-module.exports = { createChatRoom, getChatRooms, sendMessage,getMessages}
+const setPtCount = async(req, res) => {
+    const {ptCount, memberId} = req.body
+    try {
+
+        let user = await regularUser.findOne({ _id: memberId });
+        if (!user) {
+            user = await kakaoUser.findOne({ _id: memberId });
+        }
+        if(!user){
+            return res.status(404).json({ message: 'User is not found' });
+        }
+
+        user.ptCount = (user.ptCount || 0) + ptCount;
+
+        
+        await user.save()
+            res.status(200).json({ message: 'PT count decremented', ptCount: user.ptCount });
+        
+    } catch (error) {
+        console.error(error);
+
+    }
+}
+
+const getPtCount = async(req, res) => {
+    const { memberId} = req.params
+    try {
+        let user = await regularUser.findOne({ _id: memberId})
+        if(!user){
+            user = await kakaoUser.findOne({ _id: memberId})
+        }
+        if(!user){
+            return res.status(404).json({ message: 'User is not found' });
+        }
+        
+        res.status(200).json({ success: true, message: user.ptCount})
+    } catch (error) {
+        console.log('error', error)
+    }
+
+}
+
+
+module.exports = { createChatRoom, getChatRooms, sendMessage,getMessages, setPtCount, getPtCount}

@@ -43,7 +43,8 @@ const loginRegularUser = async (req, res, next) => {
                 email: user.email,
                 name: user.name,
                 role: user.role,
-                token: token
+                token: token,
+                ptCount: user.ptCount
             }
         })
     } catch (error) {
@@ -85,7 +86,8 @@ const loginKakaoUser = async (req, res) => {
             objectId: user._id, 
             kakaoId: user.kakaoId, 
             name: user.name, 
-            role: user.role
+            role: user.role,
+            ptCount: user.ptCount
         })
     } catch (error) {
         

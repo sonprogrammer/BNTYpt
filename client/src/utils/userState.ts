@@ -12,7 +12,8 @@ export const userState = atom({
         name: null,
         role: null as string | null,
         token: null as string | null, 
-        objectId: null as string | null,  // objectId 필드 추가
-        _id: null as string | null 
+        objectId: null as string | null, 
+        _id: null as string | null ,
+        ptCount: null as number | null
     }
 })

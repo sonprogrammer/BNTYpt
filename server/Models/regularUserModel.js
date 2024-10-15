@@ -17,6 +17,10 @@ const regularUserSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true
+  },
+  ptCount: {  
+    type: Number,
+    default: 0 
   }
 }, {timestamps: true})
 

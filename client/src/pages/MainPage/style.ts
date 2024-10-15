@@ -1,4 +1,3 @@
-import { addDays } from 'date-fns';
 import styled from 'styled-components'
 import tw from 'twin.macro'
 
@@ -28,7 +27,45 @@ export const StyledBox = styled.div`
         bg-stone-600
         gap-10
         relative
+        p-3
     `}
+    @media(max-width: 700px){
+        width: 90%;
+    }
+`
+
+export const StyledXIcon = styled.div`
+${tw`
+    absolute
+    right-5
+    top-5
+    cursor-pointer
+`}
+&:hover{
+    color: red;
+}
+`
+
+export const StyledMember = styled.div`
+    ${tw`
+        flex
+        items-center
+        absolute
+        top-20
+        w-[50%]
+        gap-3
+        justify-center
+    `}
+`
+
+export const StyledSelect = styled.select`
+        ${tw`
+            flex
+            bg-stone-400
+        `}
+        @media(max-width:500px){
+            width: 20%
+        }
 `
 
 export const StyledInput = styled.div`
