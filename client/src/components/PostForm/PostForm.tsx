@@ -35,7 +35,6 @@ const PostForm = ({ addPost } : PostFormProps) => {
     formData.append('file', file)
     formData.append('upload_preset', 'ods04138@gmail.com')
     const res = await axios.post('https://api.cloudinary.com/v1_1/dqrsksfho/image/upload', formData);
-    console.log('res', res.data.secure_url)
     return res.data.secure_url
   }
 
@@ -44,7 +43,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text && images.length === 0) return;
-    console.log('user',user)
+
     try{
 
       const uploadedImageUrls = await Promise.all(

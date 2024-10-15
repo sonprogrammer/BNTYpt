@@ -26,11 +26,11 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [selectedMember, setSelectedMember] = useState<string | null>(null);
     const [chatRooms, setChatRooms] = useState<any[]>([]);
-console.log('selected',selectedMember)
+
 
     const [user] = useRecoilState(userState)
 
-    console.log('user', user)
+
 
     const fetchMemeber = async(userId: string) => {
         try {
@@ -70,7 +70,6 @@ console.log('selected',selectedMember)
             formData.append('file', file)
             formData.append('upload_preset', 'ods04138@gmail.com')
             const res = await axios.post('https://api.cloudinary.com/v1_1/dqrsksfho/image/upload', formData);
-            console.log('res', res.data.secure_url)
             return res.data.secure_url
           }
         
@@ -79,14 +78,14 @@ console.log('selected',selectedMember)
           const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
             e.preventDefault();
             if (!text && images.length === 0) return;
-            console.log('user',user)
+
             try{
         
               const uploadedImageUrls = await Promise.all(
                 images.map(image => uploadImageToCloudinary(image))
               )
 
-              console.log('Uploaded Image URLs:', uploadedImageUrls);
+
               const formData: Record = {
                 text,
                 images: uploadedImageUrls,
@@ -100,7 +99,7 @@ console.log('selected',selectedMember)
                     'Content-Type' : 'application/json'
                 }
               })
-              console.log('res',res)
+
               addPost(formData)
               setText('');
             setImages([]);

@@ -9,14 +9,11 @@ const LoginComponent = () => {
     const [password, setPassword] = useState('')
     
     
-    const kakaoClientId = '748f4b889898873bb1a6d613886ebdf5'
+    const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID as string
 
-    const handleLogin = () =>{
-        console.log('try to login', { email, password})
-    }
+ 
     
     const kakaoOnSuccess = async (data: any) => {
-        console.log(data)
         const idToken = data.response.access_token  // 엑세스 토큰 백엔드로 전달
     }
     const kakaoOnFailure = (error: any) => {
@@ -45,6 +42,7 @@ const LoginComponent = () => {
                     <StyledLoginBtn type="submit">로그인하기</StyledLoginBtn>
                     <KakaoLogin
                         token={kakaoClientId}
+                        // clientId={kakaoClientId}
                         onSuccess={kakaoOnSuccess}
                         onFail={kakaoOnFailure}
                         style={{

@@ -22,13 +22,11 @@ const LogoComponent = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false)
-    console.log('close modal')
   }
 
   const handleConfirmModal = () => {
     setUser(null)
     localStorage.removeItem('user')
-    console.log('success to logout')
     handleCloseModal()
     navigate('/')
   }

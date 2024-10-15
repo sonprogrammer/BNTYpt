@@ -27,6 +27,7 @@ const LandingComponent = () => {
         setSelectedRole(e.target.value)
     }
 
+
     const kakaoOnSuccess = async (data: any) => {
         const accessToken = data.response.access_token
         if (!selectedRole) {

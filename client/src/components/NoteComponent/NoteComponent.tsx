@@ -51,7 +51,6 @@ const NoteComponent = () => {
         }else if(user.role === 'member'){
             try {
                 const res = await axios.get(`http://localhost:4000/api/records/member/${user.objectId}`)
-                console.log('res', res)
                 const formattedPosts = res.data.records.map((post: any) => ({
                     ...post,
                     uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'), // 포맷팅

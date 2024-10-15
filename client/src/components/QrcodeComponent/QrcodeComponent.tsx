@@ -41,9 +41,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
     const handleResult: OnResultFunction = (result: any, error: any) => {
         if (result) {
             const text = result.getText();
-            console.log('Scanned text',text)    
             handleScan(text);
-            console.log('reslut', result)
         }
         if (error) {
             console.log('error 발생', error)

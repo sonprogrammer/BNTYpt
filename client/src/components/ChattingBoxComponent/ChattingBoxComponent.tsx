@@ -25,7 +25,7 @@ const ChattingBoxComponent = () => {
     const [chatRooms, setChatRooms] = useState<ChatRoom[]>([])
     const navigate = useNavigate()
     const [user] = useRecoilState(userState)
-    console.log('user', user)
+
 
     const fetchChatRooms = async(userId: string) => {
         try {

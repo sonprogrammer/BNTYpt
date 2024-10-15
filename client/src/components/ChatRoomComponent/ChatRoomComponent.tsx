@@ -70,7 +70,7 @@ const ChatRoomComponent = () => {
         }
     }, [user.objectId, socket]);
 
-    console.log('chatroomid', chatRoomId)
+
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -130,7 +130,7 @@ const ChatRoomComponent = () => {
     const handleSendMessage = async () => {
         if (input.trim() !== '') {
             const newMessage = { text: input, isMine: true, sender: user.name };
-            console.log('Sending message:', newMessage);
+
             try {
                 await axios.post('http://localhost:4000/api/chat/send', {
                     chatRoomId,

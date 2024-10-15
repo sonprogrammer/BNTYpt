@@ -75,7 +75,7 @@ const SignupComponent = () => {
                 password,
                 role: selectedRole
             })
-            console.log('res', res)
+
             if(res.data.success){
                 alert('congraturation~~~🥳')
                 handleRefresh()

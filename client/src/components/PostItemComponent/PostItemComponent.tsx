@@ -16,7 +16,7 @@ interface PostItemComponentProps {
 
 
 const PostItemComponent = ({post}: PostItemComponentProps  ) => {
-  // console.log('post', post)
+
   const formattedDate = dayjs(post.uploadTime).format('YY.MM.DD(dd)')
   return (
     <StyledContainer>
