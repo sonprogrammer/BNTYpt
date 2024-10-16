@@ -48,7 +48,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 io.on('connection', (socket) => {
-    // console.log('connected', socket.id);
     socket.on('sendMessage', (message) => {
         io.emit('receiveMessage', message);
         socket.to(message.chatRoomId).emit('receiveMessage', message);
