@@ -9,7 +9,6 @@ import { io } from 'socket.io-client'
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
-import { timeStamp } from 'console';
 
 
 
@@ -56,6 +55,7 @@ const ChatRoomComponent = () => {
                 if (currentChatRoom) {
                     setChatRoomId(currentChatRoom._id);
                     socket.emit('joinRoom', currentChatRoom._id)
+                    
                 } else {
                     console.log(`No chat room found with ${userId}.`);
                 }
@@ -139,6 +139,13 @@ const ChatRoomComponent = () => {
 
 
                 socket.emit('sendMessage', newMessage);
+
+                // socket.emit('sendMessage', {
+                //     chatRoomId,
+                //     sender: newMessage.sender,
+                //     message: newMessage.text,
+                // });
+
                 setMessages(prevMessages => [...prevMessages, newMessage]);
                 setInput('')
 

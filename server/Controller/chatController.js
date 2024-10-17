@@ -2,6 +2,7 @@ const ChatRoom = require('../Models/chatModel')
 const kakaoUser = require('../Models/kakaoUserModel')
 const regularUser = require('../Models/regularUserModel')
 
+
 const createChatRoom = async(req, res)=> {
     const { trainerInfo, memberInfo} = req.body
 
@@ -34,14 +35,15 @@ const createChatRoom = async(req, res)=> {
 const getChatRooms = async(req, res) => {
     const { userId } = req.params
 
+
     try {
-        const user = await kakaoUser.findById(userId) || await regularUser.findById(userId) //현재 로그인된사용자의 정보
+        const user = await kakaoUser.findById(userId) || await regularUser.findById(userId) 
 
         if(!user){
             return res.status(404).json({success: false, message: 'not found user'})
         }
         const chatRooms = await ChatRoom.find({
-            $or: [{trainerId: user._id}, { memberId: user._id}]
+                $or: [{trainerId: user._id}, { memberId: user._id}]
         })
 
         if(chatRooms.length === 0 ){
@@ -65,7 +67,6 @@ const getChatRooms = async(req, res) => {
                 opponentName
             };
         }));
-        
         res.status(200).json({
             success: true,
             userName: user.name,
@@ -104,6 +105,7 @@ const sendMessage = async(req, res) => {
 
         chatRoom.messages.push({ sender, message, timestamp: new Date()})
         await chatRoom.save()
+
         res.status(200).json(chatRoom)
     } catch (error) {
         res.status(500).json({message: 'errror'})

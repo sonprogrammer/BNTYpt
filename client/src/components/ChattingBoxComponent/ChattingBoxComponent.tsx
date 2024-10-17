@@ -6,6 +6,7 @@ import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 
 
+
 interface ChatRoom {
     _id: string; 
     memberId?: string; 
@@ -27,7 +28,7 @@ const ChattingBoxComponent = () => {
     const [user] = useRecoilState(userState)
 
 
-    const fetchChatRooms = async(userId: string) => {
+    const fetchChatRooms = async() => {
         try {
             const res = await axios.get(`http://localhost:4000/api/chat/chatrooms/${user.objectId}`)
             const rooms = res.data.chatRooms || []
@@ -43,9 +44,8 @@ const ChattingBoxComponent = () => {
         }
     }
     useEffect(() => {
-        const userId = user.email || user.kakaoId
-        fetchChatRooms(userId)
-    },[user])
+        fetchChatRooms()
+    },[user]) //socket추가
     
 
     const handleNavigate = (room: ChatRoom) => {

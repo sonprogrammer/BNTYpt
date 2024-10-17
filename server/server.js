@@ -120,4 +120,5 @@ app.get('/', (req, res) => {
 })
 
 
+module.exports = { io };
 

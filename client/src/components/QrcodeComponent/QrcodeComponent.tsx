@@ -29,7 +29,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                         trainerInfo: trainerId,
                         memberInfo: user.email || user.kakaoId
                     })
-    
+                alert('Scan Success')
                 } catch (error) {
                     console.error('error', error)
                 }
