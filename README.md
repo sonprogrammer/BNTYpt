@@ -5,6 +5,14 @@
 
 ![personaaa](https://github.com/user-attachments/assets/0d7089b2-3850-4b76-83dc-b8952907d236)
 
+i've heard some news in koera about that kakao sold personal information to Ali. so even if that is really small things, it's matter for someone. that's why i developped it.<br>
+Actually i'm trainer right now, and i or members was inconvenience about something. that's why i developped it.<br> 
+that thing is...
+1. member can check how many classes are left. 
+2. what exercise did I do today
+3. what are going to do next class
+<br>etc...
+
 
 STACK
 1. typescript
