@@ -12,13 +12,13 @@ import AddMemeberComponent from './AddMemeberComponent'
 const MainPage = () => {
   const [addMemeber, setAddMember] = useState<boolean>(false)
   const [user, setUser] = useRecoilState(userState)
-  console.log('pt', user.ptCount)
+
 
 
   const getUserPtCount = async() => {
     try {
       const res = await axios.get(`http://localhost:4000/api/chat/pt/${user.objectId}`)
-      console.log('res', res.data.message)
+
       if(res.data.success){
         setUser((prevState: any) => ({ ...prevState, ptCount: res.data.message }));
 

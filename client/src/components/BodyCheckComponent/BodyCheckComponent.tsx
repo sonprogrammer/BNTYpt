@@ -34,7 +34,7 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
             Authorization: `Bearer ${user.token}`
           }
         })
-        console.log('API 응답 데이터:', res.data.posts); // 응답 데이터 확인
+
 
 
         const formatedPost = res.data.posts.map((post:any) => ({

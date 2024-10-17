@@ -46,7 +46,6 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponent) => {
 
   const handleSavePtCount = async () => {
     if (selectedMember && ptCount > 0) {
-      console.log('selectedMember', selectedMember)
       try {
         await axios.post('http://localhost:4000/api/chat/pt', {
           memberId: selectedMember,

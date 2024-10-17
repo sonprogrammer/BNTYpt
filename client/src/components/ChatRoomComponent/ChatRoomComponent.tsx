@@ -52,7 +52,7 @@ const ChatRoomComponent = () => {
                     (room.trainerId === user.objectId && room.opponentName === userId) ||
                     (room.memberId === user.objectId && room.opponentName === userId)
                 );
-                console.log('currentChatRoom', currentChatRoom)
+
                 if (currentChatRoom) {
                     setChatRoomId(currentChatRoom._id);
                     socket.emit('joinRoom', currentChatRoom._id)
@@ -77,7 +77,6 @@ const ChatRoomComponent = () => {
             if (chatRoomId) {
                 try {
                     const res = await axios.get(`http://localhost:4000/api/chat/messages/${chatRoomId}`)
-                    console.log('res', res.data)
                     if (res.data.success) {
                         const fetchedMessages = res.data.message.map((msg: any) => ({
                             text: msg.message,
