@@ -2,6 +2,9 @@ import styled from "styled-components"
 import tw from "twin.macro"
 
 
+
+
+
 export const StyledTitle = styled.div`
     ${tw`
         flex
@@ -10,6 +13,7 @@ export const StyledTitle = styled.div`
         text-center
         py-4
         text-[56px]
+        // text-[66px]
         bg-slate-900
         `}
         h1{
@@ -17,7 +21,8 @@ export const StyledTitle = styled.div`
             text-center
             text-red-500
             `}
-            font-family : "Anton"
+            // font-family : "Anton"
+            font-family : "rippedFont";
     }
     h3{
         ${tw`

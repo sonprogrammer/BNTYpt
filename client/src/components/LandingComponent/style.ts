@@ -37,7 +37,9 @@ export const StyledBox = styled.div`
             text-[63px]
             text-red-700
         `}
-        font-family : "Anton";
+        // font-family : "Anton";
+                    font-family : "rippedFont";
+
         text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.7);
     }
     img{

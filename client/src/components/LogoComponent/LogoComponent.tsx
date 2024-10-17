@@ -36,7 +36,7 @@ const LogoComponent = () => {
     <div>
     <StyledTitle>
         <Link to="/browse">
-          <h1>BNTY</h1> 
+          <h1>B N T Y</h1> 
         </Link>
         <h3 className='logout-text' onClick={handleOpenModal}>logout</h3>
         <FontAwesomeIcon onClick={handleOpenModal} className='logout-icon' icon={faRightFromBracket} size='lg'/>
