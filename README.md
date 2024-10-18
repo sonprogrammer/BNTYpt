@@ -2,8 +2,9 @@
  communication between member and trainer
 
 ## Persona
+![스크린샷 2024-10-18 14 42 44](https://github.com/user-attachments/assets/5b5a981d-00c5-4290-928f-92ae454d2bdc)
 
-![personaaa](https://github.com/user-attachments/assets/0d7089b2-3850-4b76-83dc-b8952907d236)
+
 
 i've heard some news in koera about that kakao sold personal information to Ali. so even if that is really small things, it's matter for someone. that's why i developped it.<br>
 Actually i'm trainer right now, and i or members was inconvenience about something. that's why i developped it.<br> 
