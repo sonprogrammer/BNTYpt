@@ -40,3 +40,15 @@ STACK
 1. gray
 2. dark red
 3. dark blue
+
+
+## troubleshooting  🔫
+1. The Outlet was not applied in the LayoutPage, so the child components are not rendered.
+2. A conflict occurred during npm's dependency resolution process -> use the --legacy-peer-deps flag.
+3. when navigating from landing page to main page after logging in, the state is empty. i used `window.location.href='/browse` , but this caused the browser to refresh. so recoil state is reset. to fix it i used `useNavigate` from react router dom. 
+4.images were stored in local when i post some photos. so i used Cloudinary
+
+
+
+## Impressions
+as i worked on everything by myself, like function, design planning. actually, i planned roughly, so i keep changing my plans because of the ambitous which led to changes function and design, this cause me to miss deadline. so i realized again that initial plan is important. 
