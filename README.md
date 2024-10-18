@@ -6,7 +6,7 @@
 
 
 
-i've heard some news in koera about that kakao sold personal information to Ali. so even if that is really small things, it's matter for someone. that's why i developped it.<br>
+i've heard news a few times about companies selling their member information to other companies. so even if that is really small things, it's matter for someone. that's why i developped it.<br>
 Actually i study and work part time as a trainer now, and i or members was inconvenience about something. so i want to solve these things. that's why i developped it.<br> 
 
 1. member can check how many classes are left. 
