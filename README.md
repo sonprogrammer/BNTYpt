@@ -7,7 +7,7 @@
 
 
 i've heard some news in koera about that kakao sold personal information to Ali. so even if that is really small things, it's matter for someone. that's why i developped it.<br>
-Actually i'm trainer right now, and i or members was inconvenience about something. that's why i developped it.<br> 
+Actually i study ans work part time as a trainer now, and i or members was inconvenience about something. that's why i developped it.<br> 
 that thing is...
 1. member can check how many classes are left. 
 2. what exercise did I do today
