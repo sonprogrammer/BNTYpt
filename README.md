@@ -43,7 +43,12 @@ that thing is...
 
 
 ## Pages
-
+<p align="center" justify-contents="center">
+  <p>when role is member</p>
+  <img src="https://github.com/user-attachments/assets/7ada0cb3-68df-42b2-a857-ee2464a884f2" alt="Member Page" width="400"/>
+  <p>when role is trainer</p>
+  <img src="https://github.com/user-attachments/assets/a19c650c-96d0-48df-a0cd-c41f6b172663" alt="Trainer Page" width="400"/>
+</p>
 
 
 
