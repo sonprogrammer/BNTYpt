@@ -42,6 +42,11 @@ STACK
 3. dark blue
 
 
+## Pages
+
+
+
+
 ## troubleshooting  🔫
 1. The Outlet was not applied in the LayoutPage, so the child components are not rendered.
 2. A conflict occurred during npm's dependency resolution process -> use the --legacy-peer-deps flag.
