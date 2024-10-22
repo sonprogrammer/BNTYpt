@@ -13,8 +13,8 @@ Actually i study and work part time as a trainer now, and i or members was incon
 2. what exercise did I do today
 3. what are going to do next class
 <br>etc...
-
-
+//no
+/*star*/
 ## STACK
 1. typescript
 2. react
