@@ -27,7 +27,7 @@ Actually i study and work part time as a trainer now, and i or members was incon
 
 | pages |  function  |
 |----------------|-------------|
-| login & signup  |  choose role      |
+| login & signup  |  kakao Login or regular Login, select a role      |
 | main     | 1.trainer and member will be connected as soon as member scan trainer's QRcode <br> 2. Trainers can register the number of classes for their members  <br> 3. members can check the number of their remaining classes     |
 | bodyCheck     | anyone can post photo of their body(only one who are logged in can see their photos )  |
 | calendar     |    users can check and record their workouts and diet.   |
