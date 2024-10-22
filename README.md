@@ -8,13 +8,12 @@
 i've heard news a few times about companies selling their member information to other companies. so even if that is really small things, it's matter for someone. that's why i developped it.<br>
 Actually i study and work part time as a trainer now, and i or members was inconvenience about something. so i want to solve these things. that's why i developped it.<br> 
 
-## Feature Summary
+/* ## Feature Summary
 1. member can check how many classes are left. 
 2. what exercise did I do today
 3. what are going to do next class
-<br>etc...
-//no
-/*star*/
+<br>etc... */
+
 ## STACK
 1. typescript
 2. react
