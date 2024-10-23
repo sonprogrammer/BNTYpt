@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only server.js"
+    "dev": "ts-node-dev --respawn --transpile-only server.js",
+    "start": "node server.js" 
   },
   "keywords": [],
   "author": "",
