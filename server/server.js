@@ -110,8 +110,13 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('mongodb connect'))
     .catch(() => console.log('mongodb connect faild'))
 
-server.listen(4000, () => {
-    console.log('listening on http://localhost:4000');
+
+
+const port = process.env.PORT || 8080
+    
+
+server.listen(port, () => {
+    console.log(`listening on http://localhost:${port}`);
 
 })
 
