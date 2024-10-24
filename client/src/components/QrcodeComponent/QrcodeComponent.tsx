@@ -19,18 +19,22 @@ interface QrcodeComponentProps {
 const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
     const [scannedData, setScannedData] = useState<string>('');
     const [memberClicked, setMemberClicked] = useState<boolean>(false)
-
     const [user] = useRecoilState(userState)
 
     const handleScan = async (trainerId: string) => {
-
         if (trainerId) {
+
             setScannedData(trainerId);
                 try {
-                    const res = await axios.post(`${apiUrl}/api/chat`, {
+                    await axios.post(`${apiUrl}/api/chat`, {
                         trainerInfo: trainerId,
                         memberInfo: user.email || user.kakaoId
                     })
+                    const res = await axios.post(`${apiUrl}/api/chat/pt`, {
+                        ptCount: -1, 
+                        memberId: user.objectId  
+                    });
+        
                 alert('Scan Success')
                 } catch (error) {
                     console.error('error', error)
@@ -44,6 +48,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
         if (result) {
             const text = result.getText();
             handleScan(text);
+            console.log('text', text);
         }
         if (error) {
             console.log('error 발생', error)
@@ -67,7 +72,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                     {memberClicked ?
                         <div className='w-[100%]'>
                             <StyledQrReader
-                                constraints={{ facingMode: 'user' }}
+                                constraints={{ facingMode: 'environment', width: 640, height: 480 }} //후면 카메라 사용
                                 onResult={handleResult}
                                 scanDelay={300}
                             />

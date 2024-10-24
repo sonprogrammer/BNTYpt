@@ -26,6 +26,7 @@ const LandingComponent = () => {
     const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID || '';
     
 
+    console.log('role', selectedRole)
 
     const handleRadioChage = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedRole(e.target.value)
