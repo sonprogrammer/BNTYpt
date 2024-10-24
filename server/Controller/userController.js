@@ -3,7 +3,7 @@ const axios = require('axios');
 const regularUser = require('../Models/regularUserModel') 
 const kakaoUser = require('../Models/kakaoUserModel'); 
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs')
 
 
 
@@ -23,7 +23,7 @@ const loginRegularUser = async (req, res, next) => {
         if(role !== user.role){
             return res.status(400).json({ success: false, message: 'Role을 다시 확인해주세요!' });
         }
-        const isPasswordValid = await bcrypt.compare(password, user.password)
+        const isPasswordValid = await bcryptjs.compare(password, user.password)
         if(!isPasswordValid){
             return res. status(400).json({ success: false, message: 'invalid password' });
         }
@@ -114,7 +114,7 @@ const checkEmail = async(req, res) => {
 const signupUser = async (req, res, next) => {
     const { email, password, role, name } = req.body
     try {
-        let hashedPassword = await bcrypt.hash(password, 10)
+        let hashedPassword = await bcryptjs.hash(password, 10)
         const newUser = await regularUser.create({
             email,
             password: hashedPassword,
