@@ -24,6 +24,8 @@ const LandingComponent = () => {
     const navigate = useNavigate()
 
     const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID || '';
+    
+
 
     const handleRadioChage = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedRole(e.target.value)
@@ -87,7 +89,6 @@ const LandingComponent = () => {
         try {
             setLoading(true);
             const res = await axios.post(`${apiUrl}/api/user/login/regular`, {
-            // const res = await axios.post('http://localhost:4000/api/user/login/regular', {
                 email,
                 password,
                 role: selectedRole
