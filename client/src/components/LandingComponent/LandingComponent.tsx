@@ -7,6 +7,8 @@ import { userState } from '../../utils/userState';
 import { useNavigate } from 'react-router-dom';
 import { saveUserToLocalStorage } from '../../utils/localStorage';
 import SignupComponent from './SignupComponent';
+const apiUrl = process.env.REACT_APP_API_URL;
+
 
 
 
@@ -36,7 +38,7 @@ const LandingComponent = () => {
         }
         try {
             setLoading(true)
-            const res = await axios.post('http://localhost:4000/api/user/login/kakao', {
+            const res = await axios.post(`${apiUrl}/api/user/login/kakao`, {
                 accessToken,
                 role: selectedRole
             })
@@ -84,7 +86,8 @@ const LandingComponent = () => {
 
         try {
             setLoading(true);
-            const res = await axios.post('http://localhost:4000/api/user/login/regular', {
+            const res = await axios.post(`${apiUrl}/api/user/login/regular`, {
+            // const res = await axios.post('http://localhost:4000/api/user/login/regular', {
                 email,
                 password,
                 role: selectedRole

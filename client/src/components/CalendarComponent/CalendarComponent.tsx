@@ -8,6 +8,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
+const apiUrl = process.env.REACT_APP_API_URL;
 
 type Records = {
     date: string;
@@ -61,10 +62,11 @@ const CalendarComponent = () => {
         try {
             let url= ''
             if(user.email){
-                url = `http://localhost:4000/api/calendar/user/email/${user.email}`
-            }else if(user.kakaoId){
-                url = `http://localhost:4000/api/calendar/user/kakao/${user.kakaoId}`
-            }
+                url = `${apiUrl}/api/calendar/user/email/${user.email}`
+              }else if(user.kakaoId){
+                url = `${apiUrl}/api/calendar/user/kakao/${user.kakaoId}`
+              }
+            
 
             const res = await axios.get(url,{
                 headers: {
@@ -118,7 +120,7 @@ const CalendarComponent = () => {
             formData.email = user.email
            }
 
-           const res = await axios.post('http://localhost:4000/api/calendar', formData, {
+           const res = await axios.post(`${apiUrl}/api/calendar`, formData, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${user.kakaoAccessToken || user.token}`

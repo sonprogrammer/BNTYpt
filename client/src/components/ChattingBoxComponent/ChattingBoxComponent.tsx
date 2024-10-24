@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
+const apiUrl = process.env.REACT_APP_API_URL;
 
 
 
@@ -30,7 +31,7 @@ const ChattingBoxComponent = () => {
 
     const fetchChatRooms = async() => {
         try {
-            const res = await axios.get(`http://localhost:4000/api/chat/chatrooms/${user.objectId}`)
+            const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`)
             const rooms = res.data.chatRooms || []
             const roomsWithLastMessage = rooms.map((room: ChatRoom) => {
                 const lastMessage = room.messages && room.messages.length > 0 

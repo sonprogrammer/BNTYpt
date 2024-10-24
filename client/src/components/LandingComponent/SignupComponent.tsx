@@ -3,6 +3,8 @@ import { StyledBackBtn, StyledBox, StyledCheckBtn, StyledEmail, StyledLoginInput
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCheck, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+const apiUrl = process.env.REACT_APP_API_URL;
+
 
 
 const SignupComponent = () => {
@@ -46,7 +48,8 @@ const SignupComponent = () => {
 
     const checkEmail = async() => {
         try {
-            const res = await axios.get(`http://localhost:4000/api/user/check-email?email=${email}`)
+            // const res = await axios.get(`http://localhost:4000/api/user/check-email?email=${email}`)
+            const res = await axios.get(`${apiUrl}/api/user/check-email?email=${email}`)
             if(res.data.exists){
                 alert('try other email')
             }else{
@@ -69,7 +72,7 @@ const SignupComponent = () => {
             return
         }
         try {
-            const res = await axios.post('http://localhost:4000/api/user/signup',{
+            const res = await axios.post(`${apiUrl}/api/user/signup`,{
                 email,
                 name,
                 password,

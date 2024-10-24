@@ -7,6 +7,8 @@ import { userState } from '../../utils/userState';
 import axios from 'axios';
 import AddMemeberComponent from '../../pages/MainPage/AddMemeberComponent';
 import { scannedMemberState } from '../../utils/pt';
+const apiUrl = process.env.REACT_APP_API_URL;
+
 
 
 interface QrcodeComponentProps {
@@ -25,7 +27,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
         if (trainerId) {
             setScannedData(trainerId);
                 try {
-                    const res = await axios.post('http://localhost:4000/api/chat', {
+                    const res = await axios.post(`${apiUrl}/api/chat`, {
                         trainerInfo: trainerId,
                         memberInfo: user.email || user.kakaoId
                     })

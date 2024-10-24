@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import AddMemeberComponent from './AddMemeberComponent'
+const apiUrl = process.env.REACT_APP_API_URL;
 
 
 
@@ -17,7 +18,7 @@ const MainPage = () => {
 
   const getUserPtCount = async() => {
     try {
-      const res = await axios.get(`http://localhost:4000/api/chat/pt/${user.objectId}`)
+      const res = await axios.get(`${apiUrl}/api/chat/pt/${user.objectId}`)
 
       if(res.data.success){
         setUser((prevState: any) => ({ ...prevState, ptCount: res.data.message }));

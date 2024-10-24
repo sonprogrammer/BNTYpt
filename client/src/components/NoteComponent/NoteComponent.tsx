@@ -10,6 +10,8 @@ import { userState } from '../../utils/userState';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { NotePostFormComponent } from '../NotePostFormComponent';
+const apiUrl = process.env.REACT_APP_API_URL;
+
 
 
 interface Post {
@@ -37,7 +39,7 @@ const NoteComponent = () => {
         const fetchPost = async () => {
         if(user.role === 'trainer'){
             try {
-                const res = await axios.get(`http://localhost:4000/api/records/${user.objectId}`)
+                const res = await axios.get(`${apiUrl}/api/records/${user.objectId}`)
                 const formattedPosts = res.data.records.map((post: any) => ({
                     ...post,
                     uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'), 
@@ -50,7 +52,7 @@ const NoteComponent = () => {
             }
         }else if(user.role === 'member'){
             try {
-                const res = await axios.get(`http://localhost:4000/api/records/member/${user.objectId}`)
+                const res = await axios.get(`${apiUrl}/api/records/member/${user.objectId}`)
                 const formattedPosts = res.data.records.map((post: any) => ({
                     ...post,
                     uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'), // 포맷팅

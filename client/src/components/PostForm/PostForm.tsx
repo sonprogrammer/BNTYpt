@@ -3,6 +3,8 @@ import { StyledBtn, StyledContainerForm, StyledSubmitEl, StyledTextArea, StyledT
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
+const apiUrl = process.env.REACT_APP_API_URL;
+
 
 
 interface PostFormProps {
@@ -57,7 +59,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
 
       if(user.kakaoId){
         formData['kakaoId'] = user.kakaoId
-        const res = await axios.post('http://localhost:4000/api/posts', formData,{
+        const res = await axios.post(`${apiUrl}/api/posts`, formData,{
           headers: {
             'Content-Type' : 'application/json',
             Authorization: `Bearer ${user.kakaoAccessToken}`
@@ -76,7 +78,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
       //*일반 로그인 
       else{
         formData['email'] = user.email
-        const res = await axios.post('http://localhost:4000/api/posts', formData, {
+        const res = await axios.post(`${apiUrl}/api/posts`, formData, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user.token}`

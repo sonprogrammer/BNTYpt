@@ -5,7 +5,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 
 interface AddMemeberComponent {
   closeModal: () => void;
@@ -18,7 +18,7 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponent) => {
   const [user] = useRecoilState(userState)
   const fetchMemeber = async (userId: string) => {
     try {
-      const res = await axios.get(`http://localhost:4000/api/chat/chatrooms/${user.objectId}`)
+      const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`)
       const memberNames = res.data.chatRooms.map((room: any) => ({
         memberId: room.memberId,
         memberName: room.opponentName
@@ -47,7 +47,7 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponent) => {
   const handleSavePtCount = async () => {
     if (selectedMember && ptCount > 0) {
       try {
-        await axios.post('http://localhost:4000/api/chat/pt', {
+        await axios.post(`${apiUrl}/api/chat/pt`, {
           memberId: selectedMember,
           ptCount,
         });

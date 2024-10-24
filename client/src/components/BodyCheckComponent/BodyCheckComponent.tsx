@@ -7,6 +7,8 @@ import { useEffect } from 'react'
 import axios from 'axios'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
+const apiUrl = process.env.REACT_APP_API_URL;
+
 
 function BodyCheckComponent( {refresh} : { refresh: boolean}) {
   const [photos, setPhotos] = useState<{ imageUrl: string, uploadTime: string, text: string}[]>([])
@@ -24,9 +26,9 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
         let url = ``
 
         if(user.email){
-          url = `http://localhost:4000/api/posts/user/email/${user.email}`
+          url = `${apiUrl}/api/posts/user/email/${user.email}`
         }else if(user.kakaoId){
-          url = `http://localhost:4000/api/posts/user/kakao/${user.kakaoId}`
+          url = `${apiUrl}/api/posts/user/kakao/${user.kakaoId}`
         }
 
         const res = await axios.get(url, {

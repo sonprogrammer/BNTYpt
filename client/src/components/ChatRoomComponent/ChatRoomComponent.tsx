@@ -9,6 +9,8 @@ import { io } from 'socket.io-client'
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
+const apiUrl = process.env.REACT_APP_API_URL;
+
 
 
 
@@ -34,7 +36,8 @@ const ChatRoomComponent = () => {
     const [chatRoomId, setChatRoomId] = useState<string | null>(null);
 
     useEffect(() => {
-        const socketInstance = io('http://localhost:4000')
+        // const socketInstance = io('http://localhost:4000')
+        const socketInstance = io(apiUrl)
         setSocket(socketInstance)
         return () => {
             socketInstance.disconnect()
@@ -44,7 +47,7 @@ const ChatRoomComponent = () => {
     useEffect(() => {
         const fetchChatRoom = async () => {
             try {
-                const response = await axios.get(`http://localhost:4000/api/chat/chatrooms/${user.objectId}`);
+                const response = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`);
                 const chatRooms = response.data.chatRooms;
 
                 const currentChatRoom = chatRooms.find((room: any) =>
@@ -76,7 +79,7 @@ const ChatRoomComponent = () => {
         const fetchMessages = async () => {
             if (chatRoomId) {
                 try {
-                    const res = await axios.get(`http://localhost:4000/api/chat/messages/${chatRoomId}`)
+                    const res = await axios.get(`${apiUrl}/api/chat/messages/${chatRoomId}`)
                     if (res.data.success) {
                         const fetchedMessages = res.data.message.map((msg: any) => ({
                             text: msg.message,
@@ -131,7 +134,7 @@ const ChatRoomComponent = () => {
             const newMessage = { text: input, isMine: true, sender: user.name };
 
             try {
-                await axios.post('http://localhost:4000/api/chat/send', {
+                await axios.post(`${apiUrl}/api/chat/send`, {
                     chatRoomId,
                     sender: newMessage.sender,
                     message: newMessage.text,
