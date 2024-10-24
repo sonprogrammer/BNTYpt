@@ -1,4 +1,9 @@
-# BNTY (Be Next To You)
+# BNTY (Be Next To You) 
+
+<a href="https://bnty.netlify.app" style="display: flex; align-items: center;">    <p style="font-size: 137px; display: inline; margin-right: 10px; line-height: 1;">배포링크 ⬇️</p>
+<img src="https://img.shields.io/badge/BNTY-D14836?style=for-the-badge&logoColor=white&radius=16px" style="width: 90px; height: auto; border-radius: 100px;"/></a>
+
+
  communication between member and trainer
 
 ## Persona
