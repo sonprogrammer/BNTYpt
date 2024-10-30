@@ -3,7 +3,8 @@
  
  ### [Go to BNTY](https://bnty.netlify.app)
 
- communication between member and trainer
+ communication between member and trainer.
+
 
 ## Persona
 ![스크린샷 2024-10-18 14 42 44](https://github.com/user-attachments/assets/5b5a981d-00c5-4290-928f-92ae454d2bdc)
