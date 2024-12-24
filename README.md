@@ -4,6 +4,7 @@
  ### [Go to BNTY](https://bnty.netlify.app)
 
  communication between member and trainer.
+ <br>
  🚨i disconnected from server due to Heroku payment issues. apologize for that 🚨
 
 
