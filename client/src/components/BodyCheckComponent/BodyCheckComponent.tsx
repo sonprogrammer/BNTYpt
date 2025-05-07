@@ -13,6 +13,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 function BodyCheckComponent( {refresh} : { refresh: boolean}) {
   const [photos, setPhotos] = useState<{ imageUrl: string, uploadTime: string, text: string}[]>([])
   const [user] = useRecoilState(userState)
+  console.log('user', user)
 
   
     useEffect(() => {

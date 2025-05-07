@@ -111,7 +111,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 
 
-const port = process.env.PORT || 40840
+const port = process.env.PORT
     
 
 server.listen(port, () => {

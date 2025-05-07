@@ -48,7 +48,7 @@ const loginRegularUser = async (req, res, next) => {
             }
         })
     } catch (error) {
-        console.error(error)
+        console.error(error) 
         res.status(500).json({ success: false, message: 'internal server errro'})
     }
 }
@@ -94,7 +94,7 @@ const loginKakaoUser = async (req, res) => {
     }
 }
 
-
+ 
 const checkEmail = async(req, res) => {
     const { email } = req.query
 

@@ -26,7 +26,7 @@ const LandingComponent = () => {
     const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID || '';
     
 
-    console.log('role', selectedRole)
+
 
     const handleRadioChage = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedRole(e.target.value)
@@ -166,7 +166,7 @@ const LandingComponent = () => {
                 <StyledLoginBtn onClick={handleLogin}>로그인</StyledLoginBtn>
                 <KakaoLogin
                     token={kakaoClientId}
-                    onSuccess={kakaoOnSuccess}
+                    onSuccess={kakaoOnSuccess} 
                     onFail={kakaoOnFailure}
                     style={{
                         backgroundColor: 'rgb(153 27 27)',

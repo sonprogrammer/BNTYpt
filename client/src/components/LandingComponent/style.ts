@@ -11,6 +11,7 @@ export const StyledContainer = styled.div`
         h-full
         p-4
     `}
+
 `
 export const StyledBox = styled.div`
     ${tw`
@@ -37,7 +38,6 @@ export const StyledBox = styled.div`
             text-[63px]
             text-red-700
         `}
-        // font-family : "Anton";
                     font-family : "rippedFont";
 
         text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.7);
@@ -56,6 +56,8 @@ export const StyledBox = styled.div`
         ${tw`
             w-[80%]
             h-[70%]
+            p-[2opx]
+
         `}
     }
     @media(max-width:480px){
