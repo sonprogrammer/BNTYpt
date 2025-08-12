@@ -68,5 +68,5 @@ Actually i study and work part time as a trainer now, and i or members was incon
 
 
 
-## Impressions
+## Reflection
 as i worked on everything by myself, like function, design planning. actually, i planned roughly, so i keep changing my plans because of the ambitous which led to changes function and design, this cause me to miss deadline. so i realized again that initial plan is important. 
