@@ -76,7 +76,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                                 onResult={handleResult}
                                 scanDelay={300}
                             />
-                            <div className='mb-7 text-center hover:font-bold hover:text-red-500 hover:cursor-pointer' onClick={handleClick}>go back</div>
+                            <div className='mb-7 text-center hover:font-bold hover:text-red-500 hover:cursor-pointer' onClick={handleClick}>Exit camera</div>
                         </div>
                         :
                         <div 

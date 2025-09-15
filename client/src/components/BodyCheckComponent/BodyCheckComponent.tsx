@@ -55,7 +55,7 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
     <StyledContainer>
     {photos.length === 0 ? (
       <StyledNothing>
-          게시글이 아직 없습니다🤪
+          게시글이 아직 없습니다 🤪
       </StyledNothing>
     ): (
       photos.map((photo, i)=> (
