@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyledBox, StyledContainer, StyledImage, StyledNothing, StyledText } from './style'
+import { StyledBox, StyledContainer, StyledImage, StyledNothing, StyledText, StyledTitle } from './style'
 import dayjs from 'dayjs'
 
 import { useState } from 'react'
@@ -13,7 +13,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 function BodyCheckComponent( {refresh} : { refresh: boolean}) {
   const [photos, setPhotos] = useState<{ imageUrl: string, uploadTime: string, text: string}[]>([])
   const [user] = useRecoilState(userState)
-  console.log('user', user)
+  // console.log('photos', photos)
 
   
     useEffect(() => {
@@ -38,13 +38,16 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
           }
         })
 
+        console.log('res',res)
 
 
         const formatedPost = res.data.posts.map((post:any) => ({
           imageUrl: post.images[0],
           uploadTime: dayjs(post.date).format('YYYY-MM-DD'),
           text: post.text
-        }))
+        })).sort((a:any, b:any) => new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime())
+
+        
         setPhotos(formatedPost)
       } catch (error) {
         console.error('er',error)
@@ -60,8 +63,10 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
     ): (
       photos.map((photo, i)=> (
         <StyledBox key={i}>
-            <StyledImage src={photo.imageUrl} alt="image" />
-            <StyledText>{photo.text}</StyledText>
+            <StyledTitle>{photo.text}</StyledTitle>
+            <StyledImage src={photo.imageUrl} alt="image" 
+              onError={(e) => {e.currentTarget.src}}
+            />
             <StyledText>{photo.uploadTime}</StyledText>
           </StyledBox>
       ))

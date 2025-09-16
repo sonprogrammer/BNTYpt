@@ -55,9 +55,10 @@ export const StyledImage = styled.img`
     ${tw`
         w-full
         h-auto
-        rounded-lg
         p-2
-        mt-2
+        border-2
+        flex
+        flex-1
     `}
     max-width: 200px;
     @media(min-width: 768px){
@@ -68,15 +69,23 @@ export const StyledImage = styled.img`
     }
 `
 
+export const StyledTitle = styled.p`
+    ${tw`
+        w-full    
+        text-center
+        py-3
+        rounded-t-3xl
+
+    `}
+`
+
 export const StyledText = styled.p`
     ${tw`
         w-full
         text-center
-        text-xl
-        mt-2
-        mb-4
-        pt-3
+        text-sm
+        // flex
+        py-2
     `}
-    border-top: 3px solid rgb(69 10 10);
 
 `
