@@ -1,8 +1,9 @@
 # BNTY (Be Next To You) 
 
  
+<!-- 
  ### [Go to BNTY](https://bnty.netlify.app)
-
+-->
  communication between member and trainer.
  <br>
  🚨Website update in progress 🚨
