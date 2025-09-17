@@ -10,7 +10,7 @@ import SignupComponent from './SignupComponent';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
-
+ 
 
 
 const LandingComponent = () => {

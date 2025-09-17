@@ -48,7 +48,17 @@ export const StyledBox = styled.div`
         items-center
         bg-gray-300
         rounded-3xl
+        relative
     `}
+    &:hover{
+        background-color: rgba(0,0,10, 0.5) ;
+    }
+    &:hover img{
+        filter: brightness(50%);
+    }
+        &:hover div{
+            color: white;
+        }
 `
 
 export const StyledImage = styled.img`

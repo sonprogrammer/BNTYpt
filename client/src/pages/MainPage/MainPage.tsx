@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import AddMemeberComponent from './AddMemeberComponent'
+import { StyledPtAddBtn } from './style'
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -16,23 +17,23 @@ const MainPage = () => {
 
 
 
-  const getUserPtCount = async() => {
+  const getUserPtCount = async () => {
     try {
       const res = await axios.get(`${apiUrl}/api/chat/pt/${user.objectId}`)
 
-      if(res.data.success){
+      if (res.data.success) {
         setUser((prevState: any) => ({ ...prevState, ptCount: res.data.message }));
 
       }
-      
+
     } catch (error) {
       console.error(error)
     }
   }
-  
+
   useEffect(() => {
     getUserPtCount()
-  },[])
+  }, [])
 
 
   const handleClick = () => {
@@ -43,17 +44,21 @@ const MainPage = () => {
     setAddMember(false)
   }
   return (
-    <div className='h-full flex flex-col items-center'>
+    <div className='h-full flex flex-col items-center justify-center'>
       {user.role === 'trainer' ? (
-        <>
-          <h1 className='absolute top-[30%] text-xl font-bold'>{user.name}트레이너님</h1>
-        <AddPhotoComponent onClick={handleClick} />
-        {addMemeber && <AddMemeberComponent closeModal={closeModal}/>}
-        </>
+        <div className='flex flex-col gap-2 items-center'>
+          <h1 className=' text-xl font-bold'>{user.name}트레이너님</h1>
+          <QrcodeComponent role={user.role} />
+          <StyledPtAddBtn onClick={handleClick}>PT추가</StyledPtAddBtn>
+          {addMemeber && <AddMemeberComponent closeModal={closeModal} />}
+        </div>
       ) : (
-        <h1 className='absolute top-[30%] text-xl font-bold'>{user.name}님의 남은 pt횟수 : {user.ptCount}</h1>
+        <div className='flex flex-col gap-2 items-center'>
+          <h1 className='text-xl font-bold'>{user.name}님</h1>
+          <h1 className='text-xl font-bold'>남은 pt횟수 : <span className='text-red-700'>{user.ptCount}</span></h1>
+          <QrcodeComponent role={user.role} />
+        </div>
       )}
-      <QrcodeComponent role={user.role}/>
     </div>
   )
 }

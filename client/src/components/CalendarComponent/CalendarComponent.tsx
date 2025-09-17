@@ -1,13 +1,15 @@
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isSameMonth, isSameDay, getDay, addDays } from 'date-fns'
-import styles from './Calendar.module.css'
+// import styles from './Calendar.module.css'
 import React, { useEffect, useState } from 'react'
 import { Dot, DotWrapper, StyledBox, StyledBtn, StyledCell, StyledCloseBtn, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon, StyledModal, StyledModalBox, StyledModalContents, StyledModalTextArea, StyledTitle } from './style'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+
 import axios from 'axios'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 type Records = {
@@ -159,11 +161,11 @@ const CalendarComponent = () => {
                     </StyledTitle>
                     <StyledHeader>
                         <StyledIcon onClick={handlePreviousMonth}>
-                            <FaChevronLeft />
+                            {/* <faAngleLeft /> */}
                         </StyledIcon>
                         <h2>{format(currentDate, 'MMM yyyy')}</h2>
                         <StyledIcon onClick={handleNextMonth}>
-                            <FaChevronRight />
+                            {/* <faAngleRight /> */}
                         </StyledIcon>
                     </StyledHeader>
                     <StyledGrid>

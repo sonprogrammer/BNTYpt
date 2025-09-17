@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import tw from "twin.macro";
-import { QrReader } from 'react-qr-reader';
+import QrReader from 'react-qr-scanner';
 
 export const StyledContainer = styled.div`
     ${tw`
         flex
         justify-center
         items-center
-        h-full
-        w-full
+        // h-full
+        // w-full
     `}
 `
 export const StyledTrainerBox = styled.div`

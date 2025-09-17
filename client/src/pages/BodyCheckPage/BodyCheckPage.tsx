@@ -31,7 +31,8 @@ const BodyCheckPage = () => {
 
   
   return (
-    <StylecContainer>
+    <StylecContainer className='b'>
+      <h1>hi</h1>
         <BodyCheckComponent refresh={refresh}/>
         {showUploadModal ? (
                     <></>

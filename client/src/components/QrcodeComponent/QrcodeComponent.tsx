@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { QRCodeCanvas } from 'qrcode.react'
-import { OnResultFunction } from 'react-qr-reader'
+import { OnResultFunction } from 'react-qr-scanner'
 import { StyledContainer, StyledMemberBox, StyledQrReader, StyledTrainerBox } from './style'
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
@@ -54,7 +54,9 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
             console.log('error 발생', error)
         }
     };
-
+    const handleQrError = (err: any) => {
+        console.log('QR error', err);
+      };
 
     const handleClick = (e: React.MouseEvent<HTMLElement>) => {
         setMemberClicked(!memberClicked)
@@ -72,11 +74,11 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                     {memberClicked ?
                         <div className='w-[100%]'>
                             <StyledQrReader
-                                constraints={{ facingMode: 'environment', width: 640, height: 480 }} //후면 카메라 사용
-                                onResult={handleResult}
-                                scanDelay={300}
+                                onScan={handleResult}
+                                delay={300}
+                                onError={handleQrError}
                             />
-                            <div className='mb-7 text-center hover:font-bold hover:text-red-500 hover:cursor-pointer' onClick={handleClick}>Exit camera</div>
+                            <div className='m-7 text-center hover:font-bold hover:text-red-500 hover:cursor-pointer' onClick={handleClick}>Exit camera</div>
                         </div>
                         :
                         <div 

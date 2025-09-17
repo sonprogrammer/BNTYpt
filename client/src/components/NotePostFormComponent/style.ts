@@ -14,25 +14,47 @@ export const StyledContainerForm  = styled.form`
         flex-col
     `}
 `
-export const StyledSelect = styled.select`
-        ${tw`
-            flex
-            absolute
-            top-12
-            bg-stone-400
-        `}
-        @media(max-width:500px){
-            width: 20%
-        }
+
+export const StyledUpper = styled.section`
+    ${tw`
+        flex
+        items-center
+        relative
+    `}
 `
 
-export const StyledTitle = styled.h1`
+export const StyledSelect = styled.select`
+        ${tw`
+            bg-stone-400
+            absolute
+            right-3
+        `}
+
+`
+
+export const StyledRecord = styled.h1`
     ${tw`
         text-center
         m-3
         text-3xl
         font-bold
         text-red-900
+        flex-1
+    `}
+`
+
+export const StyledTitle = styled.input`
+    ${tw`
+        w-full
+        p-1
+        border-[2px]
+        border-red-900
+        rounded-md
+        mb-1
+        bg-stone-400
+        outline-none
+        pl-5
+        font-bold
     `}
 `
 

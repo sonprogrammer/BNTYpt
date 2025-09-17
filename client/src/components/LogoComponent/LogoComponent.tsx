@@ -38,8 +38,7 @@ const LogoComponent = () => {
         <Link to="/browse">
           <h1>B N T Y</h1> 
         </Link>
-        <h3 className='logout-text' onClick={handleOpenModal}>logout</h3>
-        <FontAwesomeIcon onClick={handleOpenModal} className='logout-icon' icon={faRightFromBracket} size='lg'/>
+        <FontAwesomeIcon onClick={handleOpenModal} className='logout-icon' icon={faRightFromBracket} />
         <StyledLogoutModal onClick={handleCloseModal}>
           {isModalOpen && 
             (<LogoutModalComponent 

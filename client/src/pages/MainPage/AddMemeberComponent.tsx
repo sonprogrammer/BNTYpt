@@ -72,6 +72,7 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponent) => {
           <FontAwesomeIcon icon={faXmark} size='xl' />
         </StyledXIcon>
         <StyledMember>
+
           <StyledSelect name="member"
             value={selectedMember || ''}
             onChange={(e) => setSelectedMember(e.target.value)}

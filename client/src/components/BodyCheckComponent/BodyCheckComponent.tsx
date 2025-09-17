@@ -15,6 +15,7 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
   const [user] = useRecoilState(userState)
   // console.log('photos', photos)
 
+
   
     useEffect(() => {
       if(user){
@@ -38,8 +39,7 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
           }
         })
 
-        console.log('res',res)
-
+        console.log('res', res)
 
         const formatedPost = res.data.posts.map((post:any) => ({
           imageUrl: post.images[0],
@@ -64,9 +64,10 @@ function BodyCheckComponent( {refresh} : { refresh: boolean}) {
       photos.map((photo, i)=> (
         <StyledBox key={i}>
             <StyledTitle>{photo.text}</StyledTitle>
-            <StyledImage src={photo.imageUrl} alt="image" 
-              onError={(e) => {e.currentTarget.src}}
+            <StyledImage src={photo.imageUrl || 'notfound.png'} alt="image" 
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {e.currentTarget.src='./notfound.png';}}
             />
+
             <StyledText>{photo.uploadTime}</StyledText>
           </StyledBox>
       ))

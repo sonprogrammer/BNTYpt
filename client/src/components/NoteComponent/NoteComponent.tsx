@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { PostForm } from '../PostForm'
 import { PostListComponent } from '../PostListComponent';
 import { AddPhotoComponent } from '../AddPhotoComponent';
-import { StyledClose, StyledNothing, StyledPostBox, StyledPostForm } from './style';
+import { StyledClose, StyledNothing, StyledPostBox, StyledPostForm, StyledRecordBtn } from './style';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
@@ -88,18 +88,18 @@ const NoteComponent = () => {
         <>
             {role === 'trainer' ? (
                 <>
+                <StyledRecordBtn onClick={handleModalOpen}>운동 일지 기록</StyledRecordBtn>
                     {posts.length > 0 ? (
                         <PostListComponent posts={posts} />
                     ) : (
                         <StyledNothing>게시글이 아직 없습니다🤪</StyledNothing>
                     )}
-                    {/* <PostListComponent posts={posts}/> */}
-                    {modalOpen ? (
+                    {/* {modalOpen ? (
                         <></>
                     ) : (
                         <AddPhotoComponent onClick={handleModalOpen} />
                     )
-                    }
+                    } */}
                     {modalOpen && (
                         <StyledPostBox onClick={handleClosModal}>
                             <StyledPostForm onClick={(e) => e.stopPropagation()}>

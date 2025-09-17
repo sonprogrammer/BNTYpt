@@ -13,17 +13,22 @@ export const StyledTitle = styled.div`
         text-center
         py-4
         text-[56px]
-        // text-[66px]
+        relative
         bg-slate-900
         `}
+        @media(max-width: 380px){
+                ${tw`
+                    text-[42px]
+                `}
+            }
         h1{
             ${tw`
-            text-center
-            text-red-500
+                text-red-500
             `}
-            // font-family : "Anton"
+
             font-family : "rippedFont";
-    }
+        }
+            
     h3{
         ${tw`
             absolute
@@ -41,18 +46,23 @@ export const StyledTitle = styled.div`
         }
     }
     .logout-icon{
-        display:none;
+        ${tw`
+            absolute
+            right-8
+            top-[35%]
+            text-3xl
+            text-slate-500
+        `}
         &:hover{
             cursor: pointer;
             color: rgb(185 28 28);
         }
-        @media(max-width: 800px){
-            display: block;
+        @media(max-width: 380px){
             ${tw`
                 absolute
-                right-8
-                top-10
-                text-4xl
+                right-3
+                top-[40%]
+                text-2xl
                 text-slate-500
             `}
         }

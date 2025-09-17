@@ -8,7 +8,7 @@ function LayoutPage() {
 
     <StyledContainer>
       <LogoComponent />
-      <StyledOutlet>
+      <StyledOutlet className='hi'>
         <Outlet />
       </StyledOutlet>
       <StyledMenus>

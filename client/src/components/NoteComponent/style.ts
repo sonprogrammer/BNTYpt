@@ -1,9 +1,19 @@
 
-import { addDays } from 'date-fns';
+// import { addDays } from 'date-fns';
 import styled from "styled-components";
 import tw from "twin.macro";
 
 
+export const StyledRecordBtn = styled.button`
+    ${tw`
+        bg-red-900
+        text-white
+        w-full
+        rounded-md
+        py-2
+        mt-3
+    `}
+`
 
 export const StyledNothing = styled.div`
     ${tw`

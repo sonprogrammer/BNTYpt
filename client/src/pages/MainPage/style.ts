@@ -62,9 +62,10 @@ export const StyledSelect = styled.select`
         ${tw`
             flex
             bg-stone-400
+            w-[70%]
         `}
         @media(max-width:500px){
-            width: 20%
+            width: 70%
         }
 `
 
@@ -114,5 +115,15 @@ export const StyledBtn = styled.button`
         bottom-10
         font-bold
         text-xl
+    `}
+`
+
+export const StyledPtAddBtn = styled.button`
+    ${tw`
+        bg-red-800
+        w-full
+        rounded-md
+        py-3
+        text-white
     `}
 `

@@ -15,6 +15,7 @@ export const StyledOutlet = styled.div`
         flex-1
         overflow-auto
         bg-stone-500
+
     `}
 `
 
