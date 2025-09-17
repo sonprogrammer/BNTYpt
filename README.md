@@ -5,7 +5,7 @@
 
  communication between member and trainer.
  <br>
- 🚨i disconnected from server due to Heroku payment issues. apologize for that 🚨
+ 🚨Website update in progress 🚨
 
 
 ## Persona
