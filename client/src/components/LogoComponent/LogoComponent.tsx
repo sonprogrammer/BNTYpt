@@ -27,6 +27,7 @@ const LogoComponent = () => {
   const handleConfirmModal = () => {
     setUser(null)
     localStorage.removeItem('user')
+    localStorage.removeItem('token')
     handleCloseModal()
     navigate('/')
   }

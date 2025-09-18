@@ -10,7 +10,8 @@ export const StyledContainer = styled.div`
         p-3
         border-red-950
         mb-5
-        h-[500px]
+        overflow-hidden
+        h-full
     `}
     p{
         ${tw`
@@ -19,7 +20,7 @@ export const StyledContainer = styled.div`
     }
 `
 
-export const StyledBox = styled.div`
+export const StyledBox = styled.section`
     ${tw`
         
     `}

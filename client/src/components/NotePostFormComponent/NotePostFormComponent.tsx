@@ -17,7 +17,7 @@ interface Record {
 }
 
 interface NotePostFormComponentProps {
-    addPost: (post: { text: string; images: string[]; uploadTime: string; }) => void;
+    addPost: (post: { text: string; images: string[]; uploadTime: string;}) => void;
     closeModal: () => void;
 }
 
@@ -27,13 +27,11 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
     const [title, setTitle] = useState<string>('');
     const [images, setImages] = useState<File[]>([]);
     const [previewImages, setPreviewImages] = useState<string[]>([]);
-    // const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [selectedMember, setSelectedMember] = useState<string | null>(null);
     const [chatRooms, setChatRooms] = useState<any[]>([]);
 
 
     const [user] = useRecoilState(userState)
-
 
 
     const fetchMemeber = async (userId: string) => {
@@ -43,7 +41,9 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
                 memberId: room.memberId,
                 memberName: room.opponentName
             }))
+
             setChatRooms(memberNames)
+
             if (memberNames.length > 0) {
                 setSelectedMember(memberNames[0].memberId);
             }
@@ -84,7 +84,10 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!title && !text && images.length === 0) return;
+        if (!title || !text) {
+            alert('빈 내용이 없는지 확인해주세요')
+            return
+        };
 
         try {
 
@@ -100,7 +103,6 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
                 uploadTime: new Date().toISOString(),
                 userObjectId: user.objectId,
                 opponentName: selectedMember,
-
             }
             const res = await axios.post(`${apiUrl}/api/records`, formData, {
                 headers: {
@@ -132,7 +134,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
 
                 <StyledRecord>일지 기록</StyledRecord>
                 <StyledSelect name="member"
-                    value={''}
+                    value={selectedMember || ''}
                     onChange={(e) => setSelectedMember(e.target.value)}
                 >
                     <option value={''} disabled>member</option>

@@ -16,6 +16,10 @@ const recordSchema = new mongoose.Schema({
         type: String,  
         required: true,
       },
+      title: {
+        type: String,
+        required: true
+      },
       uploadTime: {
         type: Date, 
         default: Date.now,

@@ -10,14 +10,19 @@ interface Post {
 }
 
 interface PostListProps{
-    posts: Post[]
+  eachMember: Post[]
 }
 
-const PostListComponent = ({ posts} : PostListProps) => {
+const PostListComponent = ({ eachMember} : PostListProps) => {
+
+
+  const orderedPosts = eachMember.sort((a, b) => new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime())
+
+  
   return (
     <StyledContainer>
-      {posts.map((post, i) => (
-        <PostItemComponent key={i} post={post}/>
+      {orderedPosts.map((post, i) => (
+        <PostItemComponent key={i} post={post} />
       ))}
     </StyledContainer>
   )
