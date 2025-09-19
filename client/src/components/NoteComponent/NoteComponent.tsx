@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { NotePostFormComponent } from '../NotePostFormComponent';
 import useGetMembers from '../../hooks/useGetMemers';
 import useGetEachMemberNote from '../../hooks/useGetEachMemberNote';
+import useGetTrainerMemberNote from '../../hooks/useGetTrainerMemberNote';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -32,57 +33,68 @@ const NoteComponent = () => {
 
     const { data: members } = useGetMembers(user.objectId)
 
+    // console.log('user', user)
 
-    const { data: eachMemberNote, refetch } = useGetEachMemberNote(selectedMemberId)
+    //*트레이너가 보는것    
+    const trainerNotesQuery = useGetTrainerMemberNote(selectedMemberId, user.objectId);
+    //*회원이 보는것
+    const memberNotesQuery = useGetEachMemberNote(user.objectId);
 
-    console.log('mem', members)
+    // 실제로 보여줄 데이터 선택
+    const eachMemberNote = user.role === 'trainer'
+        ? trainerNotesQuery.data
+        : memberNotesQuery.data;
+
+    const refetch = user.role === 'trainer'
+        ? trainerNotesQuery.refetch
+        : memberNotesQuery.refetch;
 
     useEffect(() => {
-        if (user.role) {
+        if (user.role === 'trainer') {
             setRole(user.role)
+        } else {
+            setSelectedMemberId(user.objectId)
         }
 
     }, [user.role])
 
 
+    // useEffect(() => {
+    //     const fetchPost = async () => {
+    //         if (user.role === 'trainer') {
+    //             try {
+    //                 const res = await axios.get(`${apiUrl}/api/records/${user.objectId}`)
+    //                 const formattedPosts = res.data.records.map((post: any) => ({
+    //                     ...post,
+    //                     uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'),
+    //                 }));
+
+    //                 setPosts(formattedPosts);
+
+    //             } catch (error) {
+    //                 console.error('Error fetching posts:', error);
+    //             }
+    //         } else if (user.role === 'member') {
+    //             try {
+    //                 setSelectedMemberId(user.objectId)
+    //                 const res = await axios.get(`${apiUrl}/api/records/member/${user.objectId}`)
+    //                 const formattedPosts = res.data.records.map((post: any) => ({
+    //                     ...post,
+    //                     uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'), // 포맷팅
+    //                 }));
+
+    //                 setPosts(formattedPosts);
+    //             } catch (error) {
+    //                 console.error('Error fetching posts:', error);
+    //             }
+    //         }
+    //     };
 
 
-
-    useEffect(() => {
-        const fetchPost = async () => {
-            if (user.role === 'trainer') {
-                try {
-                    const res = await axios.get(`${apiUrl}/api/records/${user.objectId}`)
-                    const formattedPosts = res.data.records.map((post: any) => ({
-                        ...post,
-                        uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'),
-                    }));
-
-                    setPosts(formattedPosts);
-
-                } catch (error) {
-                    console.error('Error fetching posts:', error);
-                }
-            } else if (user.role === 'member') {
-                try {
-                    const res = await axios.get(`${apiUrl}/api/records/member/${user.objectId}`)
-                    const formattedPosts = res.data.records.map((post: any) => ({
-                        ...post,
-                        uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'), // 포맷팅
-                    }));
-
-                    setPosts(formattedPosts);
-                } catch (error) {
-                    console.error('Error fetching posts:', error);
-                }
-            }
-        };
-
-
-        if (user.email || user.kakaoId) {
-            fetchPost();
-        }
-    }, [user, eachMemberNote]);
+    //     if (user.email || user.kakaoId) {
+    //         fetchPost();
+    //     }
+    // }, [user, eachMemberNote]);
 
     const handleMemberClick = (memeberId: string) => {
         setSelectedMemberId(memeberId)
@@ -97,17 +109,19 @@ const NoteComponent = () => {
 
     const handleModalOpen = () => {
         setModalOpen(true)
+        refetch()
     }
 
     const handleClosModal = () => {
         setModalOpen(false)
+        refetch()
     }
 
     return (
         <StyledNoteContainer>
             {role === 'trainer' ? (
                 <>
-                    { members?.length > 0 ? (
+                    {members?.length > 0 ? (
                         <>
                             <StyledMembersGroup>
                                 {members?.length > 0 &&
@@ -123,7 +137,7 @@ const NoteComponent = () => {
                             ) : (
                                 <>
                                     {eachMemberNote && (
-                                        <PostListComponent eachMember={eachMemberNote} />
+                                        <PostListComponent eachMember={eachMemberNote} refetch={refetch}  />
                                     )}
                                 </>
                             )}
@@ -148,8 +162,8 @@ const NoteComponent = () => {
                 </>
             ) : (
                 <>
-                    {posts.length > 0 ? (
-                        <PostListComponent eachMember={eachMemberNote} />
+                    {eachMemberNote?.length > 0 ? (
+                        <PostListComponent eachMember={eachMemberNote} refetch={refetch}  />
                     ) : (
                         <StyledNothing>게시글이 아직 없습니다🤪</StyledNothing>
                     )}

@@ -1,4 +1,4 @@
-import { atom } from "recoil"
+import { atom, selector } from "recoil"
 import { getUserFromLocalStorage } from "./localStorage"
 
 const defaultUser = getUserFromLocalStorage()
@@ -17,3 +17,11 @@ export const userState = atom({
         ptCount: null as number | null
     }
 })
+
+export const userRoleSelector = selector<string | null>({
+    key: "userRoleSelector",
+    get: ({ get }) => {
+      const user = get(userState);
+      return user.role;
+    },
+  });

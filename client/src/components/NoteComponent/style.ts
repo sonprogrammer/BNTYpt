@@ -14,11 +14,11 @@ export const StyledNoteContainer = styled.div`
 export const StyledMembersGroup = styled.section`
     ${tw`
         w-full
-        border-2
         mt-2
         p-2
         flex
         gap-10
+        items-center
     `}
 `
 

@@ -21,7 +21,7 @@ const createRecord = async(req, res) => {
             images,
             trainerId : user._id,
             uploadTime: new Date().toISOString(),
-            memberId: opponentName
+            memberId: opponentName,
         })
 
         await newRecord.save()
@@ -46,10 +46,18 @@ const getRecordsByT = async(req, res) => {
 
 //*trainer가 작성한 모든 게시글 - > 트레이너가 각 멤버에대해 작성해준 포스트를 자신것만 보는것
 const getMemberRecords = async(req, res) => {
-    const { userObjectId } = req.params
-    console.log('user', userObjectId)
+    const { memberId } = req.params
+    const { trainerId } = req.query
+    console.log('user', memberId, trainerId)
+
     try {
-        const records = await Record.find({ memberId: userObjectId})
+        let records
+        if(trainerId){
+            records = await Record.find({memberId, trainerId})    
+            
+        }else{
+            records = await Record.find({ memberId})
+        }
 
         return res.status(200).json({ success: true, records })
     } catch (error) {
@@ -57,5 +65,47 @@ const getMemberRecords = async(req, res) => {
     }
 }
 
+// *트레이너가 노트내용을 삭제
+const deleteMemberRecords = async(req, res) => {
+    const { noteId } = req.params
 
-module.exports = { createRecord, getRecordsByT, getMemberRecords }
+    try {
+        const note = await Record.findOne({_id: noteId})
+        if(!note){
+            return res.status(404).json({success: false, message: 'not found'})
+        }
+
+        await Record.findByIdAndDelete(noteId)
+
+        return res.status(200).json({success: true, message: 'success'})
+        
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({success: false, message: 'failed'})
+    }
+}
+
+// *트레이너가 노트내용 수정
+const editMemberRecords = async(req, res) => {
+    const { noteId } = req.params
+    const { title, text} = req.body
+
+    try {
+        const note = await Record.findOne({_id: noteId})
+        if(!note){
+            return res.status(404).json({success: false, message: 'not found'})
+        }
+
+        note.title = title ?? note.title
+        note.text = text ?? note.text
+        await note.save()
+
+        return res.status(200).json({success: true, message: 'success', note})
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({success: false, message: 'sever eror'})
+    }
+}
+
+
+module.exports = { createRecord, getRecordsByT, getMemberRecords,deleteMemberRecords, editMemberRecords }
