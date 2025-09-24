@@ -21,22 +21,27 @@ interface User {
 }
 
 interface Message {
-    text: string;
+    text?: string;
     isMine: boolean;
     sender: string;
+    type? : 'text'|'media';
+    data?: string;
+    fileName?: string;
 }
 
 const ChatRoomComponent = () => {
     const { userId } = useParams<{ userId: string }>()
     const [messages, setMessages] = useState<Message[]>([])
     const [input, setInput] = useState<string>('')
-    const messageBoxRef = useRef<HTMLDivElement>(null)
     const [user] = useRecoilState(userState)
     const [socket, setSocket] = useState<any>(null);
     const [chatRoomId, setChatRoomId] = useState<string | null>(null);
+    const messageBoxRef = useRef<HTMLDivElement>(null)
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
+
+    
     useEffect(() => {
-        // const socketInstance = io('http://localhost:4000')
         const socketInstance = io(apiUrl)
         setSocket(socketInstance)
         return () => {
@@ -85,7 +90,8 @@ const ChatRoomComponent = () => {
                             text: msg.message,
                             isMine: msg.sender === user.name,
                             sender: msg.sender,
-                            timestamp: msg.timestamp
+                            timestamp: msg.timestamp,
+                            type: 'text'
                         }));
                         setMessages(fetchedMessages);
                     }
@@ -143,12 +149,6 @@ const ChatRoomComponent = () => {
 
                 socket.emit('sendMessage', newMessage);
 
-                // socket.emit('sendMessage', {
-                //     chatRoomId,
-                //     sender: newMessage.sender,
-                //     message: newMessage.text,
-                // });
-
                 setMessages(prevMessages => [...prevMessages, newMessage]);
                 setInput('')
 
@@ -158,8 +158,35 @@ const ChatRoomComponent = () => {
         }
     }
 
+    const handlePlusClick = () => fileInputRef.current?.click()
+
+    
+
+    const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+        if(!e.target.files || !chatRoomId) return
+        const file = e.target.files[0]
+
+        const formData = new FormData()
+        formData.append('file', file)
+        // formData.append('up')
+
+        console.log('file', file)
+        const reader = new FileReader()
+        reader.onload = () => {
+            socket.emit('sendMessage', {
+                type: 'media',
+                chatRoomId,
+                sender: user.name,
+                data: reader.result,
+                fileName: file.name
+            })
+        }
+        reader.readAsDataURL(file)
+        e.target.value =''
+    }
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter'  && !e.nativeEvent.isComposing) {
             e.preventDefault();
             handleSendMessage();
         }
@@ -180,11 +207,14 @@ const ChatRoomComponent = () => {
                     {messages.length > 0 ? (
                         messages.map((message, i) => (
                             <StyledMessage key={i} isMine={message.isMine}>
-                                {message.text}
+                                    {message.type === 'media' ? <img src={message.data} alt={message.fileName} className="max-w-xs rounded" /> : message.text}
+                                    {/* {message.text} */}
                             </StyledMessage>
                         ))
                     ) : (
-                        <p className='text-center flex items-center justify-center h-full font-bold text-2xl text-red-900'>there is no message.</p>
+                        <p className='text-center flex items-center justify-center h-full font-bold text-2xl text-red-900'>
+                            there is no message.
+                        </p>
                     )}
                 </>
                 <div ref={messageBoxRef} />
@@ -196,9 +226,11 @@ const ChatRoomComponent = () => {
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
                 />
-                <StyledPlus>
+
+                <StyledPlus onClick={handlePlusClick}>
                     <FontAwesomeIcon icon={faPlus} />
                 </StyledPlus>
+                <input type="file" ref={fileInputRef} className='hidden' onChange={handleFileChange} accept='image/*,video/*'/>
                 <button onClick={handleSendMessage}>send</button>
             </StyledSendEl>
         </StyledContainer>

@@ -95,7 +95,7 @@ const getMessages = async (req, res) => {
 
 
 const sendMessage = async(req, res) => {
-    const { chatRoomId, sender, message} = req.body
+    const { chatRoomId, sender, message, type, data, fileName} = req.body
 
     try {
         const chatRoom = await ChatRoom.findById(chatRoomId)
@@ -103,7 +103,17 @@ const sendMessage = async(req, res) => {
             return res.status(404).json({ message: 'can not find chattingroom'})
         }
 
-        chatRoom.messages.push({ sender, message, timestamp: new Date()})
+        const newMessage = {
+            sender,
+            type: type || 'text',
+            message: message || null,
+            data: data || null,
+            fileName: fileName || null, 
+            timestamp: new Date()
+        }
+        
+
+        chatRoom.messages.push(newMessage)
         await chatRoom.save()
 
         res.status(200).json(chatRoom)

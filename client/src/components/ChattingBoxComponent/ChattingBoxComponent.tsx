@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
+import loadingBar from '../../assets/loading.gif';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
 
 interface ChatRoom {
+    [key: string]: any;
     _id: string; 
     memberId?: string; 
     trainerId?: string; 
@@ -25,12 +27,14 @@ interface ChatRoom {
 
 const ChattingBoxComponent = () => {
     const [chatRooms, setChatRooms] = useState<ChatRoom[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
     const navigate = useNavigate()
     const [user] = useRecoilState(userState)
 
 
     const fetchChatRooms = async() => {
         try {
+            setLoading(true)
             const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`)
             const rooms = res.data.chatRooms || []
             const roomsWithLastMessage = rooms.map((room: ChatRoom) => {
@@ -38,10 +42,14 @@ const ChattingBoxComponent = () => {
                 ? room.messages[room.messages.length - 1].message : null;
                 return { ...room, lastMessage };
             });
+            
+            const sortedRooms = roomsWithLastMessage.sort((a: ChatRoom,b: ChatRoom) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
 
-            setChatRooms(roomsWithLastMessage); 
+            setChatRooms(sortedRooms); 
         } catch (error) {
             console.error(error);
+        }finally{
+            setLoading(false)
         }
     }
     useEffect(() => {
@@ -54,6 +62,11 @@ const ChattingBoxComponent = () => {
     }
     return (
         <>
+        {loading && <>
+            <div className='flex justify-center items-center h-full'>
+                <img src={loadingBar} alt="로딩이미지" className='w-20'/>
+            </div>
+        </>}
              {chatRooms.length === 0 ? (
                 <StyledNotMember>채팅 멤버가 없습니다. 😿</StyledNotMember> 
             ) : (

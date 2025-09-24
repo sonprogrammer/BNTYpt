@@ -22,9 +22,19 @@ const chatSchema = new mongoose.Schema({
             type: String,
             required: true
         },
+        type: {
+            type: String,
+            enum: ['text', 'media'],
+            default: 'text'
+        },
         message: {
             type: String,
-            required: true
+        },
+        data: {
+            type: String
+        },
+        fileName: {
+            type: String
         },
         timestamp: {
             type: Date,
