@@ -114,7 +114,9 @@ const PostForm = ({ addPost } : PostFormProps) => {
         className='placeholder:text-red-950 placeholder:opacity-50'
       />
       <StyledSubmitEl>
-      <input type="file" multiple accept="image/*" onChange={handleImageChange} className="my-2" />
+      <div className='overflow-auto'>
+        <input type="file" multiple accept="image/*" onChange={handleImageChange} className="my-2" />
+      </div>
       <div className='flex justify-around'>
       {imagePreview.map((preview, index) => (
           <img key={index} src={preview} alt={`미리보기 ${index + 1}`} className="my-2 w-[30%] overflow-auto mr-5"/>

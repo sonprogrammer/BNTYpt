@@ -97,6 +97,11 @@ const getMessages = async (req, res) => {
 const sendMessage = async(req, res) => {
     const { chatRoomId, sender, message, type, data, fileName} = req.body
 
+    console.log('all', chatRoomId, sender, message, type, data, fileName)
+    
+    let imgUrl = null
+    console.log('file' ,req.file)
+    
     try {
         const chatRoom = await ChatRoom.findById(chatRoomId)
         if(!chatRoom){

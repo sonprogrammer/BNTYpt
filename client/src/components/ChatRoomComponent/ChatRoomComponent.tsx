@@ -9,6 +9,7 @@ import { io } from 'socket.io-client'
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
+import { setPriority } from 'os';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -38,8 +39,16 @@ const ChatRoomComponent = () => {
     const [chatRoomId, setChatRoomId] = useState<string | null>(null);
     const messageBoxRef = useRef<HTMLDivElement>(null)
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const inputFocusRef = useRef<HTMLInputElement>(null)
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
+    const [preview, setPreview] = useState<string | null>(null)
 
 
+
+    useEffect(() => {
+        inputFocusRef.current?.focus()
+
+    }, [])
     
     useEffect(() => {
         const socketInstance = io(apiUrl)
@@ -52,17 +61,20 @@ const ChatRoomComponent = () => {
     useEffect(() => {
         const fetchChatRoom = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`);
-                const chatRooms = response.data.chatRooms;
+                const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`);
+                // console.log('res' , res)
+                const chatRooms = res.data.chatRooms;
 
                 const currentChatRoom = chatRooms.find((room: any) =>
                     (room.trainerId === user.objectId && room.opponentName === userId) ||
                     (room.memberId === user.objectId && room.opponentName === userId)
-                );
-
+                ); 
+                
                 if (currentChatRoom) {
                     setChatRoomId(currentChatRoom._id);
-                    socket.emit('joinRoom', currentChatRoom._id)
+                    if(socket){
+                        socket.emit('joinRoom', currentChatRoom._id)
+                    }
                     
                 } else {
                     console.log(`No chat room found with ${userId}.`);
@@ -85,13 +97,15 @@ const ChatRoomComponent = () => {
             if (chatRoomId) {
                 try {
                     const res = await axios.get(`${apiUrl}/api/chat/messages/${chatRoomId}`)
+                    console.log('ressss', res)
                     if (res.data.success) {
                         const fetchedMessages = res.data.message.map((msg: any) => ({
                             text: msg.message,
                             isMine: msg.sender === user.name,
                             sender: msg.sender,
                             timestamp: msg.timestamp,
-                            type: 'text'
+                            type: msg.type || 'text',
+                            data: msg.data
                         }));
                         setMessages(fetchedMessages);
                     }
@@ -114,7 +128,10 @@ const ChatRoomComponent = () => {
                 setMessages((prevMessages) => [...prevMessages, {
                     text: message.message,
                     isMine: message.sender === user.name,
-                    sender: message.sender
+                    sender: message.sender,
+                    type: message.type,
+                    data: message.data,
+                    fileName: message.fileName
                 }]);
             });
 
@@ -136,14 +153,38 @@ const ChatRoomComponent = () => {
         setInput(e.target.value)
     }
     const handleSendMessage = async () => {
-        if (input.trim() !== '') {
-            const newMessage = { text: input, isMine: true, sender: user.name };
+        if (!input.trim() && !selectedFile) return
+            // const newMessage = { text: input, isMine: true, sender: user.name };
 
             try {
+                let mediaUrl: string | null = null
+                if(selectedFile){
+                    const formData = new FormData()
+                    formData.append('file', selectedFile)
+                    const res = await axios.post(`${apiUrl}/api/chat/send`, formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' },
+                      })
+                      mediaUrl = res.data.url
+                }
+
+                // console.log('selected', selectedFile)
+                const newMessage: Message = {
+                    text: input || '',
+                    isMine: true,
+                    sender: user.name,
+                    type: mediaUrl ? 'media' : 'text',
+                    data: mediaUrl || undefined,
+                    // fileName: selectedFile?.name
+                }
+                
+                
                 await axios.post(`${apiUrl}/api/chat/send`, {
                     chatRoomId,
                     sender: newMessage.sender,
                     message: newMessage.text,
+                    type: newMessage.type,
+                    data: mediaUrl,
+                    fileName: newMessage.fileName
                 })
 
 
@@ -151,38 +192,25 @@ const ChatRoomComponent = () => {
 
                 setMessages(prevMessages => [...prevMessages, newMessage]);
                 setInput('')
+                setSelectedFile(null)
+                setPreview(null)
 
             } catch (error) {
                 console.error('Error sending message:', error);
             }
-        }
+        
     }
 
     const handlePlusClick = () => fileInputRef.current?.click()
 
     
-
-    const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        if(!e.target.files || !chatRoomId) return
+    const handleFilePreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(!e.target.files) return
         const file = e.target.files[0]
-
-        const formData = new FormData()
-        formData.append('file', file)
-        // formData.append('up')
-
-        console.log('file', file)
-        const reader = new FileReader()
-        reader.onload = () => {
-            socket.emit('sendMessage', {
-                type: 'media',
-                chatRoomId,
-                sender: user.name,
-                data: reader.result,
-                fileName: file.name
-            })
-        }
-        reader.readAsDataURL(file)
+        setSelectedFile(file)
+        setPreview(URL.createObjectURL(file))
         e.target.value =''
+
     }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -225,12 +253,27 @@ const ChatRoomComponent = () => {
                     value={input}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
+                    ref={inputFocusRef}
                 />
+                {preview && (
+          <div className="relative w-16 h-16 mr-2">
+            <img src={preview} alt="preview" className="w-16 h-16 object-cover bg-black rounded" />
+            <button
+              className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1"
+              onClick={() => {
+                setSelectedFile(null)
+                setPreview(null)
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
                 <StyledPlus onClick={handlePlusClick}>
                     <FontAwesomeIcon icon={faPlus} />
                 </StyledPlus>
-                <input type="file" ref={fileInputRef} className='hidden' onChange={handleFileChange} accept='image/*,video/*'/>
+                <input type="file" ref={fileInputRef} onChange={handleFilePreview} className='hidden' accept='image/*,video/*'/>
                 <button onClick={handleSendMessage}>send</button>
             </StyledSendEl>
         </StyledContainer>
