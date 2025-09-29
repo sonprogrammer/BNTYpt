@@ -17,6 +17,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const { Server} = require('socket.io');
 const recordRouter = require('./Routes/recordRouter');
+const ChatRoom = require('./Models/chatModel');
 
 
 
@@ -48,15 +49,41 @@ app.use(passport.session());
 
 io.on('connection', (socket) => {
     socket.on('sendMessage', (message) => {
-        io.emit('receiveMessage', message);
-        socket.to(message.chatRoomId).emit('receiveMessage', message);
-
-
+        // io.emit('receiveMessage', message);
+        const payload = {
+            text: message.text,
+            sender: message.sender,
+            type: message.type,
+            data: message.data,
+            readBy: message.readBy || [],
+            chatRoomId: message.chatRoomId
+        }
+        socket.to(message.chatRoomId).emit('receiveMessage', payload);
     });
+
     socket.on('joinRoom', (chatRoomId) => {
         socket.join(chatRoomId);
         console.log('User joined room:', chatRoomId);
       });
+
+      socket.on('read', async({chatRoomId, userId}) =>{
+        try {
+            const chatRoom = await ChatRoom.findById(chatRoomId)
+            if(!chatRoom) return
+
+            chatRoom.messages.forEach(msg => {
+                if(!msg.readBy.includes(userId)){
+                    msg.readBy.push(userId)
+                }
+            })
+            await chatRoom.save()
+            socket.to(chatRoomId).emit('read', {chatRoomId, userId})
+        } catch (error) {
+            console.error(err)
+        }
+      })
+      
+      
     socket.on('disconnect', () => {
         console.log('disconnected', socket.id);
     });

@@ -24,7 +24,7 @@ export const Styledupper = styled.div`
 export const StyledArrow = styled.div`
     ${tw`
         absolute
-        left-3
+        left-10
     `}
 `
 
@@ -36,6 +36,7 @@ export const StyledMessageBox = styled.div`
         flex-1
         overflow-y-auto
         bg-stone-400
+        px-5
     `}
 `
 export const StyledMessage = styled.div<{ isMine: boolean}>`
@@ -46,10 +47,20 @@ export const StyledMessage = styled.div<{ isMine: boolean}>`
         bg-gray-200
         rounded-lg
         max-w-[70%]
+        relative
     `}
     background-color: ${({isMine}) => (isMine ? 'orange' : 'gray')};
     align-self: ${({isMine}) => (isMine ? 'flex-end' : 'flex-start')};
-    color: ${({isMine}) => (isMine ? 'black' : 'white')};
+    span{
+        ${tw`
+            absolute
+            bottom-1
+            text-red-800
+            font-semibold
+        `}
+        left: ${({isMine}) => (isMine&& '-42px')};
+    }
+    
 `
 
 export const StyledSendEl = styled.div`

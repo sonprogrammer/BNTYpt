@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { io } from 'socket.io-client'
-// import socket from '../../socket'
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
@@ -25,9 +24,9 @@ interface Message {
     text?: string;
     isMine: boolean;
     sender: string;
-    type? : 'text'|'media';
+    type?: 'text' | 'media';
     data?: string;
-    fileName?: string;
+    readBy?: string[];
 }
 
 const ChatRoomComponent = () => {
@@ -49,7 +48,7 @@ const ChatRoomComponent = () => {
         inputFocusRef.current?.focus()
 
     }, [])
-    
+
     useEffect(() => {
         const socketInstance = io(apiUrl)
         setSocket(socketInstance)
@@ -62,20 +61,19 @@ const ChatRoomComponent = () => {
         const fetchChatRoom = async () => {
             try {
                 const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`);
-                // console.log('res' , res)
                 const chatRooms = res.data.chatRooms;
 
                 const currentChatRoom = chatRooms.find((room: any) =>
                     (room.trainerId === user.objectId && room.opponentName === userId) ||
                     (room.memberId === user.objectId && room.opponentName === userId)
-                ); 
-                
+                );
+
                 if (currentChatRoom) {
                     setChatRoomId(currentChatRoom._id);
-                    if(socket){
+                    if (socket) {
                         socket.emit('joinRoom', currentChatRoom._id)
                     }
-                    
+
                 } else {
                     console.log(`No chat room found with ${userId}.`);
                 }
@@ -93,11 +91,12 @@ const ChatRoomComponent = () => {
 
 
     useEffect(() => {
+
         const fetchMessages = async () => {
             if (chatRoomId) {
                 try {
                     const res = await axios.get(`${apiUrl}/api/chat/messages/${chatRoomId}`)
-                    console.log('ressss', res)
+                    // console.log('ressss', res)
                     if (res.data.success) {
                         const fetchedMessages = res.data.message.map((msg: any) => ({
                             text: msg.message,
@@ -105,9 +104,12 @@ const ChatRoomComponent = () => {
                             sender: msg.sender,
                             timestamp: msg.timestamp,
                             type: msg.type || 'text',
-                            data: msg.data
+                            data: msg.data,
+                            readBy: msg.readBy || []
                         }));
                         setMessages(fetchedMessages);
+
+                        socket.emit('read', { chatRoomId, userId: user.objectId })
                     }
 
                 } catch (error) {
@@ -124,19 +126,26 @@ const ChatRoomComponent = () => {
         if (chatRoomId && socket) {
             socket.emit('joinRoom', chatRoomId);
 
-            socket.on('newMessage', (message: any) => {
-                setMessages((prevMessages) => [...prevMessages, {
-                    text: message.message,
-                    isMine: message.sender === user.name,
-                    sender: message.sender,
-                    type: message.type,
-                    data: message.data,
-                    fileName: message.fileName
-                }]);
+            socket.on('receiveMessage', (message: any) => {
+                setMessages(prevMessages => [...prevMessages, message])
+                if (message.sender !== user.name) {
+                    socket.emit('read', { chatRoomId, userId: user.objectId })
+                }
             });
 
+            socket.on('read', ({ chatRoomId: roomId, userId: readerId }: { chatRoomId: string, userId: string }) => {
+                setMessages(prev => prev.map(msg => {
+                    if (!msg.readBy) msg.readBy = [];
+                    if (!msg.readBy.includes(readerId)) {
+                        msg.readBy.push(readerId);
+                    }
+                    return msg;
+                }));
+            })
+
             return () => {
-                socket.off('newMessage');
+                socket.off('receiveMessage');
+                socket.off('read')
             };
         }
     }, [chatRoomId, socket]);
@@ -154,67 +163,66 @@ const ChatRoomComponent = () => {
     }
     const handleSendMessage = async () => {
         if (!input.trim() && !selectedFile) return
-            // const newMessage = { text: input, isMine: true, sender: user.name };
 
-            try {
-                let mediaUrl: string | null = null
-                if(selectedFile){
-                    const formData = new FormData()
-                    formData.append('file', selectedFile)
-                    const res = await axios.post(`${apiUrl}/api/chat/send`, formData, {
-                        headers: { 'Content-Type': 'multipart/form-data' },
-                      })
-                      mediaUrl = res.data.url
-                }
-
-                // console.log('selected', selectedFile)
-                const newMessage: Message = {
-                    text: input || '',
-                    isMine: true,
-                    sender: user.name,
-                    type: mediaUrl ? 'media' : 'text',
-                    data: mediaUrl || undefined,
-                    // fileName: selectedFile?.name
-                }
-                
-                
-                await axios.post(`${apiUrl}/api/chat/send`, {
-                    chatRoomId,
-                    sender: newMessage.sender,
-                    message: newMessage.text,
-                    type: newMessage.type,
-                    data: mediaUrl,
-                    fileName: newMessage.fileName
+        try {
+            let mediaUrl: string | null = null
+            if (selectedFile) {
+                const formData = new FormData()
+                formData.append('file', selectedFile)
+                console.log('form', formData)
+                const res = await axios.post(`${apiUrl}/api/chat/upload`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' },
                 })
-
-
-                socket.emit('sendMessage', newMessage);
-
-                setMessages(prevMessages => [...prevMessages, newMessage]);
-                setInput('')
-                setSelectedFile(null)
-                setPreview(null)
-
-            } catch (error) {
-                console.error('Error sending message:', error);
+                mediaUrl = res.data.url
             }
-        
+
+            const newMessage: Message = {
+                text: input || '',
+                isMine: true,
+                sender: user.name,
+                type: mediaUrl ? 'media' : 'text',
+                data: mediaUrl || undefined,
+                readBy: [user.objectId]
+            }
+            console.log('new ', newMessage)
+
+
+            await axios.post(`${apiUrl}/api/chat/send`, {
+                chatRoomId,
+                sender: newMessage.sender,
+                message: newMessage.text,
+                type: newMessage.type,
+                data: mediaUrl,
+            })
+
+
+            socket.emit('sendMessage', { ...newMessage, chatRoomId });
+
+            setMessages(prevMessages => [...prevMessages, newMessage]);
+            setInput('')
+            setSelectedFile(null)
+            setPreview(null)
+
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+
     }
 
     const handlePlusClick = () => fileInputRef.current?.click()
 
-    
+
     const handleFilePreview = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(!e.target.files) return
+        if (!e.target.files) return
         const file = e.target.files[0]
         setSelectedFile(file)
         setPreview(URL.createObjectURL(file))
-        e.target.value =''
+        e.target.value = ''
 
     }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter'  && !e.nativeEvent.isComposing) {
+        if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
             e.preventDefault();
             handleSendMessage();
         }
@@ -230,13 +238,25 @@ const ChatRoomComponent = () => {
                 </StyledArrow>
                 <h2>{userId} chat</h2>
             </Styledupper>
-            <StyledMessageBox>
+            <StyledMessageBox className='hi'>
                 <>
                     {messages.length > 0 ? (
                         messages.map((message, i) => (
                             <StyledMessage key={i} isMine={message.isMine}>
-                                    {message.type === 'media' ? <img src={message.data} alt={message.fileName} className="max-w-xs rounded" /> : message.text}
-                                    {/* {message.text} */}
+                                {message.type === 'media' ?
+                                    <img src={message.data} alt={'이미지'} className="max-w-xs rounded" />
+                                    :
+                                    <p>{message.text}</p>
+                                }
+                                {message.isMine && message.readBy ? (
+                                    message.readBy.some(id => id !== user.objectId) ? (
+                                        <span className='text-sm'></span>
+                                    ) : (
+                                        <span className='text-sm'>안읽음</span>
+                                    )
+                                ) : null}
+
+
                             </StyledMessage>
                         ))
                     ) : (
@@ -256,24 +276,24 @@ const ChatRoomComponent = () => {
                     ref={inputFocusRef}
                 />
                 {preview && (
-          <div className="relative w-16 h-16 mr-2">
-            <img src={preview} alt="preview" className="w-16 h-16 object-cover bg-black rounded" />
-            <button
-              className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1"
-              onClick={() => {
-                setSelectedFile(null)
-                setPreview(null)
-              }}
-            >
-              ✕
-            </button>
-          </div>
-        )}
+                    <div className="relative w-16 h-16 mr-2">
+                        <img src={preview} alt="preview" className="w-16 h-16 object-cover bg-black rounded" />
+                        <button
+                            className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1"
+                            onClick={() => {
+                                setSelectedFile(null)
+                                setPreview(null)
+                            }}
+                        >
+                            ✕
+                        </button>
+                    </div>
+                )}
 
                 <StyledPlus onClick={handlePlusClick}>
                     <FontAwesomeIcon icon={faPlus} />
                 </StyledPlus>
-                <input type="file" ref={fileInputRef} onChange={handleFilePreview} className='hidden' accept='image/*,video/*'/>
+                <input type="file" ref={fileInputRef} onChange={handleFilePreview} className='hidden' accept='image/*,video/*' />
                 <button onClick={handleSendMessage}>send</button>
             </StyledSendEl>
         </StyledContainer>
