@@ -4,11 +4,13 @@ import { StyledArrow, StyledContainer, StyledMessage, StyledMessageBox, StyledPl
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { io } from 'socket.io-client'
+// import { io } from 'socket.io-client'
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
-import { setPriority } from 'os';
+import socket from '../../socket';
+import loadingBar from '../../assets/loading.gif';
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -34,13 +36,13 @@ const ChatRoomComponent = () => {
     const [messages, setMessages] = useState<Message[]>([])
     const [input, setInput] = useState<string>('')
     const [user] = useRecoilState(userState)
-    const [socket, setSocket] = useState<any>(null);
     const [chatRoomId, setChatRoomId] = useState<string | null>(null);
     const messageBoxRef = useRef<HTMLDivElement>(null)
     const fileInputRef = useRef<HTMLInputElement>(null);
     const inputFocusRef = useRef<HTMLInputElement>(null)
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const [preview, setPreview] = useState<string | null>(null)
+    const [loading, setLoading] = useState<boolean>(true)
 
 
 
@@ -49,13 +51,7 @@ const ChatRoomComponent = () => {
 
     }, [])
 
-    useEffect(() => {
-        const socketInstance = io(apiUrl)
-        setSocket(socketInstance)
-        return () => {
-            socketInstance.disconnect()
-        }
-    }, [])
+
 
     useEffect(() => {
         const fetchChatRoom = async () => {
@@ -95,12 +91,13 @@ const ChatRoomComponent = () => {
         const fetchMessages = async () => {
             if (chatRoomId) {
                 try {
+                    setLoading(true)
                     const res = await axios.get(`${apiUrl}/api/chat/messages/${chatRoomId}`)
-                    // console.log('ressss', res)
+
                     if (res.data.success) {
                         const fetchedMessages = res.data.message.map((msg: any) => ({
                             text: msg.message,
-                            isMine: msg.sender === user.name,
+                            isMine: msg.sender === user.objectId,
                             sender: msg.sender,
                             timestamp: msg.timestamp,
                             type: msg.type || 'text',
@@ -110,10 +107,15 @@ const ChatRoomComponent = () => {
                         setMessages(fetchedMessages);
 
                         socket.emit('read', { chatRoomId, userId: user.objectId })
+                        setLoading(false)
+                    } else {
+                        setMessages([])
                     }
 
                 } catch (error) {
                     console.error('Error chat room:', error);
+                } finally {
+                    setLoading(false)
                 }
             }
         };
@@ -128,6 +130,7 @@ const ChatRoomComponent = () => {
 
             socket.on('receiveMessage', (message: any) => {
                 setMessages(prevMessages => [...prevMessages, message])
+                setLoading(false)
                 if (message.sender !== user.name) {
                     socket.emit('read', { chatRoomId, userId: user.objectId })
                 }
@@ -179,13 +182,11 @@ const ChatRoomComponent = () => {
             const newMessage: Message = {
                 text: input || '',
                 isMine: true,
-                sender: user.name,
+                sender: user.objectId,
                 type: mediaUrl ? 'media' : 'text',
                 data: mediaUrl || undefined,
                 readBy: [user.objectId]
             }
-            console.log('new ', newMessage)
-
 
             await axios.post(`${apiUrl}/api/chat/send`, {
                 chatRoomId,
@@ -229,7 +230,8 @@ const ChatRoomComponent = () => {
     }
 
     return (
-        <StyledContainer>
+        <StyledContainer className='hi'>
+
             <Styledupper>
                 <StyledArrow>
                     <Link to='/chat'>
@@ -238,9 +240,17 @@ const ChatRoomComponent = () => {
                 </StyledArrow>
                 <h2>{userId} chat</h2>
             </Styledupper>
-            <StyledMessageBox className='hi'>
+            <StyledMessageBox className='hidd'>
                 <>
-                    {messages.length > 0 ? (
+                    {loading ? (
+
+                        <>
+                        <div className='flex justify-center items-center h-full'>
+                            <img src={loadingBar} alt="로딩이미지" className='w-20' />
+                        </div>
+                    </>
+                    ) 
+                    : messages.length > 0 ? (
                         messages.map((message, i) => (
                             <StyledMessage key={i} isMine={message.isMine}>
                                 {message.type === 'media' ?

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { StyledContainer, StyledContent, StyledProfile, StyledNotMember } from './style'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import loadingBar from '../../assets/loading.gif';
-const apiUrl = process.env.REACT_APP_API_URL;
+import socket from '../../socket'
+
 
 
 
@@ -22,6 +22,7 @@ interface ChatRoom {
         message: string;
         createdAt: string;
         senderId: string;
+        readBy: string[];
     }[]
 }
 
@@ -32,29 +33,42 @@ const ChattingBoxComponent = () => {
     const [user] = useRecoilState(userState)
 
 
-    const fetchChatRooms = async() => {
-        try {
-            setLoading(true)
-            const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`)
-            const rooms = res.data.chatRooms || []
-            const roomsWithLastMessage = rooms.map((room: ChatRoom) => {
-                const lastMessage = room.messages && room.messages.length > 0 
-                ? room.messages[room.messages.length - 1].message : null;
-                return { ...room, lastMessage };
-            });
-            
-            const sortedRooms = roomsWithLastMessage.sort((a: ChatRoom,b: ChatRoom) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-
-            setChatRooms(sortedRooms); 
-        } catch (error) {
-            console.error(error);
-        }finally{
-            setLoading(false)
-        }
-    }
     useEffect(() => {
-        fetchChatRooms()
-    },[user]) //socket추가
+        if(!socket) return
+        setLoading(true)
+        socket.emit('getChatRooms', user.objectId)
+
+        socket.on('chatRoomsUpdate', (rooms: ChatRoom[]) => {
+            setChatRooms(rooms)
+            setLoading(false)
+        })
+
+        socket.on('receiveMessage', (message: any) => {
+            console.log('me', message)
+            setChatRooms(prev => prev.map(room => {
+                if(room._id === message.chatRoomId){
+                    const read = message.readBy.includes(user.objectId)
+                    console.log('read', read)
+                    return{
+                        ...room,
+                        lastMessage: message.text,
+                        unRead: !read
+                    }
+                }
+                return room
+            }))
+        })
+    
+        return () => {
+            socket.off('receivMessage')
+            socket.off('chatRoomsUpdate')
+        }
+
+
+    }, [user.objectId, socket])
+  
+
+
     
 
     const handleNavigate = (room: ChatRoom) => {
@@ -71,13 +85,18 @@ const ChattingBoxComponent = () => {
                 <StyledNotMember>채팅 멤버가 없습니다. 😿</StyledNotMember> 
             ) : (
                 chatRooms.map((room) => (
-                    <StyledContainer key={room._id} onClick={() => handleNavigate(room)}>
+                    <StyledContainer className='hi' key={room._id} onClick={() => handleNavigate(room)}>
                         <StyledProfile>
                             <img src="./logo2.png" alt="프로필사진" />
                         </StyledProfile>
                         <StyledContent>
                             <h2>{room.opponentName || '이름'}</h2> 
                             <p>{room.lastMessage || '대화내용'}</p>
+                            {room.unRead && 
+                            <span className='text-red-500 text-sm'>
+                                unRead
+                            </span>}
+
                         </StyledContent>
                     </StyledContainer>
                 ))

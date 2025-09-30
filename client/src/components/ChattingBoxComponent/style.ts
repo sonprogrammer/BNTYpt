@@ -20,7 +20,7 @@ export const StyledContainer = styled.div`
         border-b
         border-black
         p-7
-        
+        relative
     `}
     &:hover{
         background-color: rgba(0, 0, 0, 0.5);
@@ -45,12 +45,21 @@ export const StyledContent = styled.div`
         flex
         flex-col
         justify-center
+        
     `}
     h2{
         ${tw`
             text-xl
             font-bold
             
+        `}
+    }
+    span{
+        ${tw`
+            absolute
+            right-5
+            font-bold
+            text-xl
         `}
     }
 `

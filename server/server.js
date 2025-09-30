@@ -18,6 +18,7 @@ const socketIo = require('socket.io');
 const { Server} = require('socket.io');
 const recordRouter = require('./Routes/recordRouter');
 const ChatRoom = require('./Models/chatModel');
+const kakaoUser = require('./Models/kakaoUserModel');
 
 
 
@@ -48,8 +49,46 @@ app.use(session({
 app.use(passport.session());
 
 io.on('connection', (socket) => {
+
+
+    socket.on('getChatRooms', async(userId) => {
+        try {
+            const rooms = await ChatRoom.find({
+                $or: [{ memberId: userId }, { trainerId: userId }]
+            }).lean();
+
+            const roomsWithNames = await Promise.all(
+                rooms.map(async (room) => {
+                    let opponentName;
+                    if (room.trainerId.toString() === userId) {
+                        const member = await kakaoUser.findById(room.memberId) || await regularUser.findById(room.memberId);
+                        opponentName = member ? member.name : "Unknown Member";
+                    } else {
+                        const trainer = await kakaoUser.findById(room.trainerId) || await regularUser.findById(room.trainerId);
+                        opponentName = trainer ? trainer.name : "Unknown Trainer";
+                    }
+
+                    const lastMsg = room.messages?.[room.messages.length - 1];
+                    const isUnread = lastMsg && lastMsg.sender !== userId && !lastMsg.readBy?.includes(userId);
+                    return {
+                        ...room,
+                        opponentName,
+                        lastMessage: lastMsg?.message || null,
+                        unRead: !!isUnread
+                    };
+                })
+            );
+
+            socket.emit('chatRoomsUpdate', roomsWithNames);
+        } catch (err) {
+            console.error(err);
+        }
+    })
+
+
+    
     socket.on('sendMessage', (message) => {
-        // io.emit('receiveMessage', message);
+        console.log('message', message)
         const payload = {
             text: message.text,
             sender: message.sender,
