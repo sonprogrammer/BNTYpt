@@ -45,7 +45,7 @@ const MainPage = () => {
   }
   return (
     <div className='h-full flex flex-col items-center justify-center'>
-      {user.role === 'trainer' ? (
+      {user?.role === 'trainer' ? (
         <div className='flex flex-col gap-2 items-center'>
           <h1 className=' text-xl font-bold'>{user.name}트레이너님</h1>
           <QrcodeComponent role={user.role} />

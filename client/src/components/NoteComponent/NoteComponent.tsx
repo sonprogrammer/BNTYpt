@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { PostForm } from '../PostForm'
+import { useEffect, useState } from 'react'
 import { PostListComponent } from '../PostListComponent';
-import { AddPhotoComponent } from '../AddPhotoComponent';
 import { StyledClose, StyledMember, StyledMembersGroup, StyledNavText, StyledNoteContainer, StyledNothing, StyledPostBox, StyledPostForm, StyledRecordBtn } from './style';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
-import axios from 'axios';
-import dayjs from 'dayjs';
 import { NotePostFormComponent } from '../NotePostFormComponent';
 import useGetMembers from '../../hooks/useGetMemers';
 import useGetEachMemberNote from '../../hooks/useGetEachMemberNote';
 import useGetTrainerMemberNote from '../../hooks/useGetTrainerMemberNote';
-const apiUrl = process.env.REACT_APP_API_URL;
+
 
 
 
@@ -33,14 +29,13 @@ const NoteComponent = () => {
 
     const { data: members } = useGetMembers(user.objectId)
 
-    // console.log('user', user)
 
     //*트레이너가 보는것    
     const trainerNotesQuery = useGetTrainerMemberNote(selectedMemberId, user.objectId);
     //*회원이 보는것
     const memberNotesQuery = useGetEachMemberNote(user.objectId);
 
-    // 실제로 보여줄 데이터 선택
+
     const eachMemberNote = user.role === 'trainer'
         ? trainerNotesQuery.data
         : memberNotesQuery.data;
@@ -58,43 +53,6 @@ const NoteComponent = () => {
 
     }, [user.role])
 
-
-    // useEffect(() => {
-    //     const fetchPost = async () => {
-    //         if (user.role === 'trainer') {
-    //             try {
-    //                 const res = await axios.get(`${apiUrl}/api/records/${user.objectId}`)
-    //                 const formattedPosts = res.data.records.map((post: any) => ({
-    //                     ...post,
-    //                     uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'),
-    //                 }));
-
-    //                 setPosts(formattedPosts);
-
-    //             } catch (error) {
-    //                 console.error('Error fetching posts:', error);
-    //             }
-    //         } else if (user.role === 'member') {
-    //             try {
-    //                 setSelectedMemberId(user.objectId)
-    //                 const res = await axios.get(`${apiUrl}/api/records/member/${user.objectId}`)
-    //                 const formattedPosts = res.data.records.map((post: any) => ({
-    //                     ...post,
-    //                     uploadTime: dayjs(post.uploadTime).format('YYYY-MM-DD HH:mm:ss'), // 포맷팅
-    //                 }));
-
-    //                 setPosts(formattedPosts);
-    //             } catch (error) {
-    //                 console.error('Error fetching posts:', error);
-    //             }
-    //         }
-    //     };
-
-
-    //     if (user.email || user.kakaoId) {
-    //         fetchPost();
-    //     }
-    // }, [user, eachMemberNote]);
 
     const handleMemberClick = (memeberId: string) => {
         setSelectedMemberId(memeberId)

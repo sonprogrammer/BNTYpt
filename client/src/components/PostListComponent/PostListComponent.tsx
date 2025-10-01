@@ -11,6 +11,8 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
 import usePutNote from '../../hooks/usePutNote';
+import { confirmDelete, showSuccess } from '../../utils/alert'
+
 
 
 interface Post {
@@ -33,7 +35,7 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
   const [editMode, setEditMode] = useState<boolean>(false)
   const [editTitle, setEditTitle] = useState<string>('')
   const [editText, setEditText] = useState<string>('')
-  const [askDelete, setAskDelete] = useState<boolean>(false)
+  // const [askDelete, setAskDelete] = useState<boolean>(false)
 
   const currentUserRole = useRecoilValue(userRoleSelector)
 
@@ -57,18 +59,23 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
     setEditMode(false)
   }
 
-  const handleDeleteAsk = () => {
-    setAskDelete(true)
-  }
+  // const handleDeleteAsk = () => {
+  //   setAskDelete(true)
+  // }
 
-  const handleDelete = (noteId: string) => {
-    deletMutation.mutate(noteId, {
-      onSuccess: () => {
-        refetch()
-        setAskDelete(false)
-        setModalOpen(false)
-      }
-    })
+  const handleDelete = async(noteId: string) => {
+    const confirmed = await confirmDelete()
+
+    if(confirmed){
+      deletMutation.mutate(noteId, {
+        onSuccess: () => {
+          refetch()
+          showSuccess('삭제되었습니다')
+          // setAskDelete(false)
+          setModalOpen(false)
+        }
+      })
+    }
 
   }
 
@@ -130,7 +137,8 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
                         <EditIcon />
                       </IconButton>
 
-                      <IconButton aria-label="delete" sx={{ color: 'darkred', border: '1px solid' }} onClick={handleDeleteAsk}>
+                      <IconButton aria-label="delete" sx={{ color: 'darkred', border: '1px solid' }}
+                       onClick={()=>handleDelete(selectedPost._id)}>
                         <DeleteIcon />
                       </IconButton>
                     </StyledTrainerFn>
@@ -157,7 +165,7 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
 
 
           </StyledModalBox>
-          {askDelete &&
+          {/* {askDelete &&
             <StyledAskDeleteContainer>
               <StyledAskBox>
                 <h1>삭제 하시겠습니까?</h1>
@@ -172,7 +180,7 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
                 </StyledBtns>
               </StyledAskBox>
             </StyledAskDeleteContainer>
-          }
+          } */}
 
         </StyledModalContainer>
       )
