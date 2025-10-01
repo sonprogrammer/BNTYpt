@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { AddPhotoComponent, CalendarComponent, LogoutModalComponent, QrcodeComponent } from '../../components'
+import { QrcodeComponent } from '../../components'
 
 import axios from 'axios'
 import { useEffect } from 'react'
