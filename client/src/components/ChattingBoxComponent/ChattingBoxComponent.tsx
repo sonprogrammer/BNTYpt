@@ -68,6 +68,7 @@ const ChattingBoxComponent = () => {
     }, [user.objectId, socket])
   
 
+    const orderedChatRooms = chatRooms.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
 
     
 
