@@ -25,10 +25,8 @@ export const StyledTitle = styled.h1`
     `}
 `
 
-export const StyledTextArea = styled.textarea`
+export const StyledTitleInput = styled.input`
     ${tw`
-        w-full
-        h-full
         p-5 
         border-[2px]
         border-red-900

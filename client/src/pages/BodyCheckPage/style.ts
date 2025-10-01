@@ -3,8 +3,7 @@ import styled from "styled-components";
 
 export const StylecContainer = styled.div`
     ${tw`
-        h-screen
-        p-5
+        h-full
     `}
 
 `

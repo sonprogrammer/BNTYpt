@@ -68,13 +68,13 @@ const getUserPosts = async (req, res) => {
             user = await kakaoUser.findOne({ kakaoId })
         }
         
-
         if(!user){
             return res.status(404).json({ success: false, message: 'user not found' })
         }
         
         const posts = await Post.find({ userId: user._id }).populate('userId', 'name role')
-        if (!posts || posts.length === 0) {
+
+        if (!posts) {
             return res.status(404).json({ success: false, message: 'No posts found for this user' });
         }
 
@@ -85,4 +85,23 @@ const getUserPosts = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getPost, getUserPosts}
+const deletePosts = async(req, res) => {
+    const { photoId} = req.params
+
+    try {
+        
+        const photo = await Post.findById(photoId)
+        console.log('photo', photo)
+        if(!photo){
+            return res.status(404).json({success: false,message: 'there is no photo'})
+        }
+        
+        await Post.findByIdAndDelete(photoId)
+        res.status(200).json({success:true, message: 'success'})
+    } catch (error) {
+        console.log(error)    
+        return res.status(500).json({success: false, message: 'internal server erorr'})
+    }
+}
+
+module.exports = { createPost, getPost, getUserPosts, deletePosts}

@@ -10,10 +10,6 @@ export const StyledMenus = styled.div`
         text-xl
         font-bold
         bg-gray-400
-        // h-[32]
-        // fixed
-        // bottom-0
-        // left-0
         w-full
     `}
         border-bottom: 1px solid;

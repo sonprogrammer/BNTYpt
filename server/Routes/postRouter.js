@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
-const { createPost, getUserPosts } = require('../Controller/postController')
+const { createPost, getUserPosts, deletePosts } = require('../Controller/postController')
 const postRouter = express.Router();
 
 
@@ -19,5 +19,6 @@ const upload = multer({ storage })
 postRouter.post('/', upload.array('images'), createPost)
 postRouter.get('/user/email/:email', getUserPosts)
 postRouter.get('/user/kakao/:kakaoId', getUserPosts)
+postRouter.delete('/delete/:photoId', deletePosts)
 
 module.exports = postRouter

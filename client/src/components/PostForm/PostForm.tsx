@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { StyledBtn, StyledContainerForm, StyledSubmitEl, StyledTextArea, StyledTitle } from './style';
+import { StyledBtn, StyledContainerForm, StyledSubmitEl, StyledTitle, StyledTitleInput } from './style';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
@@ -20,7 +20,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
   const [user] = useRecoilState(userState)
 
 
-  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => setText(e.target.value);
+  const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => setText(e.target.value);
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const fileArray = Array.from(e.target.files)
@@ -107,7 +107,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
   return (
     <StyledContainerForm onSubmit={handleSubmit}>
       <StyledTitle>일지 기록</StyledTitle>
-      <StyledTextArea
+      <StyledTitleInput
         placeholder="무슨 운동을 했나요?"
         value={text}
         onChange={handleTextChange}
