@@ -33,6 +33,7 @@ const ChattingBoxComponent = () => {
     const [user] = useRecoilState(userState)
 
 
+
     useEffect(() => {
         if(!socket) return
         setLoading(true)
@@ -48,7 +49,6 @@ const ChattingBoxComponent = () => {
             setChatRooms(prev => prev.map(room => {
                 if(room._id === message.chatRoomId){
                     const read = message.readBy.includes(user.objectId)
-                    console.log('read', read)
                     return{
                         ...room,
                         lastMessage: message.text,
@@ -60,12 +60,12 @@ const ChattingBoxComponent = () => {
         })
     
         return () => {
-            socket.off('receivMessage')
+            socket.off('receiveMessage')
             socket.off('chatRoomsUpdate')
         }
 
 
-    }, [user.objectId])
+    }, [user])
   
 
     const orderedChatRooms = [...chatRooms].sort((a, b) =>

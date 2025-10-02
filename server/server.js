@@ -59,6 +59,7 @@ io.on('connection', (socket) => {
                 $or: [{ memberId: userId }, { trainerId: userId }]
             }).lean();
 
+
             const roomsWithNames = await Promise.all(
                 rooms.map(async (room) => {
                     let opponentName;
