@@ -51,7 +51,7 @@ const NoteComponent = () => {
             setSelectedMemberId(user.objectId)
         }
 
-    }, [user.role])
+    }, [user.role, user.objectId])
 
 
     const handleMemberClick = (memeberId: string) => {

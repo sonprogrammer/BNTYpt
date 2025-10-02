@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { QrcodeComponent } from '../../components'
 
 import axios from 'axios'
@@ -17,7 +17,7 @@ const MainPage = () => {
 
 
 
-  const getUserPtCount = async () => {
+  const getUserPtCount = useCallback(async () => {
     try {
       const res = await axios.get(`${apiUrl}/api/chat/pt/${user.objectId}`)
 
@@ -29,11 +29,11 @@ const MainPage = () => {
     } catch (error) {
       console.error(error)
     }
-  }
+  },[user.objectId, setUser])
 
   useEffect(() => {
     getUserPtCount()
-  }, [])
+  }, [getUserPtCount])
 
 
   const handleClick = () => {

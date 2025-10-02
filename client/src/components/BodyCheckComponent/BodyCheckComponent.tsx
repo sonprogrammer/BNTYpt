@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { StyledBox, StyledContainer, StyledDelete, StyledImage, StyledImgContainer, StyledNothing, StyledText, StyledTitle } from './style'
 import dayjs from 'dayjs'
 
@@ -24,22 +24,8 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
 
   const deleteMutation = useDeletePhoto()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return
-      setLoading(true)
-      try {
-        await fetchPost()
-      } catch (error) {
-        console.log(error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [refresh, user])
 
-  const fetchPost = async () => {
+  const fetchPost = useCallback( async () => {
     try {
       let url = ``
 
@@ -68,7 +54,23 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
     } catch (error) {
       console.error('er', error)
     }
-  }
+  },[user])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) return
+      setLoading(true)
+      try {
+        await fetchPost()
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+
+  }, [refresh, user, fetchPost])
 
   const handleDelete = async(photoId: string) => {
     const confirmed = await confirmDelete()

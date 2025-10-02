@@ -16,7 +16,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
   const [text, setText] = useState<string>('');
   const [images, setImages] = useState<File[]>([]);
   const [imagePreview, setImagePreview] = useState<string[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [, setIsModalOpen] = useState<boolean>(false)
   const [user] = useRecoilState(userState)
 
 

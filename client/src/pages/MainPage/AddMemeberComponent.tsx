@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { StyledBox, StyledBtn, StyledContainer, StyledInput, StyledMember, StyledSelect, StyledXIcon } from './style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -16,7 +16,8 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
   const [chatRooms, setChatRooms] = useState<any[]>([]);
   const [ptCount, setPtCount] = useState<number>(0);
   const [user] = useRecoilState(userState)
-  const fetchMemeber = async (userId: string) => {
+
+  const fetchMemeber = useCallback( async () => {
     try {
       const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`)
       const memberNames = res.data.chatRooms.map((room: any) => ({
@@ -30,11 +31,11 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
     } catch (error) {
       console.error(error);
     }
-  }
+  },[user.objectId])
+
   useEffect(() => {
-    const userId = user.objectId
-    fetchMemeber(userId)
-  }, [])
+    fetchMemeber()
+  }, [fetchMemeber])
 
   const handleContainerClick = () => {
     closeModal();

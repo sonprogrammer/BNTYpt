@@ -162,22 +162,7 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
 
 
           </StyledModalBox>
-          {/* {askDelete &&
-            <StyledAskDeleteContainer>
-              <StyledAskBox>
-                <h1>삭제 하시겠습니까?</h1>
-                <p>복구 할 수 없습니다.</p>
-                <StyledBtns>
-                  <FontAwesomeIcon icon={faThumbsUp} className='text-red-700 text-[52px] cursor-pointer hover:opacity-70' 
-                    onClick={()=>handleDelete(selectedPost._id)}
-                  />
-                  <FontAwesomeIcon icon={faThumbsDown} className='text-blue-600 text-[52px] cursor-pointer hover:opacity-70'
-                    onClick={() => setAskDelete(false)}
-                  />
-                </StyledBtns>
-              </StyledAskBox>
-            </StyledAskDeleteContainer>
-          } */}
+          
 
         </StyledModalContainer>
       )

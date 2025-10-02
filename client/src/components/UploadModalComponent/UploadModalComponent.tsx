@@ -13,7 +13,6 @@ const UploadModalComponent = ({onClose, addPost} : UploadModalComponentProps) =>
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [description, setDescription] = useState<string>('')
-  const [showAddModal, setShowAddModal] = useState<boolean>(false)
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

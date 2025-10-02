@@ -15,8 +15,8 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 const LandingComponent = () => {
     const [selectedRole, setSelectedRole] = useState<string>('')
-    const [loading, setLoading] = useState<boolean>(false)
-    const [user, setUser] = useRecoilState(userState)
+    const [, setLoading] = useState<boolean>(false)
+    const [, setUser] = useRecoilState(userState)
     const [signup, setSignup] = useState<boolean>(false)
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');

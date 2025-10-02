@@ -1,5 +1,5 @@
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isSameMonth, isSameDay, getDay, addDays } from 'date-fns'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Dot, DotWrapper, StyledBox, StyledBtn, StyledCell, StyledCloseBtn, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon, StyledModal, StyledModalBox, StyledModalContents, StyledModalTextArea, StyledTitle } from './style'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -52,14 +52,9 @@ const CalendarComponent = () => {
         return records.find(record => record.date === dateString)
     }
 
-    useEffect(()=>{
-        if(user.email || user.kakaoId){
-            fetchCalendar() 
-        }
-    },[user])
 
 
-    const fetchCalendar = async() => {
+    const fetchCalendar = useCallback(async() => {
         try {
             let url= ''
             if(user.email){
@@ -92,7 +87,13 @@ const CalendarComponent = () => {
         } catch (error) {
             console.log('err', error)
         }
-    }
+    },[user])
+
+    useEffect(()=>{
+        if(user.email || user.kakaoId){
+            fetchCalendar() 
+        }
+    },[user, fetchCalendar])
 
     const handleAddClicked = () => {
         setAdd(!add)

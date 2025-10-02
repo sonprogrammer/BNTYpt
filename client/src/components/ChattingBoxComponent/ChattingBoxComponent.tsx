@@ -65,11 +65,12 @@ const ChattingBoxComponent = () => {
         }
 
 
-    }, [user.objectId, socket])
+    }, [user.objectId])
   
 
-    const orderedChatRooms = chatRooms.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-
+    const orderedChatRooms = [...chatRooms].sort((a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      )
     
 
     const handleNavigate = (room: ChatRoom) => {
@@ -82,10 +83,10 @@ const ChattingBoxComponent = () => {
                 <img src={loadingBar} alt="로딩이미지" className='w-20'/>
             </div>
         </>}
-             {chatRooms.length === 0 ? (
+             {orderedChatRooms.length === 0 ? (
                 <StyledNotMember>채팅 멤버가 없습니다. 😿</StyledNotMember> 
             ) : (
-                chatRooms.map((room) => (
+                orderedChatRooms.map((room) => (
                     <StyledContainer className='hi' key={room._id} onClick={() => handleNavigate(room)}>
                         <StyledProfile>
                             <img src="./logo2.png" alt="프로필사진" />

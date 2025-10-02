@@ -15,7 +15,7 @@ interface QrcodeComponentProps {
 
 
 const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
-    const [scannedData, setScannedData] = useState<string>('');
+    const [, setScannedData] = useState<string>('');
     const [memberClicked, setMemberClicked] = useState<boolean>(false)
     const [user] = useRecoilState(userState)
 
@@ -28,7 +28,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                         trainerInfo: trainerId,
                         memberInfo: user.email || user.kakaoId
                     })
-                    const res = await axios.post(`${apiUrl}/api/chat/pt`, {
+                    await axios.post(`${apiUrl}/api/chat/pt`, {
                         ptCount: -1, 
                         memberId: user.objectId  
                     });
@@ -46,7 +46,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
         if (result) {
             const text = result.getText();
             handleScan(text);
-            console.log('text', text);
+   
         }
         if (error) {
             console.log('error 발생', error)

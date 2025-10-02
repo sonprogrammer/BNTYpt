@@ -75,7 +75,7 @@ const ChatRoomComponent = () => {
         if (user.objectId) {
             fetchChatRoom();
         }
-    }, [user.objectId, socket]);
+    }, [user.objectId, userId]);
 
 
 
@@ -114,7 +114,7 @@ const ChatRoomComponent = () => {
         };
 
         fetchMessages();
-    }, [chatRoomId]);
+    }, [chatRoomId, user.objectId]);
 
 
     useEffect(() => {
@@ -144,7 +144,7 @@ const ChatRoomComponent = () => {
                 socket.off('read')
             };
         }
-    }, [chatRoomId, socket]);
+    }, [chatRoomId, user.objectId, user.name]);
 
     useEffect(() => {
         if (messageBoxRef.current) {

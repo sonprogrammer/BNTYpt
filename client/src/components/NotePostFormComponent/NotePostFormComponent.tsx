@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, useCallback, useEffect, useState } from 'react'
 import { StyledBtn, StyledContainerForm, StyledRecord, StyledSelect, StyledSubmitEl, StyledTextArea, StyledTitle, StyledUpper } from './style';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
@@ -35,7 +35,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
 
 
 
-    const fetchMemeber = async (userId: string) => {
+    const fetchMemeber = useCallback(async (userId: string) => {
         try {
             const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`)
             const memberNames = res.data.chatRooms.map((room: any) => ({
@@ -51,11 +51,12 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
         } catch (error) {
             console.error(error);
         }
-    }
+    },[user.objectId])
+
     useEffect(() => {
         const userId = user.objectId
         fetchMemeber(userId)
-    }, [])
+    }, [user.objectId, fetchMemeber])
 
     const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setText(e.target.value)
@@ -105,7 +106,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
                 userObjectId: user.objectId,
                 opponentName: selectedMember,
             }
-            const res = await axios.post(`${apiUrl}/api/records`, formData, {
+            await axios.post(`${apiUrl}/api/records`, formData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
