@@ -7,8 +7,7 @@ export const StyledContainer = styled.div`
         flex
         justify-center
         items-center
-        // h-full
-        // w-full
+
     `}
 `
 export const StyledTrainerBox = styled.div`

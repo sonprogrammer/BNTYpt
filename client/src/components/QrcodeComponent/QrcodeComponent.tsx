@@ -75,6 +75,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                                 onScan={handleResult}
                                 delay={300}
                                 onError={handleQrError}
+                                facingMode="environment"
                             />
                             <div className='m-7 text-center hover:font-bold hover:text-red-500 hover:cursor-pointer' onClick={handleClick}>Exit camera</div>
                         </div>
