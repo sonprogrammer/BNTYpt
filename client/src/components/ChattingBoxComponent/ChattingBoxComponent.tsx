@@ -32,8 +32,6 @@ const ChattingBoxComponent = () => {
     const navigate = useNavigate()
     const [user] = useRecoilState(userState)
 
-
-
     useEffect(() => {
         if(!socket) return
         setLoading(true)
