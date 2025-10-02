@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { StyledBtns, StyledContainer, StyledContent } from './style'
 
 

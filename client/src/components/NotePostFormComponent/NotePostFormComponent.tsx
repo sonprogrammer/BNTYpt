@@ -32,7 +32,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
 
 
     const [user] = useRecoilState(userState)
-    // console.log('user', user)
+
 
 
     const fetchMemeber = async (userId: string) => {

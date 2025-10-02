@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { ChattingBoxComponent } from '../../components'
 
 const ChatPage = () => {

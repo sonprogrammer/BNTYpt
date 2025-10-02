@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StyledContainer, StyledContent, StyledProfile, StyledNotMember } from './style'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'

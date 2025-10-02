@@ -1,6 +1,6 @@
-import React from 'react'
+
 import { StyledBox, StyledContainer, StyledImage, StyledText } from './style'
-import dayjs from 'dayjs'
+
 
 interface PhotoComponentProps {
     imageUrl: string,

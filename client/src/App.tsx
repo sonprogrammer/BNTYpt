@@ -4,6 +4,8 @@ import './App.css'
 import { NotFoundComponent } from './components'
 import { Route, Routes } from 'react-router-dom'
 
+
+
 export const LandingPage = lazy(() =>
   import('./pages/LandingPage').then(module => ({ default: module.LandingPage }))
 );
@@ -30,9 +32,12 @@ export const ChatRoomPage = lazy(() =>
 );
 
 function App() {
+
+
   return (
     <>
       <Suspense fallback={<div>로딩중...</div>}>
+
         <Routes>
           <Route path='/' element={<LandingPage />} />
 

@@ -41,13 +41,6 @@ const LogoComponent = () => {
           <h1>B N T Y</h1>
         </Link>
         <FontAwesomeIcon onClick={handleLogoutConfirm} className='logout-icon' icon={faRightFromBracket} />
-        {/* <StyledLogoutModal onClick={handleCloseModal}>
-          {isModalOpen && 
-            (<LogoutModalComponent 
-              onConfirm={handleConfirmModal} 
-              onCancel={handleCloseModal}
-            />)}
-        </StyledLogoutModal> */}
       </StyledTitle>
     </div>
   )

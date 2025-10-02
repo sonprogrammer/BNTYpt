@@ -1,10 +1,9 @@
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isSameMonth, isSameDay, getDay, addDays } from 'date-fns'
-// import styles from './Calendar.module.css'
 import React, { useEffect, useState } from 'react'
 import { Dot, DotWrapper, StyledBox, StyledBtn, StyledCell, StyledCloseBtn, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon, StyledModal, StyledModalBox, StyledModalContents, StyledModalTextArea, StyledTitle } from './style'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 import axios from 'axios'
 import { useRecoilState } from 'recoil'

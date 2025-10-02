@@ -1,4 +1,3 @@
-import React from 'react'
 import { StyledBox, StyledContainer, StyledContent, StyledImg, StyledTitle, StyledUpper } from './style';
 import dayjs from 'dayjs';
 

@@ -1,5 +1,5 @@
-import React from 'react'
-import { LandingComponent, LoginComponent } from '../../components'
+
+import { LandingComponent } from '../../components'
 import { StyledContainer, StyledLogin } from './style'
 
 

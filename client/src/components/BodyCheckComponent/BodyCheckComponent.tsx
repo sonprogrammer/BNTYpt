@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyledBox, StyledBtnBox, StyledContainer, StyledDelete, StyledDeleteBtn, StyledImage, StyledImgContainer, StyledNothing, StyledText, StyledTitle } from './style'
+import { StyledBox, StyledContainer, StyledDelete, StyledImage, StyledImgContainer, StyledNothing, StyledText, StyledTitle } from './style'
 import dayjs from 'dayjs'
 
 import { useState } from 'react'

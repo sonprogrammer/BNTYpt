@@ -7,11 +7,11 @@ import { userState } from '../../utils/userState';
 import axios from 'axios';
 const apiUrl = process.env.REACT_APP_API_URL;
 
-interface AddMemeberComponent {
+interface AddMemeberComponentProps {
   closeModal: () => void;
 }
 
-const AddMemeberComponent = ({ closeModal }: AddMemeberComponent) => {
+const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
   const [selectedMember, setSelectedMember] = useState<string | null>(null);
   const [chatRooms, setChatRooms] = useState<any[]>([]);
   const [ptCount, setPtCount] = useState<number>(0);

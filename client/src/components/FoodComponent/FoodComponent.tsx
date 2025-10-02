@@ -1,5 +1,4 @@
-import React from 'react'
-import { PhotoComponent } from '../PhotoComponent'
+
 import { AddPhotoComponent } from '../AddPhotoComponent'
 
 interface AddPhotoComponentProps {

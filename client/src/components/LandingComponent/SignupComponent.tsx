@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyledBackBtn, StyledBox, StyledCheckBtn, StyledEmail, StyledLoginInput, StyledPassword, StyledRadios, StyledSignUp, StyledSignUpBtn } from './style'
+import { StyledBackBtn, StyledBox, StyledCheckBtn, StyledEmail, StyledLoginInput, StyledPassword, StyledRadios, StyledSignUp } from './style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCheck, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';

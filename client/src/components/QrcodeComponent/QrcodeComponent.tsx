@@ -5,8 +5,6 @@ import { StyledContainer, StyledMemberBox, StyledQrReader, StyledTrainerBox } fr
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
-import AddMemeberComponent from '../../pages/MainPage/AddMemeberComponent';
-import { scannedMemberState } from '../../utils/pt';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 

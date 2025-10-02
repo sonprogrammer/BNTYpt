@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { PostItemComponent } from '../PostItemComponent';
-import { StyledAskBox, StyledAskDeleteContainer, StyledBtns, StyledCloseBtn, StyledContainer, StyledDate, StyledEditBox, StyledEditBtnGroup, StyledEditText, StyledEditTitle, StyledFnBtn, StyledImage, StyledModalBox, StyledModalContainer, StyledText, StyledTitle, StyledTrainerFn } from './style';
+import { StyledCloseBtn, StyledContainer, StyledDate, StyledEditBox, StyledEditBtnGroup, StyledEditText, StyledEditTitle, StyledImage, StyledModalBox, StyledModalContainer, StyledText, StyledTitle, StyledTrainerFn } from './style';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsDown, faThumbsUp, faX } from '@fortawesome/free-solid-svg-icons'
+import {  faX } from '@fortawesome/free-solid-svg-icons'
 import dayjs from 'dayjs';
 import useDeleteNote from '../../hooks/useDeleteNote';
 import { useRecoilValue } from 'recoil';
@@ -59,9 +59,6 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
     setEditMode(false)
   }
 
-  // const handleDeleteAsk = () => {
-  //   setAskDelete(true)
-  // }
 
   const handleDelete = async(noteId: string) => {
     const confirmed = await confirmDelete()

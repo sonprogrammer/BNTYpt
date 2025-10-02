@@ -14,7 +14,7 @@ const LoginComponent = () => {
  
     
     const kakaoOnSuccess = async (data: any) => {
-        const idToken = data.response.access_token  // 엑세스 토큰 백엔드로 전달
+        const idToken = data.response.access_token  
     }
     const kakaoOnFailure = (error: any) => {
         console.log(error);

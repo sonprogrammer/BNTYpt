@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { LogoComponent, NavbarComponent } from '../../components'
 import { Outlet } from 'react-router-dom'
 import { StyledContainer, StyledMenus, StyledOutlet } from './style'

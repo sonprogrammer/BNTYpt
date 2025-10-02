@@ -6,7 +6,6 @@ const path = require('path');
 const userRouter = require('./Routes/userRouter');
 const postRouter = require('./Routes/postRouter');
 const cloudinary = require('cloudinary').v2;
-const multer = require('multer');
 const passport = require('passport');
 const regularUser = require('./Models/regularUserModel')
 const LocalStrategy = require('passport-local')
@@ -15,10 +14,11 @@ const calendarRouter = require('./Routes/calendarRouter');
 const chatRouter = require('./Routes/chatRouter');
 const http = require('http');
 const socketIo = require('socket.io');
-const { Server} = require('socket.io');
 const recordRouter = require('./Routes/recordRouter');
 const ChatRoom = require('./Models/chatModel');
 const kakaoUser = require('./Models/kakaoUserModel');
+
+
 
 
 
@@ -47,6 +47,8 @@ app.use(session({
 }));
 
 app.use(passport.session());
+
+
 
 io.on('connection', (socket) => {
 
@@ -88,7 +90,7 @@ io.on('connection', (socket) => {
 
     
     socket.on('sendMessage', (message) => {
-        console.log('message', message)
+
         const payload = {
             text: message.text,
             sender: message.sender,
@@ -102,7 +104,7 @@ io.on('connection', (socket) => {
 
     socket.on('joinRoom', (chatRoomId) => {
         socket.join(chatRoomId);
-        console.log('User joined room:', chatRoomId);
+
       });
 
       socket.on('read', async({chatRoomId, userId}) =>{

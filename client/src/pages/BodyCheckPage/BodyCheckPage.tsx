@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { AddPhotoComponent, BodyCheckComponent, PostForm, UploadModalComponent } from '../../components'
+import { useState } from 'react'
+import { AddPhotoComponent, BodyCheckComponent, PostForm } from '../../components'
 import { StylecContainer, StyledClose, StyledPostBox, StyledPostForm } from './style'
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect } from 'react';
+
 
 interface Post {
   text: string;

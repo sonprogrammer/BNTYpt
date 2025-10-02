@@ -4,7 +4,7 @@ import { StyledArrow, StyledContainer, StyledMessage, StyledMessageBox, StyledPl
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-// import { io } from 'socket.io-client'
+
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
@@ -14,13 +14,6 @@ import loadingBar from '../../assets/loading.gif';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
-
-
-interface User {
-    id: string;
-    name: string;
-    profile?: string;
-}
 
 interface Message {
     text?: string;
