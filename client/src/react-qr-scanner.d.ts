@@ -11,6 +11,14 @@ declare module 'react-qr-scanner' {
       onError?: (error: any) => void;
       onScan?: OnResultFunction;
       style?: CSSProperties;
+      constraints?: {
+        audio?: boolean;
+        video?: {
+            facingMode?: { exact: string } | string;
+            [key: string]: any;
+
+        }
+    }
     }
   
     const QrReader: ComponentType<QrReaderProps>;

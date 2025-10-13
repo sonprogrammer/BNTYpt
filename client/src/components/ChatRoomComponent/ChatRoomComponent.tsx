@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { StyledArrow, StyledContainer, StyledMessage, StyledMessageBox, StyledPlus, StyledSendEl, Styledupper } from './style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
@@ -38,6 +37,7 @@ const ChatRoomComponent = () => {
     const [loading, setLoading] = useState<boolean>(true)
 
 
+    const navigate = useNavigate()
 
     useEffect(() => {
         inputFocusRef.current?.focus()
@@ -65,6 +65,7 @@ const ChatRoomComponent = () => {
 
                 } else {
                     console.log(`No chat room found with ${userId}.`);
+                    navigate(-1)
                 }
 
             } catch (error) {

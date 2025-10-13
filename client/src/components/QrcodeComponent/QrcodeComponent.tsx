@@ -60,6 +60,13 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
         setMemberClicked(!memberClicked)
     }
 
+    const videoConstraints = {
+        audio: false,
+        video: {
+            facingMode: { exact: "environment" }
+        }
+    };
+
     return (
         <StyledContainer>
             {role === 'trainer' ? (
@@ -73,9 +80,9 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                         <div className='w-[100%]'>
                             <StyledQrReader
                                 onScan={handleResult}
-                                delay={300}
+                                delay={500}
                                 onError={handleQrError}
-                                facingMode="environment"
+                                constraints={videoConstraints}
                             />
                             <div className='m-7 text-center hover:font-bold hover:text-red-500 hover:cursor-pointer' onClick={handleClick}>Exit camera</div>
                         </div>

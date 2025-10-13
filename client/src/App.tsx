@@ -36,23 +36,49 @@ function App() {
 
   return (
     <>
+      <Routes>
+  <Route path='/' element={
+    <Suspense fallback={<div>로딩중...</div>}>
+      <LandingPage />
+    </Suspense>
+  } />
+
+  <Route path='*' element={<NotFoundComponent />} />
+
+  <Route element={<LayoutPage />}>
+    <Route path='/browse' element={
       <Suspense fallback={<div>로딩중...</div>}>
-
-        <Routes>
-          <Route path='/' element={<LandingPage />} />
-
-          <Route path='*' element={<NotFoundComponent />} />
-
-          <Route element={<LayoutPage />}>
-            <Route path='/browse' element={<MainPage />} />
-            <Route path='/bodycheck' element={<BodyCheckPage />} />
-            <Route path='/calendar' element={<CalendarPage />} />
-            <Route path='/chat' element={<ChatPage />} />
-            <Route path='/chat/:userId' element={<ChatRoomPage />} />
-            <Route path='/note' element={<NotePage />} />
-          </Route>
-        </Routes>
+        <MainPage />
       </Suspense>
+    } />
+    <Route path='/bodycheck' element={
+      <Suspense fallback={<div>로딩중...</div>}>
+        <BodyCheckPage />
+      </Suspense>
+    } />
+    <Route path='/calendar' element={
+      <Suspense fallback={<div>로딩중...</div>}>
+        <CalendarPage />
+      </Suspense>
+    } />
+    <Route path='/chat' element={
+      <Suspense fallback={<div>로딩중...</div>}>
+        <ChatPage />
+      </Suspense>
+    } />
+    <Route path='/chat/:userId' element={
+      <Suspense fallback={<div>로딩중...</div>}>
+        <ChatRoomPage />
+      </Suspense>
+    } />
+    <Route path='/note' element={
+      <Suspense fallback={<div>로딩중...</div>}>
+        <NotePage />
+      </Suspense>
+    } />
+  </Route>
+</Routes>
+
     </>
   )
 }

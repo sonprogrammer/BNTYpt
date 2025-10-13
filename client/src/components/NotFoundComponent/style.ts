@@ -47,7 +47,11 @@ export const StyledText = styled.div`
   animation: ${slideIn} 1s ease-in-out;
 `;
 
-export const StyledBackLink = styled.a`
-  ${tw`no-underline text-black bg-white px-5 py-2 rounded-lg text-lg font-medium hover:bg-gray-400 transition-colors`}
-  href: '/';
+export const StyledBackLink = styled.button`
+  ${tw`text-black bg-white px-5 py-2 rounded-lg text-lg font-medium transition-colors`}
+  &:hover{
+    ${tw`
+        bg-gray-200
+      `}
+  }
 `;
