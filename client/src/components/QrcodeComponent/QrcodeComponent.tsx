@@ -63,7 +63,9 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
     const videoConstraints = {
         audio: false,
         video: {
-            facingMode: { exact: "environment" }
+            facingMode: { exact: "environment" },
+            width: {ideal: 1280},
+            height: {ideal: 720}
         }
     };
 
