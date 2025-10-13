@@ -79,7 +79,6 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
         audio: false,
         video: {
             facingMode: { exact: "environment" },
-            // facingMode: { exact: "user" },
         }
     };
 

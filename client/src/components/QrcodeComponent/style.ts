@@ -47,4 +47,9 @@ export const StyledQrReader = styled(QrReader)`
         m-0
         box-border
     `}
+    video{
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
 `;
