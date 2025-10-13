@@ -5,6 +5,9 @@ import { StyledContainer, StyledMemberBox, StyledQrReader, StyledTrainerBox } fr
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
+import { showSuccessAlert, showFailAlert } from '../../utils/toast';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -16,26 +19,37 @@ interface QrcodeComponentProps {
 
 const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
     const [, setScannedData] = useState<string>('');
+    const [isScanning, setIsScanning] = useState<boolean>(false)
     const [memberClicked, setMemberClicked] = useState<boolean>(false)
-    const [user] = useRecoilState(userState)
+    const [user, setUser] = useRecoilState(userState)
 
     const handleScan = async (trainerId: string) => {
+        if(isScanning) return
         if (trainerId) {
-
+            setIsScanning(true)
             setScannedData(trainerId);
                 try {
                     await axios.post(`${apiUrl}/api/chat`, {
                         trainerInfo: trainerId,
                         memberInfo: user.email || user.kakaoId
                     })
-                    await axios.post(`${apiUrl}/api/chat/pt`, {
+                    const res = await axios.post(`${apiUrl}/api/chat/pt`, {
                         ptCount: -1, 
                         memberId: user.objectId  
                     });
+
+                    setUser((prev: any) => ({
+                        ...prev, 
+                        ptCount: res.data.ptCount
+                    }))
         
-                alert('Scan Success')
+                    showSuccessAlert('수업 시작')
+                    setMemberClicked(false)
                 } catch (error) {
                     console.error('error', error)
+                    showFailAlert('다시 스캔해주세요')
+                }finally{
+                    setIsScanning(false)
                 }
             }
         }
@@ -43,8 +57,9 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
 
 
     const handleResult: OnResultFunction = (result: any, error: any) => {
+        if(isScanning) return
         if (result) {
-            const text = result.getText();
+            const text = result.text;
             handleScan(text);
    
         }
@@ -64,13 +79,12 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
         audio: false,
         video: {
             facingMode: { exact: "environment" },
-            width: {ideal: 1280},
-            height: {ideal: 720}
+            // facingMode: { exact: "user" },
         }
     };
 
     return (
-        <StyledContainer>
+        <StyledContainer className='hi'>
             {role === 'trainer' ? (
                 <StyledTrainerBox>
                     <QRCodeCanvas value={user.email || user.kakaoId} />
@@ -98,6 +112,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                     }
                 </StyledMemberBox>
             )}
+            <ToastContainer/>
         </StyledContainer>
     )
 }

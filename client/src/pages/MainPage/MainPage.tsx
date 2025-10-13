@@ -15,8 +15,6 @@ const MainPage = () => {
   const [addMemeber, setAddMember] = useState<boolean>(false)
   const [user, setUser] = useRecoilState(userState)
 
-
-
   const getUserPtCount = useCallback(async () => {
     try {
       const res = await axios.get(`${apiUrl}/api/chat/pt/${user.objectId}`)

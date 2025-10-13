@@ -17,17 +17,14 @@ export const StyledTrainerBox = styled.div`
         justify-center
         items-center
         p-4
-        bg-gray-700
+        // bg-gray-700
+        bg-white
         rounded-lg
         shadow-lg
     `}
-    width: 300px;
-    height: 300px;
-    h2{
-        ${tw`
-            mb-5
-        `}
-    }
+    // width: 300px;
+    // height: 300px;
+   
 `
 export const StyledMemberBox = styled.div`
     ${tw`
