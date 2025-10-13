@@ -59,7 +59,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
     const handleResult: OnResultFunction = (result: any, error: any) => {
         if(isScanning) return
         if (result) {
-            const text = result.getText();
+            const text = result.text;
             handleScan(text);
    
         }
