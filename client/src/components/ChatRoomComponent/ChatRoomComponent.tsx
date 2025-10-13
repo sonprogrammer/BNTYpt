@@ -76,7 +76,7 @@ const ChatRoomComponent = () => {
         if (user.objectId) {
             fetchChatRoom();
         }
-    }, [user.objectId, userId]);
+    }, [user.objectId, userId, navigate]);
 
 
 
