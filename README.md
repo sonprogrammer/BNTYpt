@@ -1,9 +1,9 @@
 # BNTY (Be Next To You) 
 
  
-<!-- 
- ### [Go to BNTY](https://bnty.netlify.app)
--->
+
+ ### [Go to BNTY](https://bnty.netlify.app/)
+
  communication between member and trainer.
  <br>
  🚨Website update in progress 🚨
@@ -16,11 +16,31 @@
 i've heard news a few times about companies selling their member information to other companies. so even if that is really small things, it's matter for someone. that's why i developped it.<br>
 Actually i study and work part time as a trainer now, and i or members was inconvenience about something. so i want to solve these things. that's why i developped it.<br> 
 
-<!-- ## Feature Summary
-1. member can check how many classes are left. 
-2. what exercise did I do today
-3. what are going to do next class
-<br>etc... -->
+
+## Update
+### ✨ Page
+- MainPage(QR Code)
+   - improved QR code performance and stability for faster scanning and connection between trainers and members.
+- BodyCheckPage
+  - posts are now sorted by latest.
+  - add delete functionality.
+- ChatPage
+  - Messages are now sorted by latest.
+  - add read/unread indicators for better comunication.
+  - image sending feature added.
+  - fixed several bugs for a smoother chatting experience.
+- NotePage
+  - trainers can now manage notes per member(view, edit, delete).
+  - members can expand and view detailed workout records.
+### 💥 etc
+- Overall UI/UX enhancements
+  - add skeleton components with React.lazy() and Suspense.
+  - add loading bars so each component now has a proper loading fallback.
+- PWA integration
+  - usable like a native mobile app with a splash screen for an app like.
+  - improved responsive design across various screen sizes.
+- Notification
+  - rebuilt alert and notification popups 
 
 ## STACK
 1. typescript
