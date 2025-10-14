@@ -3,11 +3,20 @@ import { Suspense, lazy } from 'react'
 import './App.css'
 import { NotFoundComponent } from './components'
 import { Route, Routes } from 'react-router-dom'
+import { BodyCheckPageSkeleton, CalendarPageSkeleton, ChatPageSkeleton, ChatRoomPageSkeleton, LandingPageSplash, MainPageSkeleton, NotePageSkeleton } from './skeleton';
 
 
 
-export const LandingPage = lazy(() =>
-  import('./pages/LandingPage').then(module => ({ default: module.LandingPage }))
+
+
+
+
+const LandingPage = lazy(() =>
+  new Promise<{ default: React.ComponentType<any> }>(resolve => {
+    setTimeout(() => {
+      import('./pages/LandingPage').then(module => resolve({ default: module.LandingPage }));
+    }, 2000); // 2초 지연
+  })
 );
 export const MainPage = lazy(() =>
   import('./pages/MainPage').then(module => ({ default: module.MainPage }))
@@ -37,47 +46,48 @@ function App() {
   return (
     <>
       <Routes>
-  <Route path='/' element={
-    <Suspense fallback={<div>로딩중...</div>}>
-      <LandingPage />
-    </Suspense>
-  } />
+        <Route path='/' element={
+          <Suspense fallback={<LandingPageSplash />}>
+            <LandingPage />
+          </Suspense>
+        } />
+        
 
-  <Route path='*' element={<NotFoundComponent />} />
+        <Route path='*' element={<NotFoundComponent />} />
 
-  <Route element={<LayoutPage />}>
-    <Route path='/browse' element={
-      <Suspense fallback={<div>로딩중...</div>}>
-        <MainPage />
-      </Suspense>
-    } />
-    <Route path='/bodycheck' element={
-      <Suspense fallback={<div>로딩중...</div>}>
-        <BodyCheckPage />
-      </Suspense>
-    } />
-    <Route path='/calendar' element={
-      <Suspense fallback={<div>로딩중...</div>}>
-        <CalendarPage />
-      </Suspense>
-    } />
-    <Route path='/chat' element={
-      <Suspense fallback={<div>로딩중...</div>}>
-        <ChatPage />
-      </Suspense>
-    } />
-    <Route path='/chat/:userId' element={
-      <Suspense fallback={<div>로딩중...</div>}>
-        <ChatRoomPage />
-      </Suspense>
-    } />
-    <Route path='/note' element={
-      <Suspense fallback={<div>로딩중...</div>}>
-        <NotePage />
-      </Suspense>
-    } />
-  </Route>
-</Routes>
+        <Route element={<LayoutPage />}>
+          <Route path='/browse' element={
+            <Suspense fallback={<MainPageSkeleton />}>
+              <MainPage />
+            </Suspense>
+          } />
+          <Route path='/bodycheck' element={
+            <Suspense fallback={<BodyCheckPageSkeleton />}>
+              <BodyCheckPage />
+            </Suspense>
+          } />
+          <Route path='/calendar' element={
+            <Suspense fallback={<CalendarPageSkeleton />}>
+              <CalendarPage />
+            </Suspense>
+          } />
+          <Route path='/chat' element={
+            <Suspense fallback={<ChatPageSkeleton />}>
+              <ChatPage />
+            </Suspense>
+          } />
+          <Route path='/chat/:userId' element={
+            <Suspense fallback={<ChatRoomPageSkeleton />}>
+              <ChatRoomPage />
+            </Suspense>
+          } />
+          <Route path='/note' element={
+            <Suspense fallback={<NotePageSkeleton />}>
+              <NotePage />
+            </Suspense>
+          } />
+        </Route>
+      </Routes>
 
     </>
   )

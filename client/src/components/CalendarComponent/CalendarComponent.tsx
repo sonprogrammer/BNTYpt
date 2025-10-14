@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Dot, DotWrapper, StyledBox, StyledBtn, StyledCell, StyledCloseBtn, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon, StyledModal, StyledModalBox, StyledModalContents, StyledModalTextArea, StyledTitle } from './style'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
 import axios from 'axios'
 import { useRecoilState } from 'recoil'
@@ -23,7 +23,7 @@ type Records = {
 
 const CalendarComponent = () => {
     const [currentDate, setCurrentDate] = useState<Date>(new Date())
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+    const [selectedDate, setSelectedDate] = useState<Date >(new Date())
     const [records, setRecords] = useState<Records[]>([])
     const [add, setAdd] = useState<boolean>(false)
     const [workout, setWorkout] = useState<string>('')
@@ -52,6 +52,7 @@ const CalendarComponent = () => {
         return records.find(record => record.date === dateString)
     }
 
+    
 
 
     const fetchCalendar = useCallback(async() => {
@@ -161,11 +162,11 @@ const CalendarComponent = () => {
                     </StyledTitle>
                     <StyledHeader>
                         <StyledIcon onClick={handlePreviousMonth}>
-                            {/* <faAngleLeft /> */}
+                            <FontAwesomeIcon icon={faAngleLeft} size='2x' />
                         </StyledIcon>
                         <h2>{format(currentDate, 'MMM yyyy')}</h2>
                         <StyledIcon onClick={handleNextMonth}>
-                            {/* <faAngleRight /> */}
+                            <FontAwesomeIcon icon={faAngleRight} size='2x' />
                         </StyledIcon>
                     </StyledHeader>
                     <StyledGrid>
