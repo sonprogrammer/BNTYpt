@@ -22,8 +22,7 @@ export const StyledTrainerBox = styled.div`
         rounded-lg
         shadow-lg
     `}
-    // width: 300px;
-    // height: 300px;
+
    
 `
 export const StyledMemberBox = styled.div`
@@ -38,7 +37,7 @@ export const StyledMemberBox = styled.div`
         shadow-lg
     `}
     width: 300px;
-    height: 300px;
+    // height: 300px;
 `
 
 export const StyledQrReader = styled(QrReader)`
