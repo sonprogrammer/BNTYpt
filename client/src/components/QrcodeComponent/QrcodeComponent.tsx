@@ -78,7 +78,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
     const videoConstraints = {
         audio: false,
         video: {
-            facingMode: { exact: "environment" },
+            facingMode: 'environment',
         }
     };
 
@@ -90,9 +90,9 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
 
                 </StyledTrainerBox>
             ) : (
-                <StyledMemberBox>
+                <StyledMemberBox className='camera'>
                     {memberClicked ?
-                        <div className='w-[100%]'>
+                        <div>
                             <StyledQrReader
                                 onScan={handleResult}
                                 delay={500}
