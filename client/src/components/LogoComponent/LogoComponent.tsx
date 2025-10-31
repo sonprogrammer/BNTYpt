@@ -21,15 +21,10 @@ const LogoComponent = () => {
   const handleLogoutConfirm = async () => {
     const confirmed = await handleLogout()
     if (confirmed) {
+      setUser(null)
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
       navigate('/')
-      setTimeout(() => {
-
-
-        setUser(null)
-        localStorage.removeItem('user')
-        localStorage.removeItem('token')
-      }, 1600)
-
     }
   }
 

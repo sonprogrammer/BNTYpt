@@ -16,6 +16,7 @@ const MainPage = () => {
   const [user, setUser] = useRecoilState(userState)
 
   const getUserPtCount = useCallback(async () => {
+    if (!user?.objectId) return
     try {
       const res = await axios.get(`${apiUrl}/api/chat/pt/${user.objectId}`)
 
@@ -27,7 +28,7 @@ const MainPage = () => {
     } catch (error) {
       console.error(error)
     }
-  },[user.objectId, setUser])
+  },[user?.objectId, setUser])
 
   useEffect(() => {
     getUserPtCount()
@@ -52,9 +53,9 @@ const MainPage = () => {
         </div>
       ) : (
         <div className='flex flex-col gap-2 items-center'>
-          <h1 className='text-xl font-bold'>{user.name}님</h1>
-          <h1 className='text-xl font-bold'>남은 pt횟수 : <span className='text-red-700'>{user.ptCount}</span></h1>
-          <QrcodeComponent role={user.role} />
+          <h1 className='text-xl font-bold'>{user?.name}님</h1>
+          <h1 className='text-xl font-bold'>남은 pt횟수 : <span className='text-red-700'>{user?.ptCount}</span></h1>
+          <QrcodeComponent role={user?.role} />
         </div>
       )}
     </div>

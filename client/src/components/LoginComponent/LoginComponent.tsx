@@ -42,7 +42,6 @@ const LoginComponent = () => {
                     <StyledLoginBtn type="submit">로그인하기</StyledLoginBtn>
                     <KakaoLogin
                         token={kakaoClientId}
-                        // clientId={kakaoClientId}
                         onSuccess={kakaoOnSuccess}
                         onFail={kakaoOnFailure}
                         style={{
