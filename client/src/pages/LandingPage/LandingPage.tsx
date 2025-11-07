@@ -20,7 +20,8 @@ useEffect(() => {
   
   return (
     <StyledContainer>
-        <video autoPlay loop muted>
+        <video autoPlay loop muted playsInline webkit-playsinline="true"
+  x5-playsinline="true">
             <source src='/bg.mp4' type='video/mp4'/>
                 your browser does not support
         </video>
