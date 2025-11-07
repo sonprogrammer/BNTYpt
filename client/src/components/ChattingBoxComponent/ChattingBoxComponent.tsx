@@ -33,7 +33,7 @@ const ChattingBoxComponent = () => {
     const [user] = useRecoilState(userState)
 
     useEffect(() => {
-        if(!socket) return
+        if(!socket || !user?.objectId) return
         setLoading(true)
         socket.emit('getChatRooms', user.objectId)
 

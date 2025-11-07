@@ -45,6 +45,7 @@ const NoteComponent = () => {
         : memberNotesQuery.refetch;
 
     useEffect(() => {
+        if(!user || !user.objectId) return
         if (user.role === 'trainer') {
             setRole(user.role)
         } else {

@@ -91,6 +91,7 @@ const CalendarComponent = () => {
     },[user])
 
     useEffect(()=>{
+        if(!user || !user.email) return
         if(user.email || user.kakaoId){
             fetchCalendar() 
         }

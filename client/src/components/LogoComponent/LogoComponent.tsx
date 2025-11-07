@@ -25,6 +25,11 @@ const LogoComponent = () => {
       localStorage.removeItem('user')
       localStorage.removeItem('token')
       navigate('/')
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith('kakao_')) {
+          localStorage.removeItem(key);
+        }
+      });
     }
   }
 
