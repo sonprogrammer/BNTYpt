@@ -20,6 +20,7 @@ export const StyledContainer = styled.div`
         transform : translate(-50%, -50%);
         z-index: -1;
         filter: brightness(0.8);
+        pointer-events: none;
     }
 `
 
