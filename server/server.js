@@ -6,10 +6,10 @@ const path = require('path');
 const userRouter = require('./Routes/userRouter');
 const postRouter = require('./Routes/postRouter');
 const cloudinary = require('cloudinary').v2;
-const passport = require('passport');
+// const passport = require('passport');
 const regularUser = require('./Models/regularUserModel')
-const LocalStrategy = require('passport-local')
-const session = require('express-session');
+// const LocalStrategy = require('passport-local')
+// const session = require('express-session');
 const calendarRouter = require('./Routes/calendarRouter');
 const chatRouter = require('./Routes/chatRouter');
 const http = require('http');
@@ -17,7 +17,6 @@ const socketIo = require('socket.io');
 const recordRouter = require('./Routes/recordRouter');
 const ChatRoom = require('./Models/chatModel');
 const kakaoUser = require('./Models/kakaoUserModel');
-
 
 
 
@@ -36,17 +35,18 @@ const io = socketIo(server, {
 
 app.use(express.json())
 app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'DELETE', 'PUT']
+    origin: ['http://localhost:3000', 'https://bnty.netlify.app'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
+    credentials: true
 }))
-app.use(passport.initialize())
-app.use(session({
-    secret: 'secret', 
-    resave: true,
-    saveUninitialized: false,
-}));
+// app.use(passport.initialize())
+// app.use(session({
+//     secret: 'secret', 
+//     resave: true,
+//     saveUninitialized: false,
+// }));
 
-app.use(passport.session());
+// app.use(passport.session());
 
 
 
@@ -138,31 +138,31 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
   });
   
-passport.use(new LocalStrategy(
-    async (email, password, done) => {
-        try {
-            const user = await regularUser.findOne({ email})
-            if(!user){
-                return done(null, false, { message: 'incorrect email'})
-            }
-            const isMatch = await user.comparePassword(password)
-            if(!isMatch){
-                return done(null, false, { message: 'incorrect password'})
-            }
-            return done(null, user)
-        } catch (error) {
-            return done(error)
-        }
-    }
-))
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
+// passport.use(new LocalStrategy(
+//     async (email, password, done) => {
+//         try {
+//             const user = await regularUser.findOne({ email})
+//             if(!user){
+//                 return done(null, false, { message: 'incorrect email'})
+//             }
+//             const isMatch = await user.comparePassword(password)
+//             if(!isMatch){
+//                 return done(null, false, { message: 'incorrect password'})
+//             }
+//             return done(null, user)
+//         } catch (error) {
+//             return done(error)
+//         }
+//     }
+// ))
+// passport.serializeUser((user, done) => {
+//     done(null, user.id);
+// });
 
-passport.deserializeUser(async (id, done) => {
-    const user = await regularUser.findById(id);
-    done(null, user);
-});
+// passport.deserializeUser(async (id, done) => {
+//     const user = await regularUser.findById(id);
+//     done(null, user);
+// });
 
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -187,6 +187,7 @@ server.listen(port, () => {
     console.log(`listening on http://localhost:${port}`);
 
 })
+
 
 app.get('/', (req, res) => {
     res.send('hdfdfdi')

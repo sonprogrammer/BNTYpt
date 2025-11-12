@@ -44,7 +44,7 @@ const LandingComponent = () => {
             const res = await axios.post(`${apiUrl}/api/user/login/kakao`, {
                 accessToken,
                 role: selectedRole
-            })
+            },{withCredentials: true})
             if (res.data.success) {
                 const newUser = ({
                     kakaoId: res.data.kakaoId,
@@ -93,11 +93,9 @@ const LandingComponent = () => {
                 email,
                 password,
                 role: selectedRole
-            },{
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            },{ withCredentials: true});
+
+
             if (res.data.success) {
                 const newUser = {
                     email: res.data.user.email,

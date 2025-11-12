@@ -29,11 +29,25 @@ const loginRegularUser = async (req, res, next) => {
         }
 
         const token = jwt.sign({
-            id: user.id,
+            id: user._id,
             email: user.email,
             role: user.role,
             name: user.name
         }, process.env.JWT_SECRET, { expiresIn: '24h' });
+
+        const refreshToken = jwt.sign({
+            id: user._id,
+            email: user.email,
+            role: user.role,
+            name: user.name
+        }, process.env.JWT_SECRET, {expiresIn: '7d'})
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
         
         return res.status(200).json({
             success: true,
@@ -44,7 +58,8 @@ const loginRegularUser = async (req, res, next) => {
                 name: user.name,
                 role: user.role,
                 token: token,
-                ptCount: user.ptCount
+                ptCount: user.ptCount,
+                token
             }
         })
     } catch (error) {
@@ -79,6 +94,20 @@ const loginKakaoUser = async (req, res) => {
             })
             await user.save()
         }
+
+        const token = jwt.sign({
+            id: user._id,
+            kakaoId: user.kakaoId,
+            role:user.role,
+            name: user.name
+        }, process.env.JWT_SECRET, {expiresIn: '24h'})
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
         
         res.status(200).json({ 
             success: true, 
@@ -87,7 +116,8 @@ const loginKakaoUser = async (req, res) => {
             kakaoId: user.kakaoId, 
             name: user.name, 
             role: user.role,
-            ptCount: user.ptCount
+            ptCount: user.ptCount,
+            token
         })
     } catch (error) {
         
