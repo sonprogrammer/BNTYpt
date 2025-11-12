@@ -8,6 +8,7 @@ import { RecoilRoot } from 'recoil'
 import './assets/styles/fonts.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 
 const root = ReactDOM.createRoot(
@@ -24,6 +25,9 @@ root.render(
   </RecoilRoot>
   </QueryClientProvider>
 );
+
+serviceWorkerRegistration.register();
+
 
 
 reportWebVitals();
