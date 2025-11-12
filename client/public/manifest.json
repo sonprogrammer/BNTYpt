@@ -1,25 +1,52 @@
 {
-  "short_name": "BNTY",
-  "name": "BNTY",
+  "background_color": "#ffffff",
+  "description": "BNTY: 함께 기록하고, 함께 성장하는 공간",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "BNTY - Be Next To You",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "BNTY - Be Next To You",
+  "start_url": "/",
+  "theme_color": "#8B0000",
   "icons": [
     {
-      "src": "/bnty.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "https://bnty.netlify.app/bnty.png",
+      "type": "image/png",
+      "sizes": "1024x1024",
+      "isSquare": true,
+      "isPng": true,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 1024,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
     },
     {
-      "src": "/bnty.png",
+      "src": "https://res.cloudinary.com/dqrsksfho/image/upload/v1760434389/sdisstavaqa9pcb1l5o1.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "1024x1024",
+      "isSquare": true,
+      "isPng": true,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 1024,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
     },
     {
-      "src": "/bnty.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "https://bnty.netlify.app/favicon.ico",
+      "type": "image/x-icon",
+      "isSquare": false,
+      "isPng": false,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 0,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
     }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#012a56"
+  ]
 }
