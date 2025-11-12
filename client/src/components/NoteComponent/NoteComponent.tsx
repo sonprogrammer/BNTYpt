@@ -52,7 +52,7 @@ const NoteComponent = () => {
             setSelectedMemberId(user.objectId)
         }
 
-    }, [user.role, user.objectId])
+    }, [user])
 
 
     const handleMemberClick = (memeberId: string) => {
