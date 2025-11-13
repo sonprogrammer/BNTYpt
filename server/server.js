@@ -34,6 +34,7 @@ const io = socketIo(server, {
 });
 
 app.use(express.json())
+app.set('trust proxy', 1);
 app.use(cors({
     origin: ['http://localhost:3000', 'https://bnty.netlify.app'],
     methods: ['GET', 'POST', 'DELETE', 'PUT'],
