@@ -3,6 +3,7 @@ import { StyledBtn, StyledContainerForm, StyledSubmitEl, StyledTitle, StyledTitl
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
+import { axiosInstance } from '../../utils/axiosInstance';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -56,7 +57,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
         text,
         images: uploadedImageUrls
       }
-
+      // TODO kakaotalk accesstoken management
       if(user.kakaoId){
         formData['kakaoId'] = user.kakaoId
         const res = await axios.post(`${apiUrl}/api/posts`, formData,{
@@ -78,12 +79,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
       //*일반 로그인 
       else{
         formData['email'] = user.email
-        const res = await axios.post(`${apiUrl}/api/posts`, formData, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${user.token}`
-          }
-        })
+        const res = await axiosInstance.post(`${apiUrl}/api/posts`, formData)
         if(res.data.success){
           addPost({ text, images: res.data.post.images, uploadTime: res.data.post.date})
           setText('')

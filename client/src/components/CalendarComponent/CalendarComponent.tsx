@@ -5,9 +5,10 @@ import { Dot, DotWrapper, StyledBox, StyledBtn, StyledCell, StyledCloseBtn, Styl
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
-import axios from 'axios'
+
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
+import { axiosInstance } from '../../utils/axiosInstance';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -65,11 +66,7 @@ const CalendarComponent = () => {
               }
             
 
-            const res = await axios.get(url,{
-                headers: {
-                    Authorization: `Bearer ${user.token}`
-                }
-            })
+            const res = await axiosInstance.get(url)
             if(res.data.success){
                 const formattedRecords = res.data.calendars.map((record: {
                     _id: string;
@@ -123,13 +120,14 @@ const CalendarComponent = () => {
            }else if(user.email){
             formData.email = user.email
            }
-
-           const res = await axios.post(`${apiUrl}/api/calendar`, formData, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.kakaoAccessToken || user.token}`
-            }
-           })
+           //기존
+        //    const res = await axios.post(`${apiUrl}/api/calendar`, formData, {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         Authorization: `Bearer ${user.kakaoAccessToken || user.token}`
+        //     }
+        //    })
+           const res = await axiosInstance.post(`${apiUrl}/api/calendar`, formData)
             if(res.data.success){
                 const newRecord: Records = {
                     date: formatDate,

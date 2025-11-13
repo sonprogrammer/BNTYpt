@@ -9,7 +9,7 @@ import { NotePostFormComponent } from '../NotePostFormComponent';
 import useGetMembers from '../../hooks/useGetMemers';
 import useGetEachMemberNote from '../../hooks/useGetEachMemberNote';
 import useGetTrainerMemberNote from '../../hooks/useGetTrainerMemberNote';
-
+import loadingBar from '../../assets/loading.gif';
 
 
 
@@ -27,7 +27,8 @@ const NoteComponent = () => {
     const [user] = useRecoilState(userState)
     const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
 
-    const { data: members } = useGetMembers(user.objectId)
+    const { data: members, isLoading } = useGetMembers(user.objectId)
+
 
 
     //*트레이너가 보는것    
@@ -35,6 +36,7 @@ const NoteComponent = () => {
     //*회원이 보는것
     const memberNotesQuery = useGetEachMemberNote(user.objectId);
 
+    
 
     const eachMemberNote = user.role === 'trainer'
         ? trainerNotesQuery.data
@@ -54,6 +56,13 @@ const NoteComponent = () => {
 
     }, [user])
 
+    if(isLoading){
+        return (
+            <div className='h h-full flex items-center justify-center'>
+                <img src={loadingBar} alt="로딩이미지" className='w-20' />
+            </div>
+        )
+    }
 
     const handleMemberClick = (memeberId: string) => {
         setSelectedMemberId(memeberId)

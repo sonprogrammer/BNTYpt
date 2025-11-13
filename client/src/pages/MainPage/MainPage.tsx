@@ -1,12 +1,11 @@
 import { useCallback, useState } from 'react'
 import { QrcodeComponent } from '../../components'
-
-import axios from 'axios'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import AddMemeberComponent from './AddMemeberComponent'
 import { StyledPtAddBtn } from './style'
+import { axiosInstance } from '../../utils/axiosInstance'
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -18,7 +17,7 @@ const MainPage = () => {
   const getUserPtCount = useCallback(async () => {
     if (!user?.objectId) return
     try {
-      const res = await axios.get(`${apiUrl}/api/chat/pt/${user.objectId}`)
+      const res = await axiosInstance.get(`${apiUrl}/api/chat/pt/${user.objectId}`)
 
       if (res.data.success) {
         setUser((prevState: any) => ({ ...prevState, ptCount: res.data.message }));

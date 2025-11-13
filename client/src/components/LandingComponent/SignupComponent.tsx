@@ -48,7 +48,6 @@ const SignupComponent = () => {
 
     const checkEmail = async() => {
         try {
-            // const res = await axios.get(`http://localhost:4000/api/user/check-email?email=${email}`)
             const res = await axios.get(`${apiUrl}/api/user/check-email?email=${email}`)
             if(res.data.exists){
                 alert('try other email')

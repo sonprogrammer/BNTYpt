@@ -23,6 +23,7 @@ const LogoComponent = () => {
     if (confirmed) {
       setUser(null)
       localStorage.removeItem('user')
+      localStorage.removeItem('accessToken')
       localStorage.removeItem('token')
       navigate('/')
       Object.keys(localStorage).forEach((key) => {

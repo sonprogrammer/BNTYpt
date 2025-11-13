@@ -1,8 +1,9 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import axios from "axios";
+
+import { axiosInstance } from "../utils/axiosInstance";
 
 const deletePhoto = async(photoId: string) => {
-    const res = await axios.delete(`${process.env.REACT_APP_API_URL}/api/posts/delete/${photoId}`)
+    const res = await axiosInstance.delete(`${process.env.REACT_APP_API_URL}/api/posts/delete/${photoId}`)
     return res.data
 }
 

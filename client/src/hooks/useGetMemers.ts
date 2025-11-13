@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { axiosInstance } from "../utils/axiosInstance";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
 const getMembers = async(userId: string) => {
     try {
-        const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${userId}`)
+        const res = await axiosInstance.get(`${apiUrl}/api/chat/chatrooms/${userId}`)
         if(res.data.chatRooms){
             const memebersName = res.data.chatRooms.map((room: any) => ({
                 memberId: room.memberId,

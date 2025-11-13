@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import { axiosInstance } from "../utils/axiosInstance";
 
 
 const deleteNote = async(noteId: string) => {
-    const res = await axios.delete(`${process.env.REACT_APP_API_URL}/api/records/note/${noteId}`)
+    const res = await axiosInstance.delete(`${process.env.REACT_APP_API_URL}/api/records/note/${noteId}`)
     return res.data
 }
 

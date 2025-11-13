@@ -1,11 +1,14 @@
 import { atom, selector } from "recoil"
 import { getUserFromLocalStorage } from "./localStorage"
+import { getAccessToken } from "./accessToken"
 
 const defaultUser = getUserFromLocalStorage()
+const accessToken = getAccessToken()
+
 
 export const userState = atom({
     key: 'userState',
-    default: defaultUser && defaultUser.token ? defaultUser :{
+    default: defaultUser && accessToken ? defaultUser :{
         kakaoId: null,
         id: null,
         email: null,

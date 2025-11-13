@@ -8,6 +8,7 @@ import axios from 'axios';
 import { showSuccessAlert, showFailAlert } from '../../utils/toast';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { axiosInstance } from '../../utils/axiosInstance';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -29,11 +30,11 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
             setIsScanning(true)
             setScannedData(trainerId);
                 try {
-                    await axios.post(`${apiUrl}/api/chat`, {
+                    await axiosInstance.post(`${apiUrl}/api/chat`, {
                         trainerInfo: trainerId,
                         memberInfo: user.email || user.kakaoId
                     })
-                    const res = await axios.post(`${apiUrl}/api/chat/pt`, {
+                    const res = await axiosInstance.post(`${apiUrl}/api/chat/pt`, {
                         ptCount: -1, 
                         memberId: user.objectId  
                     });

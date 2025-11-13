@@ -7,6 +7,8 @@ import { userState } from '../../utils/userState';
 import { useNavigate } from 'react-router-dom';
 import { saveUserToLocalStorage } from '../../utils/localStorage';
 import SignupComponent from './SignupComponent';
+import { saveAccessToken } from '../../utils/accessToken';
+import { axiosInstance } from '../../utils/axiosInstance';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -32,7 +34,7 @@ const LandingComponent = () => {
         setSelectedRole(e.target.value)
     }
 
-
+    // TODO 카카오톡 엑세스 토큰 관리하기
     const kakaoOnSuccess = async (data: any) => {
         const accessToken = data.response.access_token
         if (!selectedRole) {
@@ -89,11 +91,11 @@ const LandingComponent = () => {
 
         try {
             setLoading(true);
-            const res = await axios.post(`${apiUrl}/api/user/login/regular`, {
+            const res = await axiosInstance.post(`${apiUrl}/api/user/login/regular`, {
                 email,
                 password,
                 role: selectedRole
-            },{ withCredentials: true});
+            });
 
 
             if (res.data.success) {
@@ -101,12 +103,15 @@ const LandingComponent = () => {
                     email: res.data.user.email,
                     name: res.data.user.name,
                     role: res.data.user.role,
-                    token: res.data.user.token,
+                    // token: res.data.user.token,
                     objectId: res.data.user.objectId,
                     ptCount: res.data.user.ptCount
                 };
+                const accessToken = res.data.user.token
+
                 setUser(newUser);
                 saveUserToLocalStorage(newUser);
+                saveAccessToken(accessToken)
                 navigate('/browse');
                 
             } else {

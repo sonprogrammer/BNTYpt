@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 
 import { useState } from 'react'
 import { useEffect } from 'react'
-import axios from 'axios'
+import { axiosInstance } from '../../utils/axiosInstance';
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import loadingBar from '../../assets/loading.gif';
@@ -24,6 +24,7 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
 
   const deleteMutation = useDeletePhoto()
 
+  console.log('user', user)
 
   const fetchPost = useCallback( async () => {
     try {
@@ -35,11 +36,7 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
         url = `${apiUrl}/api/posts/user/kakao/${user.kakaoId}`
       }
 
-      const res = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${user.token}`
-        }
-      })
+      const res = await axiosInstance.get(url)
 
 
       const formatedPost = res.data.posts.map((post: any) => ({

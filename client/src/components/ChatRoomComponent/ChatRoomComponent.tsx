@@ -6,9 +6,9 @@ import { faPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
-import axios from 'axios';
 import socket from '../../socket';
 import loadingBar from '../../assets/loading.gif';
+import { axiosInstance } from '../../utils/axiosInstance';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -49,7 +49,7 @@ const ChatRoomComponent = () => {
     useEffect(() => {
         const fetchChatRoom = async () => {
             try {
-                const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`);
+                const res = await axiosInstance.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`);
                 const chatRooms = res.data.chatRooms;
 
                 const currentChatRoom = chatRooms.find((room: any) =>
@@ -86,7 +86,7 @@ const ChatRoomComponent = () => {
             if (chatRoomId) {
                 try {
                     setLoading(true)
-                    const res = await axios.get(`${apiUrl}/api/chat/messages/${chatRoomId}`)
+                    const res = await axiosInstance.get(`${apiUrl}/api/chat/messages/${chatRoomId}`)
 
                     if (res.data.success) {
                         const fetchedMessages = res.data.message.map((msg: any) => ({
@@ -167,7 +167,7 @@ const ChatRoomComponent = () => {
                 const formData = new FormData()
                 formData.append('file', selectedFile)
                 console.log('form', formData)
-                const res = await axios.post(`${apiUrl}/api/chat/upload`, formData, {
+                const res = await axiosInstance.post(`${apiUrl}/api/chat/upload`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 })
                 mediaUrl = res.data.url
@@ -182,7 +182,7 @@ const ChatRoomComponent = () => {
                 readBy: [user.objectId]
             }
 
-            await axios.post(`${apiUrl}/api/chat/send`, {
+            await axiosInstance.post(`${apiUrl}/api/chat/send`, {
                 chatRoomId,
                 sender: newMessage.sender,
                 message: newMessage.text,

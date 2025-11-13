@@ -1,9 +1,9 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { axiosInstance } from "../utils/axiosInstance";
 
 
 const putNote = async ({ noteId, title, text }: { noteId: string; title: string; text: string }) => {
-    const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/records/note/${noteId}`,
+    const res = await axiosInstance.put(`${process.env.REACT_APP_API_URL}/api/records/note/${noteId}`,
         {title, text}
     )
     return res.data

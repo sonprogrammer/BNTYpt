@@ -3,6 +3,7 @@ import { StyledBtn, StyledContainerForm, StyledRecord, StyledSelect, StyledSubmi
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
+import { axiosInstance } from '../../utils/axiosInstance';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -37,7 +38,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
 
     const fetchMemeber = useCallback(async (userId: string) => {
         try {
-            const res = await axios.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`)
+            const res = await axiosInstance.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`)
             const memberNames = res.data.chatRooms.map((room: any) => ({
                 memberId: room.memberId,
                 memberName: room.opponentName
@@ -106,11 +107,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
                 userObjectId: user.objectId,
                 opponentName: selectedMember,
             }
-            await axios.post(`${apiUrl}/api/records`, formData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+            await axiosInstance.post(`${apiUrl}/api/records`, formData)
 
             addPost(formData)
             setText('');
