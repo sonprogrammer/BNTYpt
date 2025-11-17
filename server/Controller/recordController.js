@@ -48,7 +48,7 @@ const getRecordsByT = async(req, res) => {
 const getMemberRecords = async(req, res) => {
     const { memberId } = req.params
     const { trainerId } = req.query
-    console.log('user', memberId, trainerId)
+    
 
     try {
         let records
@@ -68,7 +68,7 @@ const getMemberRecords = async(req, res) => {
 // *트레이너가 노트내용을 삭제
 const deleteMemberRecords = async(req, res) => {
     const { noteId } = req.params
-
+    console.log('note', noteId)
     try {
         const note = await Record.findOne({_id: noteId})
         if(!note){

@@ -27,22 +27,22 @@ const NoteComponent = () => {
     const [user] = useRecoilState(userState)
     const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
 
-    const { data: members, isLoading } = useGetMembers(user.objectId)
+    const { data: members, isLoading } = useGetMembers(user?.objectId)
 
 
 
     //*트레이너가 보는것    
-    const trainerNotesQuery = useGetTrainerMemberNote(selectedMemberId, user.objectId);
+    const trainerNotesQuery = useGetTrainerMemberNote(selectedMemberId, user?.objectId);
     //*회원이 보는것
-    const memberNotesQuery = useGetEachMemberNote(user.objectId);
+    const memberNotesQuery = useGetEachMemberNote(user?.objectId);
 
     
 
-    const eachMemberNote = user.role === 'trainer'
+    const eachMemberNote = user?.role === 'trainer'
         ? trainerNotesQuery.data
         : memberNotesQuery.data;
 
-    const refetch = user.role === 'trainer'
+    const refetch = user?.role === 'trainer'
         ? trainerNotesQuery.refetch
         : memberNotesQuery.refetch;
 

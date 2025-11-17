@@ -24,7 +24,6 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
 
   const deleteMutation = useDeletePhoto()
 
-  console.log('user', user)
 
   const fetchPost = useCallback( async () => {
     try {

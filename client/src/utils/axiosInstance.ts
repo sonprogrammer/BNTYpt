@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getAccessToken } from "./accessToken";
 
-const accessToken = getAccessToken()
+
 
 export const axiosInstance = axios.create({
     withCredentials: true
@@ -9,7 +9,7 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = accessToken
+        const token = getAccessToken()
         if (token) config.headers.Authorization = `Bearer ${token}`
         return config
     },
@@ -17,17 +17,15 @@ axiosInstance.interceptors.request.use(
 )
 
 axiosInstance.interceptors.response.use(
-    (res) => res,
+    (res) => res ,
     async (err) => {
         const originalRequest = err.config
-
-        if (err.res?.status === 401 && !originalRequest._retry) {
+        if ((err.response?.status === 401  || err.response?.status === 403) && !originalRequest._retry) {
             originalRequest._retry = true
 
 
             try {
-                const res = await axios.post(`${process.env.REACT_APP_API_UR}/user/refresh`, {}, { withCredentials: true })
-
+                const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/user/refresh`, {}, { withCredentials: true })
                 const newAccessToken = res.data.accessToken
                 localStorage.setItem('accessToken', newAccessToken)
 

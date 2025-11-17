@@ -8,7 +8,7 @@ const bcryptjs = require('bcryptjs')
 
 
 //*일반 로그인
-const loginRegularUser = async (req, res, next) => {
+const loginRegularUser = async (req, res) => {
     const { role, email, password} = req.body;
 
     try {
@@ -33,7 +33,7 @@ const loginRegularUser = async (req, res, next) => {
             email: user.email,
             role: user.role,
             name: user.name
-        }, process.env.JWT_SECRET, { expiresIn: '24h' });
+        }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         const refreshToken = jwt.sign({
             id: user._id,
@@ -71,14 +71,14 @@ const loginRegularUser = async (req, res, next) => {
 
 //* 카카오톡 로그인
 const loginKakaoUser = async (req, res) => {
-    const { accessToken, role } = req.body
+    const { kakaoaccessToken, role } = req.body
 
     try {
         const userInfoRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
             headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${kakaoaccessToken}`,
             },
-        });
+        })
         
         const userInfo = userInfoRes.data;
         const  kakaoId = userInfo.id
@@ -100,7 +100,14 @@ const loginKakaoUser = async (req, res) => {
             kakaoId: user.kakaoId,
             role:user.role,
             name: user.name
-        }, process.env.JWT_SECRET, {expiresIn: '24h'})
+        }, process.env.JWT_SECRET, {expiresIn: '1h'})
+
+        const refreshToken = jwt.sign({
+            id: user._id,
+            email: user.email,
+            role: user.role,
+            name: user.name
+        }, process.env.JWT_SECRET, {expiresIn: '7d'})
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -120,7 +127,8 @@ const loginKakaoUser = async (req, res) => {
             token
         })
     } catch (error) {
-        
+        console.error(error) 
+        res.status(500).json({ success: false, message: 'internal server errro'})
     }
 }
 
@@ -162,5 +170,14 @@ const signupUser = async (req, res, next) => {
     }
 }
 
+const logout = async (req, res) => {
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+    })
+    res.status(200).json({success: true, message:'logout success'})
+}
 
-module.exports = { signupUser, checkEmail, loginRegularUser, loginKakaoUser };
+
+module.exports = { signupUser, checkEmail, loginRegularUser, loginKakaoUser, logout };

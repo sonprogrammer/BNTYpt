@@ -34,29 +34,33 @@ const LandingComponent = () => {
         setSelectedRole(e.target.value)
     }
 
+
     // TODO 카카오톡 엑세스 토큰 관리하기
     const kakaoOnSuccess = async (data: any) => {
-        const accessToken = data.response.access_token
+        const kakaoaccessToken = data.response.access_token
         if (!selectedRole) {
             alert('Please select your role')
             return
         }
         try {
             setLoading(true)
-            const res = await axios.post(`${apiUrl}/api/user/login/kakao`, {
-                accessToken,
+            const res = await axiosInstance.post(`${apiUrl}/api/user/login/kakao`, {
+                kakaoaccessToken,
                 role: selectedRole
-            },{withCredentials: true})
+            })
+            console.log('re',res)
             if (res.data.success) {
                 const newUser = ({
                     kakaoId: res.data.kakaoId,
                     name: res.data.name,
                     role: selectedRole,
-                    token: accessToken,
                     objectId: res.data.objectId 
                 });
+                const accessToken = res.data.token
+                console.log('acc', accessToken)
                 setUser(newUser)
                 saveUserToLocalStorage(newUser)
+                saveAccessToken(accessToken)
                 navigate('/browse')
             } else {
                 console.error('login failed :', res.data.message)
@@ -103,19 +107,18 @@ const LandingComponent = () => {
                     email: res.data.user.email,
                     name: res.data.user.name,
                     role: res.data.user.role,
-                    // token: res.data.user.token,
                     objectId: res.data.user.objectId,
                     ptCount: res.data.user.ptCount
                 };
                 const accessToken = res.data.user.token
 
                 setUser(newUser);
-                saveUserToLocalStorage(newUser);
+                saveUserToLocalStorage(newUser)
                 saveAccessToken(accessToken)
-                navigate('/browse');
+                navigate('/browse')
                 
             } else {
-                    alert(res.data.message);
+                    alert(res.data.message)
     
             }
         } catch (error) {

@@ -6,12 +6,14 @@ import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import { handleLogout } from '../../utils/logout'
+import { usePostLogout } from '../../hooks/usePostLogout';
 
 
 
 const LogoComponent = () => {
   const [, setUser] = useRecoilState(userState)
 
+  const logoutMutation =usePostLogout()
 
   const navigate = useNavigate()
 
@@ -25,6 +27,7 @@ const LogoComponent = () => {
       localStorage.removeItem('user')
       localStorage.removeItem('accessToken')
       localStorage.removeItem('token')
+      await logoutMutation.mutateAsync()
       navigate('/')
       Object.keys(localStorage).forEach((key) => {
         if (key.startsWith('kakao_')) {

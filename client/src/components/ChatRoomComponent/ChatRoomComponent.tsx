@@ -48,6 +48,7 @@ const ChatRoomComponent = () => {
 
     useEffect(() => {
         const fetchChatRoom = async () => {
+            if (!user.objectId) return; 
             try {
                 const res = await axiosInstance.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`);
                 const chatRooms = res.data.chatRooms;
@@ -73,10 +74,10 @@ const ChatRoomComponent = () => {
             }
         };
 
-        if (user.objectId) {
+        if (user?.objectId) {
             fetchChatRoom();
         }
-    }, [user.objectId, userId, navigate]);
+    }, [user?.objectId, userId, navigate]);
 
 
 
@@ -115,7 +116,7 @@ const ChatRoomComponent = () => {
         };
 
         fetchMessages();
-    }, [chatRoomId, user.objectId]);
+    }, [chatRoomId, user?.objectId]);
 
 
     useEffect(() => {
@@ -145,7 +146,7 @@ const ChatRoomComponent = () => {
                 socket.off('read')
             };
         }
-    }, [chatRoomId, user.objectId, user.name]);
+    }, [chatRoomId, user?.objectId, user?.name]);
 
     useEffect(() => {
         if (messageBoxRef.current) {
@@ -253,7 +254,7 @@ const ChatRoomComponent = () => {
                                     <p>{message.text}</p>
                                 }
                                 {message.isMine && message.readBy ? (
-                                    message.readBy.some(id => id !== user.objectId) ? (
+                                    message.readBy.some(id => id !== user?.objectId) ? (
                                         <span className='text-sm'></span>
                                     ) : (
                                         <span className='text-sm'>안읽음</span>
