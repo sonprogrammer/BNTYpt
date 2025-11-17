@@ -4,7 +4,7 @@ import { OnResultFunction } from 'react-qr-scanner'
 import { StyledContainer, StyledMemberBox, StyledQrReader, StyledTrainerBox } from './style'
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
-import axios from 'axios';
+// import axios from 'axios';
 import { showSuccessAlert, showFailAlert } from '../../utils/toast';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
