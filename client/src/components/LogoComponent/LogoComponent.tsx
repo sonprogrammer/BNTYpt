@@ -23,17 +23,24 @@ const LogoComponent = () => {
   const handleLogoutConfirm = async () => {
     const confirmed = await handleLogout()
     if (confirmed) {
+
+      try {
+        await logoutMutation.mutateAsync()
+      } catch (e) {
+        console.error("logout error", e)
+      }
+      
       setUser(null)
       localStorage.removeItem('user')
       localStorage.removeItem('accessToken')
       localStorage.removeItem('token')
-      await logoutMutation.mutateAsync()
-      navigate('/')
+      
       Object.keys(localStorage).forEach((key) => {
         if (key.startsWith('kakao_')) {
           localStorage.removeItem(key);
         }
       });
+      navigate('/')
     }
   }
 
