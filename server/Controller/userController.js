@@ -33,7 +33,9 @@ const loginRegularUser = async (req, res) => {
             email: user.email,
             role: user.role,
             name: user.name
-        }, process.env.JWT_SECRET, { expiresIn: '10s' });
+        }, process.env.JWT_SECRET, { expiresIn: '10s' });//! 시간바꾸기
+        
+
 
         const refreshToken = jwt.sign({
             id: user._id,
