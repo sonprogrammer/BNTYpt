@@ -33,7 +33,7 @@ const loginRegularUser = async (req, res) => {
             email: user.email,
             role: user.role,
             name: user.name
-        }, process.env.JWT_SECRET, { expiresIn: '10s' });//! 시간바꾸기
+        }, process.env.JWT_SECRET, { expiresIn: '1h' });//! 시간바꾸기
         
 
 
