@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import { StyledContainer, StyledContent, StyledProfile, StyledNotMember } from './style'
+import { StyledContainer, StyledContent, StyledProfile, StyledNotMember, LastMsgWrapper, UnreadBadge } from './style'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
-import loadingBar from '../../assets/loading.gif';
 import socket from '../../socket'
+import { BeatLoader } from 'react-spinners'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faComments } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -71,38 +73,41 @@ const ChattingBoxComponent = () => {
       )
     
 
-    const handleNavigate = (room: ChatRoom) => {
-        navigate(`/chat/${room.opponentName}`)
-    }
+   
+
+    if (loading) return (
+        <div className='flex flex-col justify-center items-center h-[300px] gap-4'>
+            <BeatLoader color="#ef4444" size={10} />
+            <p className="text-gray-500 text-sm">대화 목록을 가져오는 중...</p>
+        </div>
+    )
     return (
         <>
-        {loading && <>
-            <div className='flex justify-center items-center h-full'>
-                <img src={loadingBar} alt="로딩이미지" className='w-20'/>
-            </div>
-        </>}
-             {orderedChatRooms.length === 0 ? (
-                <StyledNotMember>채팅 멤버가 없습니다. 😿</StyledNotMember> 
-            ) : (
-                orderedChatRooms.map((room) => (
-                    <StyledContainer className='hi' key={room._id} onClick={() => handleNavigate(room)}>
-                        <StyledProfile>
-                            <img src="./logo2.png" alt="프로필사진" />
-                        </StyledProfile>
-                        <StyledContent>
-                            <h2>{room.opponentName || '이름'}</h2> 
-                            <p>{room.lastMessage || '대화내용'}</p>
-                            {room.unRead && 
-                            <span className='text-red-500 text-sm'>
-                                unRead
-                            </span>}
-
-                        </StyledContent>
-                    </StyledContainer>
-                ))
-            )}
-
-        </>
+        {orderedChatRooms.length === 0 ? (
+            <StyledNotMember>
+                <FontAwesomeIcon icon={faComments} size="2x" className="mb-4 opacity-20" />
+                <p>연결된 대화 상대가 없습니다.</p>
+            </StyledNotMember> 
+        ) : (
+            orderedChatRooms.map((room) => (
+                <StyledContainer key={room._id} onClick={() => navigate(`/chat/${room.opponentName}`)}>
+                    <StyledProfile>
+                        <img src="/logo2.png" alt="프로필" />
+                    </StyledProfile>
+                    <StyledContent>
+                        <div className="top-row">
+                            <h2>{room.opponentName || '이름 없음'}</h2>
+                            {room.unRead && <UnreadBadge>NEW</UnreadBadge>}
+                        </div>
+                        <LastMsgWrapper>
+                            <p className="msg-text">{room.lastMessage || '새로운 대화가 없습니다.'}</p>
+                        </LastMsgWrapper>
+                    </StyledContent>
+                    <div className="arrow-icon">〉</div>
+                </StyledContainer>
+            ))
+        )}
+    </>
     )
 }
 

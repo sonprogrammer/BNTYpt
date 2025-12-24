@@ -2,7 +2,6 @@ declare module 'react-qr-scanner' {
   import { ComponentType, CSSProperties } from 'react';
 
   
-    // 스캔 결과 함수 타입
     export type OnResultFunction = (data: any, error?: any) => void;
   
     interface QrReaderProps {

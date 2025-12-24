@@ -19,23 +19,20 @@ const PostItemComponent = ({ post, handleClick }: PostItemComponentProps) => {
 
   const formattedDate = dayjs(post.uploadTime).format('MM.DD(dd)')
   return (
-    <StyledContainer className='am' onClick={handleClick}>
+    <StyledContainer onClick={handleClick}>
       <StyledUpper>
-        {post.title ? <StyledTitle>{post.title}</StyledTitle> : <></>}
-        <p className='mt-1'>{formattedDate}</p>
+        <StyledTitle>{post.title || '제목 없음'}</StyledTitle>
+        <span className='date'>{formattedDate}</span>
       </StyledUpper>
+      
       <StyledBox>
         {post.text && <StyledContent>{post.text}</StyledContent>}
         {post.images && post.images.length > 0 && (
           <StyledImg>
-            {post.images.map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                alt={'노트이미지'}
-                style={{ maxWidth: '100%', height: 'auto', marginTop: '10px' }}
-              />
-            ))}
+            <img src={post.images[0]} alt={'thumbnail'} />
+            {post.images.length > 1 && (
+              <div className="img-count">+{post.images.length - 1}</div>
+            )}
           </StyledImg>
         )}
       </StyledBox>

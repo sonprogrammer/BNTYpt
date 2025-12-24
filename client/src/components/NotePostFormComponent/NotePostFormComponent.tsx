@@ -1,11 +1,13 @@
 import React, { FormEvent, useCallback, useEffect, useState } from 'react'
-import { StyledBtn, StyledContainerForm, StyledRecord, StyledSelect, StyledSubmitEl, StyledTextArea, StyledTitle, StyledUpper } from './style';
+import { ImagePreviewWrapper, StyledBtn, StyledContainerForm, StyledRecord, StyledSelect, StyledSubmitEl, StyledTextArea, StyledTitle, StyledUpper } from './style';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
 import { axiosInstance } from '../../utils/axiosInstance';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCloudArrowUp, faImage } from '@fortawesome/free-solid-svg-icons';
+import toast from 'react-hot-toast'
 const apiUrl = process.env.REACT_APP_API_URL;
-
 
 interface Record {
     title: string;
@@ -30,7 +32,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
     const [previewImages, setPreviewImages] = useState<string[]>([]);
     const [selectedMember, setSelectedMember] = useState<string | null>(null);
     const [chatRooms, setChatRooms] = useState<any[]>([]);
-
+    const [isUploading, setIsUploading] = useState<boolean>(false);
 
     const [user] = useRecoilState(userState)
 
@@ -59,12 +61,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
         fetchMemeber(userId)
     }, [user.objectId, fetchMemeber])
 
-    const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setText(e.target.value)
-    }
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value)
-    }
+   
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -88,12 +85,12 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!title || !text) {
-            alert('빈 내용이 없는지 확인해주세요')
+            toast.error('빈 내용이 없는지 확인해주세요')
             return
         };
 
         try {
-
+            setIsUploading(true)
             const uploadedImageUrls = await Promise.all(
                 images.map(image => uploadImageToCloudinary(image))
             )
@@ -114,12 +111,14 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
             setImages([]);
             setPreviewImages([]);
             setSelectedMember(chatRooms[0]?.memberId || null);
-
+            toast.success('노트 일지를 작성하셨습니다')
             closeModal();
 
 
         } catch (error) {
             console.error('Error', error)
+        }finally {
+            setIsUploading(false)
         }
 
     };
@@ -130,43 +129,58 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
     return (
         <StyledContainerForm onSubmit={handleSubmit}>
             <StyledUpper>
-
-                <StyledRecord>일지 기록</StyledRecord>
-                <StyledSelect name="member"
-                    value={selectedMember || ''}
-                    onChange={(e) => setSelectedMember(e.target.value)}
-                >
-                    <option value={''} disabled>member</option>
-                    {chatRooms.map((room) => (
-                        <option key={room.memberId} value={room.memberId}>
-                            {room.memberName}
-                        </option>
-                    ))}
-
-                </StyledSelect>
+                <StyledRecord>NEW RECORD</StyledRecord>
+                <div className="select-wrapper">
+                    <StyledSelect 
+                        value={selectedMember || ''}
+                        onChange={(e) => setSelectedMember(e.target.value)}
+                    >
+                        <option value={''} disabled>회원 선택</option>
+                        {chatRooms.map((room) => (
+                            <option key={room.memberId} value={room.memberId}>
+                                {room.memberName}
+                            </option>
+                        ))}
+                    </StyledSelect>
+                </div>
             </StyledUpper>
 
-            <StyledTitle placeholder='오늘 주제'
-                className='placeholder:text-red-950 placeholder:opacity-50'
+            <StyledTitle 
+                placeholder='일지 제목을 입력하세요 (예: 하체 루틴)'
                 value={title}
-                onChange={handleTitleChange}
+                onChange={(e) => setTitle(e.target.value)}
             />
 
             <StyledTextArea
-                placeholder="회원에게 알려주세요"
+                placeholder="오늘 운동에 대한 상세 설명이나 피드백을 남겨주세요."
                 value={text}
-                onChange={handleTextChange}
-                className='placeholder:text-red-950 placeholder:opacity-50'
+                onChange={(e) => setText(e.target.value)}
             />
+
             <StyledSubmitEl>
-                <input type="file" multiple accept="image/*" onChange={handleImageChange} className="my-2" />
-                <div className='flex justify-around'>
-                    {previewImages.map((preview, index) => (
-                        <img key={index} src={preview} alt={`미리보기 ${index + 1}`} className="my-2 w-[30%] overflow-auto mr-5" />
-                    ))}
+                <div className="file-input-wrapper">
+                    <label htmlFor="file-upload">
+                        <FontAwesomeIcon icon={faImage} />
+                        {images.length > 0 ? `${images.length}장의 사진 선택됨` : '사진 첨부 (최대 3장)'}
+                    </label>
+                    <input id="file-upload" type="file" multiple accept="image/*" onChange={handleImageChange} className="hidden" />
                 </div>
-                <StyledBtn type="submit">
-                    게시하기
+
+                {previewImages.length > 0 && (
+                    <ImagePreviewWrapper>
+                        {previewImages.map((preview, index) => (
+                            <img key={index} src={preview} alt="preview" />
+                        ))}
+                    </ImagePreviewWrapper>
+                )}
+
+                <StyledBtn type="submit" disabled={isUploading}>
+                    {isUploading ? '기록 업로드 중...' : (
+                        <>
+                            <FontAwesomeIcon icon={faCloudArrowUp} className="mr-2" />
+                            게시하기
+                        </>
+                    )}
                 </StyledBtn>
             </StyledSubmitEl>
         </StyledContainerForm>

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { StyledBox, StyledContainer, StyledDelete, StyledImage, StyledImgContainer, StyledNothing, StyledText, StyledTitle } from './style'
+import { ImageWrapper, StyledBox, StyledContainer, StyledDelete, StyledImgContainer, StyledNothing, StyledText, StyledTitle } from './style'
 import dayjs from 'dayjs'
 
 import { useState } from 'react'
@@ -7,11 +7,11 @@ import { useEffect } from 'react'
 import { axiosInstance } from '../../utils/axiosInstance';
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
-import loadingBar from '../../assets/loading.gif';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faCamera } from '@fortawesome/free-solid-svg-icons'
 import { confirmDelete, showSuccess } from '../../utils/alert'
 import useDeletePhoto from '../../hooks/useDeletePhoto'
+import { BeatLoader } from 'react-spinners'
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -68,7 +68,8 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
 
   }, [refresh, user, fetchPost])
 
-  const handleDelete = async(photoId: string) => {
+  const handleDelete = async(e: React.MouseEvent,photoId: string) => {
+    e.stopPropagation()
     const confirmed = await confirmDelete()
     if(confirmed){
       deleteMutation.mutate(photoId, {
@@ -83,43 +84,47 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
 
   return (
     <StyledContainer>
-
       {loading ? (
-
-        <div className='flex justify-center items-center h-full'>
-          <img src={loadingBar} alt="로딩이미지" className='w-20' />
+        <div className='flex flex-col justify-center items-center h-[400px] gap-4'>
+          <BeatLoader color="#e11d48" size={12} />
+          <p className="text-gray-500 text-sm">기록을 불러오는 중...</p>
         </div>
       ) : (
         <>
-
           {photos.length === 0 ? (
             <StyledNothing>
-              사진을 업로드 해주세요
+              <FontAwesomeIcon icon={faCamera} size="2xl" className="mb-4 opacity-20" />
+              <p>아직 등록된 기록이 없어요.<br/>오늘의 몸을 기록해보세요!</p>
             </StyledNothing>
           ) : (
             <StyledImgContainer>
+              {photos.map((photo) => (
+                <StyledBox 
+                  key={photo.imageId} 
+                  onClick={() => setClickedForDelete(clickedForDelete === photo.imageId ? null : photo.imageId)}
+                >
+                  <StyledTitle>{photo.text || "No Title"}</StyledTitle>
+                  
+                  <ImageWrapper>
+                    <img 
+                      src={photo.imageUrl || '/notfound.png'} 
+                      alt="body-check"
+                      onError={(e) => { e.currentTarget.src = '/notfound.png'; }}
+                    />
+                    {clickedForDelete === photo.imageId && (
+                      <StyledDelete onClick={(e) => handleDelete(e, photo.imageId)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </StyledDelete>
+                    )}
+                  </ImageWrapper>
 
-              {photos.map((photo, i) => (
-                <StyledBox key={i} onClick={() => setClickedForDelete(clickedForDelete === photo.imageId ? null : photo.imageId)}>
-                  <StyledTitle>{photo.text}</StyledTitle>
-                  <StyledImage src={photo.imageUrl || 'notfound.png'} alt="image" className='h-[100px]'
-                    onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => { e.currentTarget.src = './notfound.png'; }}
-                  />
-                  <StyledDelete
-                    style={{ display: clickedForDelete === photo.imageId ? 'block' : 'none' }}
-                    onClick={() => handleDelete(photo.imageId)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </StyledDelete>
                   <StyledText>{photo.uploadTime}</StyledText>
                 </StyledBox>
-              ))
-              }
+              ))}
             </StyledImgContainer>
           )}
         </>
-      )
-      }
+      )}
     </StyledContainer>
   )
 }

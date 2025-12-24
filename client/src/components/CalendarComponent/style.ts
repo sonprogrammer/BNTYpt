@@ -1,228 +1,103 @@
-
 import styled from "styled-components";
 import tw from "twin.macro";
 
-
-
 export const StyledBox = styled.div`
-    ${tw`
-        flex
-        flex-col
-        // lg:w-[100vw]
-        lg:items-center
-        lg:gap-4
-        p-2
-        mt-2
-    `}
-`
+    ${tw`flex flex-col items-center w-full max-w-[450px] mx-auto p-4 gap-6`}
+`;
 
 export const StyledContainer = styled.div`
-    ${tw`
-        w-full
-        lg:w-2/3
-        mx-auto
-        mb-4
-    `}
-    max-width: 320px;
-    min-width: 320px;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    flex-grow: 0;
-`
+    ${tw`w-full bg-[#1a1a1a] rounded-[2.5rem] p-6 border border-white/5 shadow-2xl`}
+`;
 
 export const StyledTitle = styled.div`
-    ${tw`
-        flex
-        justify-between
-        items-center
-        mb-3
-        border-b
-        p-3
-    `}
-    p{
-        ${tw`
-            cursor-pointer
-            text-slate-600
-            font-extrabold
-        `}
-        &:hover{
-            background-color: rgb(185 28 28);
-            color: white;
-            padding: 3px;
-            border-radius: 30px;
-        }
+    ${tw`flex justify-between items-center mb-6`}
+    h1 { ${tw`text-xl font-black text-white`} }
+    .add-btn {
+        ${tw`w-10 h-10 flex items-center justify-center bg-red-700 text-white rounded-full hover:bg-red-600 transition-all shadow-lg shadow-red-900/20 active:scale-90`}
     }
-`
+`;
 
 export const StyledHeader = styled.header`
-    ${tw`
-        flex
-        justify-between
-        items-center
-        mb-2
-
-    `}
-    
-`
+    ${tw`flex justify-between items-center mb-6 px-2`}
+    h2 { ${tw`text-lg font-bold text-gray-200 uppercase tracking-widest`} }
+`;
 
 export const StyledIcon = styled.div`
-    ${tw`
-        cursor-pointer
-    `}
-    &:hover{
-        color: red;
-    }
-`
+    ${tw`w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white cursor-pointer transition-colors`}
+`;
 
 export const StyledGrid = styled.div`
-    ${tw`
-        grid
-        grid-cols-7
-        gap-1
-        w-[100%]
-    `}
-`
+    ${tw`grid grid-cols-7 gap-1 w-full`}
+`;
+
 export const StyledDay = styled.div`
-    ${tw`
-        text-center
-        font-bold
-    `}
-`
+    ${tw`text-center text-[10px] font-black text-gray-600 pb-4 uppercase tracking-tighter`}
+`;
+
 export const StyledCell = styled.div<{ isToday: boolean; isSelected: boolean; isDisabled: boolean }>`
-${tw`p-2 text-center cursor-pointer relative`}
-${({ isToday }) => isToday && tw`bg-stone-700 text-white rounded-full`}
-${({ isSelected }) => isSelected && tw`bg-red-900 text-white rounded-full`}
-${({ isDisabled }) => isDisabled && tw`text-gray-700`}
+    ${tw`aspect-square flex flex-col items-center justify-center cursor-pointer relative rounded-xl transition-all text-sm font-medium`}
+    
+    color: ${({ isDisabled }) => (isDisabled ? '#374151' : '#f3f4f6')};
+    
+    ${({ isToday }) => isToday && tw`bg-white/10 text-red-500 font-bold`}
+    ${({ isSelected }) => isSelected && tw`bg-red-700 text-white shadow-lg shadow-red-900/30 scale-105 z-10`}
+    
+    &:hover { ${tw`bg-white/5`} }
 `;
 
 export const DotWrapper = styled.div`
-    ${tw`
-        absolute 
-        left-1/2 
-        transform -translate-x-1/2 
-        flex 
-        space-x-2
-    `}
-
+    ${tw`absolute bottom-1.5 flex gap-0.5`}
 `;
 
-export const Dot = styled.div<{ color : string }>`
-    ${tw`
-        w-2
-        h-2
-        rounded-full
-    `}
-    background-color: ${({ color }) => color}
-`
+export const Dot = styled.div<{ color: string }>`
+    ${tw`w-1 h-1 rounded-full`}
+    background-color: ${({ color }) => color};
+`;
 
 export const StyledDetail = styled.div`
-    ${tw`
-        p-4
-        bg-stone-400
-        rounded-lg
-        w-[320px]
-        flex-shrink-0
-
-    `}
-
-    max-height: 220px;
-    overflow-y: auto;
-    @media (max-width:768px) {
-        ${tw`
-            mt-4
-            w-[320px]
-        `
-       }    
-}
-`
+    ${tw`w-full bg-[#1a1a1a] rounded-[2rem] p-6 border border-white/5 shadow-xl`}
+    
+    .detail-header { ${tw`mb-4 pb-4 border-b border-white/5`} 
+        h3 { ${tw`text-gray-400 font-bold text-sm tracking-widest`} }
+    }
+    
+    .detail-content {
+        ${tw`flex flex-col gap-4`}
+        .item {
+            ${tw`flex flex-col gap-1`}
+            .label { 
+                ${tw`text-[10px] font-black px-2 py-0.5 rounded w-fit`}
+                &.diet { ${tw`bg-yellow-500/10 text-yellow-500`} }
+                &.workout { ${tw`bg-red-500/10 text-red-500`} }
+            }
+            p { ${tw`text-gray-300 text-sm leading-relaxed`} }
+        }
+    }
+`;
 
 export const StyledModal = styled.div`
-    ${tw`
-        fixed
-        top-0
-        left-0
-        w-full
-        h-full
-        flex
-        justify-center
-        items-center
-        bg-black
-        bg-opacity-50
-    `}
-`
+    ${tw`fixed inset-0 flex items-center justify-center z-[2000] p-4`}
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+`;
 
 export const StyledModalBox = styled.div`
-    ${tw`
-        bg-stone-500
-        p-5
-        rounded-lg
-        w-[50%]
-        h-[70%]
-        shadow-2xl
-        relative
-    `}
-    @media(max-width:700px){
-        width: 90%;
-    }
-    display: grid;
-`
-
+    ${tw`bg-[#1a1a1a] p-8 rounded-[2rem] w-full max-w-[400px] border border-white/10 shadow-2xl relative flex flex-col gap-6`}
+`;
 
 export const StyledCloseBtn = styled.div`
-    ${tw`
-        absolute
-        right-5
-        top-5
-        cursor-pointer
-    `}
-    &:hover{
-        color: red;
-    }
-`
+    ${tw`absolute right-6 top-6 text-gray-500 hover:text-white cursor-pointer transition-all`}
+`;
 
 export const StyledModalContents = styled.div`
-    ${tw`
-        flex-1
-        p-4
-    `}
-    flex: 1;
-    overflow: none;
-    h1{
-        ${tw`
-            text-xl
-            font-bold
-            text-red-900
-        `}
-    }
-`
+    ${tw`flex flex-col gap-2`}
+    label { ${tw`text-xs font-black text-red-600 uppercase tracking-widest`} }
+`;
+
 export const StyledModalTextArea = styled.textarea`
-    ${tw`
-        w-full
-        border-[1px]
-        border-red-900
-        rounded-md
-        resize-none
-        h-[80%]
-        outline-none
-        font-bold
-        mt-3
-        p-3
-        bg-stone-400
-    `}
-`
+    ${tw`w-full h-32 p-4 bg-white/5 border border-white/10 rounded-2xl text-white text-sm outline-none focus:border-red-600 transition-all resize-none`}
+`;
 
 export const StyledBtn = styled.button`
-    ${tw`
-        px-4
-        py-2
-        mt-auto
-        rounded-md
-        text-red-600
-        font-bold
-        bg-blue-950
-    `}
-    &:hover{
-        background-color: rgb(30 58 138);
-    }
-`
+    ${tw`w-full py-4 bg-red-700 hover:bg-red-600 text-white font-black rounded-2xl transition-all active:scale-95 shadow-lg shadow-red-900/20`}
+`;

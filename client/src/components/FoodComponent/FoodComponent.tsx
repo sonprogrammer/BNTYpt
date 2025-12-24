@@ -8,7 +8,6 @@ interface AddPhotoComponentProps {
 const FoodComponent = ({onClick} : AddPhotoComponentProps) => {
   return (
     <div>
-      {/* <PhotoComponent /> */}
       <AddPhotoComponent onClick={onClick}/>
     </div>
   )

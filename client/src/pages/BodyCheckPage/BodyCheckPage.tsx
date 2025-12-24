@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AddPhotoComponent, BodyCheckComponent, PostForm } from '../../components'
-import { StylecContainer, StyledClose, StyledPostBox, StyledPostForm } from './style'
+import {  StyledCloseBtn, StyledModalOverlay, StyledPageContainer, StyledPostFormContainer } from './style'
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -31,30 +31,30 @@ const BodyCheckPage = () => {
 
   
   return (
-    <StylecContainer className='b'>
-
+    <StyledPageContainer>
         <BodyCheckComponent refresh={refresh}/>
-        {showUploadModal ? (
-                    <></>
-                    ):(
-                        <AddPhotoComponent onClick={handleAddPhotoClick}/>
-                    )
-                }
-        {showUploadModal && 
-        <>
-        <div className='fixed inset-0 bg-black bg-opacity-50'></div>
-        <StyledPostBox onClick={handleCloseModal}>
-                        <StyledPostForm onClick={(e) => e.stopPropagation()}>
-                            <StyledClose onClick={handleCloseModal}>
-                                <FontAwesomeIcon icon={faXmark} size='xl' />
-                            </StyledClose>
-                            <PostForm addPost={addPost}/>
-                        </StyledPostForm>
-                    </StyledPostBox>
-        </>
-        
-        }
-    </StylecContainer>
+
+        {!showUploadModal && (
+          <AddPhotoComponent onClick={handleAddPhotoClick}/>
+        )}
+
+        {showUploadModal && (
+          <StyledModalOverlay onClick={handleCloseModal}>
+            <StyledPostFormContainer onClick={(e) => e.stopPropagation()}>
+                <StyledCloseBtn onClick={handleCloseModal}>
+                    <FontAwesomeIcon icon={faXmark} />
+                </StyledCloseBtn>
+                
+                <div className="modal-header">
+                  <h2>오늘의 변화 기록</h2>
+                  <p>운동 후의 멋진 모습을 기록하세요!</p>
+                </div>
+
+                <PostForm addPost={addPost}/>
+            </StyledPostFormContainer>
+          </StyledModalOverlay>
+        )}
+    </StyledPageContainer>
   )
 }
 

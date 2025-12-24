@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil'
 import './assets/styles/fonts.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
+import { Toaster } from 'react-hot-toast'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 
@@ -20,6 +20,7 @@ root.render(
   <QueryClientProvider client={queryClient}>
   <RecoilRoot>
     <BrowserRouter>
+    <Toaster position="top-center" reverseOrder={false} />
       <App />
     </BrowserRouter>
   </RecoilRoot>

@@ -1,65 +1,67 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 
-
 export const StyledNotMember = styled.div`
     ${tw`
-        flex
-        justify-center
-        items-center
-        h-full
-        text-3xl
-        font-bold
+        flex flex-col justify-center items-center
+        h-[60vh] text-xl font-bold text-gray-700
     `}
-`
-
+`;
 
 export const StyledContainer = styled.div`
     ${tw`
-        flex
-        border-b
-        border-black
-        p-7
+        flex items-center
+        p-5 md:p-6
+        border-b border-white/5
+        cursor-pointer
+        transition-all duration-200
         relative
     `}
-    &:hover{
-        background-color: rgba(0, 0, 0, 0.5);
-        transition: background-color 0.3s;
-        color: rgb(168 162 158);
+    
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.03);
     }
-`
+
+    .arrow-icon {
+        ${tw`text-gray-800 text-xs ml-auto`}
+    }
+`;
+
 export const StyledProfile = styled.div`
     ${tw`
-        border
-        rounded-full
+        flex-shrink-0
+        w-14 h-14 rounded-2xl
+        bg-gray-800 border border-white/10
+        overflow-hidden
     `}
-    img{
-        ${tw`
-            rounded-full
-        `}
+    img {
+        ${tw`w-full h-full object-cover`}
     }
-`
+`;
+
 export const StyledContent = styled.div`
     ${tw`
-        ml-7
-        flex
-        flex-col
-        justify-center
-        
+        ml-5 flex flex-col flex-1
     `}
-    h2{
-        ${tw`
-            text-xl
-            font-bold
-            
-        `}
+    
+    .top-row {
+        ${tw`flex items-center gap-2 mb-1`}
+        h2 { ${tw`text-lg font-bold text-gray-100`} }
     }
-    span{
-        ${tw`
-            absolute
-            right-5
-            font-bold
-            text-xl
-        `}
+`;
+
+export const LastMsgWrapper = styled.div`
+    ${tw`flex justify-between items-center`}
+    .msg-text {
+        ${tw`text-sm text-gray-500 truncate max-w-[200px] md:max-w-[300px]`}
     }
-`
+`;
+
+export const UnreadBadge = styled.span`
+    ${tw`
+        bg-red-600 text-white
+        text-[10px] font-black
+        px-1.5 py-0.5 rounded-md
+        animate-pulse
+    `}
+`;

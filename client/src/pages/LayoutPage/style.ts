@@ -8,22 +8,23 @@ export const StyledContainer = styled.div`
        h-screen
        flex
        flex-col
+       bg-black
     `}
 `
 export const StyledOutlet = styled.div`
     ${tw`
         flex-1
         overflow-auto
-        bg-stone-500
-
+        bg-gray-950
+        text-gray-100
     `}
 `
 
 export const StyledMenus = styled.div`
     ${tw`
-        // fixed
-        // bottom-0
-        // left-0
+        
         w-full
+        bg-gray-950
+        border-t border-white/5
     `}
 `

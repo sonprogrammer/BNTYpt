@@ -104,9 +104,9 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
       {orderedPosts.map((post, i) => (
         <PostItemComponent key={i} post={post} handleClick={() => handleClick(post)} />
       ))}
+      
       {modalOpen && selectedPost && (
-        <StyledModalContainer className='modal ' onClick={handleCloseModal}>
-
+        <StyledModalContainer onClick={handleCloseModal}>
           <StyledModalBox onClick={(e) => e.stopPropagation()}>
             <StyledCloseBtn onClick={handleCloseModal}>
               <FontAwesomeIcon icon={faX} />
@@ -114,59 +114,60 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
 
             {editMode ? (
               <StyledEditBox>
-                <StyledEditTitle type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
+                <div className="label">제목 수정</div>
+                <StyledEditTitle 
+                   type="text" 
+                   value={editTitle} 
+                   onChange={(e) => setEditTitle(e.target.value)} 
+                />
+                <div className="label">내용 수정</div>
+                <StyledEditText 
+                   value={editText} 
+                   onChange={(e) => setEditText(e.target.value)} 
+                />
                 <StyledEditBtnGroup>
-                  <button onClick={() => handleSave(selectedPost._id)}>save</button>
-                  <button onClick={() => setEditMode(false)}>cancle</button>
+                  <button className="save" onClick={() => handleSave(selectedPost._id)}>저장하기</button>
+                  <button className="cancel" onClick={() => setEditMode(false)}>취소</button>
                 </StyledEditBtnGroup>
-                <StyledEditText value={editText} onChange={(e) => setEditText(e.target.value)} />
               </StyledEditBox>
-            )
-              :
-              (
-                <>
-                  <StyledTitle>{selectedPost.title}</StyledTitle>
-                  <StyledDate>{dayjs(selectedPost.uploadTime).format('MM.DD(dd)')}</StyledDate>
+            ) : (
+              <>
+                <StyledTitle>{selectedPost.title}</StyledTitle>
+                <StyledDate>{dayjs(selectedPost.uploadTime).format('YYYY. MM. DD (dd)')}</StyledDate>
 
-                  {currentUserRole === 'trainer' ?
-                    <StyledTrainerFn>
-                      <IconButton onClick={handleEdit} sx={{ border: '1px solid' }}>
-                        <EditIcon />
-                      </IconButton>
+                {currentUserRole === 'trainer' && (
+                  <StyledTrainerFn>
+                    <IconButton 
+                      onClick={handleEdit} 
+                      sx={{ color: '#9ca3af', border: '1px solid #374151', '&:hover': { color: 'white', borderColor: 'white' } }}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
 
-                      <IconButton aria-label="delete" sx={{ color: 'darkred', border: '1px solid' }}
-                       onClick={()=>handleDelete(selectedPost._id)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </StyledTrainerFn>
-                    :
-                    <></>
-                  }
-                  {selectedPost.images && selectedPost.images.length > 0 && (
-                    <StyledImage>
-                      {selectedPost.images.map((image, index) => (
-                        <img
-                          key={index}
-                          src={image}
-                          alt={'노트이미지'}
-                          style={{ maxWidth: '100%', height: 'auto', marginTop: '10px' }}
-                        />
-                      ))}
-                    </StyledImage>
-                  )}
+                    <IconButton 
+                      aria-label="delete" 
+                      onClick={() => handleDelete(selectedPost._id)}
+                      sx={{ color: '#ef4444', border: '1px solid #ef4444', '&:hover': { bgcolor: 'rgba(239, 68, 68, 0.1)' } }}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </StyledTrainerFn>
+                )}
 
-                  <StyledText>{selectedPost.text}</StyledText>
-                </>
-              )
-            }
+                {selectedPost.images && selectedPost.images.length > 0 && (
+                  <StyledImage>
+                    {selectedPost.images.map((image, index) => (
+                      <img key={index} src={image} alt={'노트이미지'} />
+                    ))}
+                  </StyledImage>
+                )}
 
-
+                <StyledText>{selectedPost.text}</StyledText>
+              </>
+            )}
           </StyledModalBox>
-          
-
         </StyledModalContainer>
-      )
-      }
+      )}
     </StyledContainer>
   )
 }

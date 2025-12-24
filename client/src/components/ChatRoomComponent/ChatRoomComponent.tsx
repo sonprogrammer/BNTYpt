@@ -2,14 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { StyledArrow, StyledContainer, StyledMessage, StyledMessageBox, StyledPlus, StyledSendEl, Styledupper } from './style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import socket from '../../socket';
-import loadingBar from '../../assets/loading.gif';
 import { axiosInstance } from '../../utils/axiosInstance';
-
+import { BeatLoader } from 'react-spinners';
+import { faPaperPlane, faImage, faCommentDots, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -225,81 +224,75 @@ const ChatRoomComponent = () => {
     }
 
     return (
-        <StyledContainer className='hi'>
-
+        <StyledContainer>
             <Styledupper>
                 <StyledArrow>
                     <Link to='/chat'>
                         <FontAwesomeIcon icon={faArrowLeft} />
                     </Link>
                 </StyledArrow>
-                <h2>{userId} chat</h2>
+                <h2>{userId}</h2>
             </Styledupper>
-            <StyledMessageBox className='hidd'>
-                <>
-                    {loading ? (
 
-                        <>
-                        <div className='flex justify-center items-center h-full'>
-                            <img src={loadingBar} alt="로딩이미지" className='w-20' />
-                        </div>
-                    </>
-                    ) 
-                    : messages.length > 0 ? (
-                        messages.map((message, i) => (
-                            <StyledMessage key={i} isMine={message.isMine}>
-                                {message.type === 'media' ?
-                                    <img src={message.data} alt={'이미지'} className="max-w-xs rounded" />
-                                    :
+            <StyledMessageBox>
+                {loading ? (
+                    <div className='flex flex-col justify-center items-center h-full gap-3'>
+                        <BeatLoader color="#ef4444" size={10} />
+                        <p className="text-gray-500 text-xs">메시지를 불러오는 중...</p>
+                    </div>
+                ) : messages.length > 0 ? (
+                    messages.map((message, i) => (
+                        <StyledMessage key={i} isMine={message.isMine}>
+                            <div className="bubble">
+                                {message.type === 'media' ? (
+                                    <img src={message.data} alt='media' className="rounded-lg max-w-full" />
+                                ) : (
                                     <p>{message.text}</p>
-                                }
-                                {message.isMine && message.readBy ? (
-                                    message.readBy.some(id => id !== user?.objectId) ? (
-                                        <span className='text-sm'></span>
-                                    ) : (
-                                        <span className='text-sm'>안읽음</span>
-                                    )
-                                ) : null}
-
-
-                            </StyledMessage>
-                        ))
-                    ) : (
-                        <p className='text-center flex items-center justify-center h-full font-bold text-2xl text-red-900'>
-                            there is no message.
-                        </p>
-                    )}
-                </>
-                <div ref={messageBoxRef} />
-            </StyledMessageBox>
-            <StyledSendEl>
-                <input
-                    type="text"
-                    value={input}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyDown}
-                    ref={inputFocusRef}
-                />
-                {preview && (
-                    <div className="relative w-16 h-16 mr-2">
-                        <img src={preview} alt="preview" className="w-16 h-16 object-cover bg-black rounded" />
-                        <button
-                            className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1"
-                            onClick={() => {
-                                setSelectedFile(null)
-                                setPreview(null)
-                            }}
-                        >
-                            ✕
-                        </button>
+                                )}
+                            </div>
+                            
+                            {message.isMine && (
+                                <span className="status">
+                                    {message.readBy?.some(id => id !== user?.objectId) ? '' : '1'}
+                                </span>
+                            )}
+                        </StyledMessage>
+                    ))
+                ) : (
+                    <div className='flex flex-col items-center justify-center h-full opacity-20'>
+                        <FontAwesomeIcon icon={faCommentDots} size="3x" className="mb-4" />
+                        <p className='font-bold text-xl'>대화 내용이 없습니다.</p>
                     </div>
                 )}
+                <div ref={messageBoxRef} />
+            </StyledMessageBox>
 
+            <StyledSendEl>
                 <StyledPlus onClick={handlePlusClick}>
-                    <FontAwesomeIcon icon={faPlus} />
+                    <FontAwesomeIcon icon={faImage} />
                 </StyledPlus>
+                
+                <div className="input-wrapper">
+                    <input
+                        type="text"
+                        placeholder="메시지를 입력하세요..."
+                        value={input}
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}
+                        ref={inputFocusRef}
+                    />
+                    {preview && (
+                        <div className="preview-overlay">
+                            <img src={preview} alt="preview" />
+                            <button onClick={() => { setSelectedFile(null); setPreview(null); }}>✕</button>
+                        </div>
+                    )}
+                </div>
+
                 <input type="file" ref={fileInputRef} onChange={handleFilePreview} className='hidden' accept='image/*,video/*' />
-                <button onClick={handleSendMessage}>send</button>
+                <button className="send-btn" onClick={handleSendMessage}>
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                </button>
             </StyledSendEl>
         </StyledContainer>
     )

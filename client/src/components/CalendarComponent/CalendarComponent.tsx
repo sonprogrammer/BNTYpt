@@ -1,14 +1,12 @@
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isSameMonth, isSameDay, getDay, addDays } from 'date-fns'
 import { useCallback, useEffect, useState } from 'react'
 import { Dot, DotWrapper, StyledBox, StyledBtn, StyledCell, StyledCloseBtn, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon, StyledModal, StyledModalBox, StyledModalContents, StyledModalTextArea, StyledTitle } from './style'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark, faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
-
-
+import { faXmark, faAngleRight, faAngleLeft, faPlus, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import { axiosInstance } from '../../utils/axiosInstance';
+import toast from 'react-hot-toast'
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -104,7 +102,7 @@ const CalendarComponent = () => {
 
     const handlePostClick = async() => {
         if(!selectedDate){
-            alert('날짜를 선택하세요')
+            toast.error('날짜를 선택해주세요.')
             return
         }
         const formatDate = format(selectedDate, 'yyyy-MM-dd')
@@ -120,13 +118,6 @@ const CalendarComponent = () => {
            }else if(user.email){
             formData.email = user.email
            }
-           //기존
-        //    const res = await axios.post(`${apiUrl}/api/calendar`, formData, {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         Authorization: `Bearer ${user.kakaoAccessToken || user.token}`
-        //     }
-        //    })
            const res = await axiosInstance.post(`${apiUrl}/api/calendar`, formData)
             if(res.data.success){
                 const newRecord: Records = {
@@ -135,16 +126,17 @@ const CalendarComponent = () => {
                     diet: diet,
                     kakaoId: user.kakaoId,
                     email: user.email,
-
                 }
     
                 setRecords([...records, newRecord])
                 setAdd(false)
+                toast.success('오늘의 기록이 저장되었습니다!')
 
             }
 
         }catch(error){
             console.log('error', error)
+            toast.error('저장에 실패했습니다.')
         }
     }
 
@@ -156,38 +148,39 @@ const CalendarComponent = () => {
             <StyledBox>
                 <StyledContainer>
                     <StyledTitle>
-                        <h1 className='font-bold text-3xl text-slate-900'>운동, 식단 기록</h1>
-                        <p onClick={handleAddClicked}>추가하기</p>
+                        <h1><FontAwesomeIcon icon={faCalendarCheck} className="mr-2 text-red-600" />기록 캘린더</h1>
+                        <button className="add-btn" onClick={() => setAdd(true)}>
+                            <FontAwesomeIcon icon={faPlus} />
+                        </button>
                     </StyledTitle>
+                    
                     <StyledHeader>
-                        <StyledIcon onClick={handlePreviousMonth}>
-                            <FontAwesomeIcon icon={faAngleLeft} size='2x' />
+                        <StyledIcon onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}>
+                            <FontAwesomeIcon icon={faAngleLeft} />
                         </StyledIcon>
-                        <h2>{format(currentDate, 'MMM yyyy')}</h2>
-                        <StyledIcon onClick={handleNextMonth}>
-                            <FontAwesomeIcon icon={faAngleRight} size='2x' />
+                        <h2>{format(currentDate, 'MMMM yyyy')}</h2>
+                        <StyledIcon onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}>
+                            <FontAwesomeIcon icon={faAngleRight} />
                         </StyledIcon>
                     </StyledHeader>
+
                     <StyledGrid>
-                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                            <StyledDay>{day}</StyledDay>
-                        ))}
-                        {leadingEmptyDays.map((_, i) => (
-                            <div></div>
-                        ))}
+                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => <StyledDay key={day}>{day}</StyledDay>)}
+                        {leadingEmptyDays.map((_, i) => <div key={`empty-${i}`} />)}
                         {days.map(day => {
                             const record = getRecordForDate(day)
                             return (
                                 <StyledCell
-                                    onClick={() => handleDayClick(day)}
+                                    key={day.toString()}
+                                    onClick={() => setSelectedDate(day)}
                                     isToday={isToday(day)}
-                                    isSelected={isSameDay(day, selectedDate || new Date())}
+                                    isSelected={isSameDay(day, selectedDate)}
                                     isDisabled={!isSameMonth(day, currentDate)}
                                 >
-                                    {format(day, 'd')}
+                                    <span>{format(day, 'd')}</span>
                                     <DotWrapper>
-                                        {record?.diet && <Dot color='yellow' />}
-                                        {record?.workout && <Dot color='blue' />}
+                                        {record?.diet && <Dot color='#fbbf24' />}
+                                        {record?.workout && <Dot color='#ef4444' />}
                                     </DotWrapper>
                                 </StyledCell>
                             )
@@ -195,53 +188,44 @@ const CalendarComponent = () => {
                     </StyledGrid>
                 </StyledContainer>
 
-                {selectedRecord && (
-                    <StyledDetail>
-                        <h2 className='mb-2 text-center'>{format(selectedDate!, 'yy년 M월 d일')}</h2>
-                        <div className='border border-stone-300 ' />
-                        {selectedRecord.diet && (
-                            <div className='my-3'>
-                                <h1 className='text-lg text-yellow-300 font-bold'>식단:</h1>
-                                <p>{selectedRecord.diet}</p>
-                            </div>
-                        )}
-                        <div className='border border-stone-300 ' />
-                        {selectedRecord.workout && (
-                            <div className='my-3'>
-                                <h1 className='text-lg text-blue-600 font-bold'>운동:</h1>
-                                <p>{selectedRecord.workout}</p>
-                            </div>
-                        )}
-                    </StyledDetail>
-                )}
+                <StyledDetail>
+                    <div className="detail-header">
+                        <h3>{format(selectedDate, 'yyyy. MM. dd')}</h3>
+                    </div>
+                    <div className="detail-content">
+                        <div className="item">
+                            <span className="label diet">DIET</span>
+                            <p>{selectedRecord?.diet || '기록된 식단이 없습니다.'}</p>
+                        </div>
+                        <div className="item">
+                            <span className="label workout">WORKOUT</span>
+                            <p>{selectedRecord?.workout || '기록된 운동이 없습니다.'}</p>
+                        </div>
+                    </div>
+                </StyledDetail>
             </StyledBox>
+
             {add && (
-                <StyledModal onClick={handleAddClicked}>
+                <StyledModal onClick={() => setAdd(false)}>
                     <StyledModalBox onClick={(e) => e.stopPropagation()}>
-                        <StyledCloseBtn onClick={handleAddClicked}>
-                            <FontAwesomeIcon icon={faXmark} size='xl' />
-                        </StyledCloseBtn>
+                        <StyledCloseBtn onClick={() => setAdd(false)}><FontAwesomeIcon icon={faXmark} /></StyledCloseBtn>
                         <StyledModalContents>
-                            <h1>운동</h1>
+                            <label>오늘의 운동</label>
                             <StyledModalTextArea 
-                                placeholder='당신의 운동을 기록하세요'
-                                className='placeholder:text-red-950 placeholder:opacity-50'
+                                placeholder='수행한 운동 루틴을 적어주세요'
                                 value={workout}
                                 onChange={(e) => setWorkout(e.target.value)}
-                                >
-                            </StyledModalTextArea>
+                            />
                         </StyledModalContents>
                         <StyledModalContents>
-                            <h1>식단</h1>
+                            <label>오늘의 식단</label>
                             <StyledModalTextArea 
-                                placeholder='당신의 식단을 기록하세요'
-                                className='placeholder:text-red-950 placeholder:opacity-50'
+                                placeholder='무엇을 드셨나요?'
                                 value={diet}
                                 onChange={(e) => setDiet(e.target.value)}
-                                >
-                            </StyledModalTextArea>
+                            />
                         </StyledModalContents>
-                        <StyledBtn onClick={handlePostClick}>게시하기</StyledBtn>
+                        <StyledBtn onClick={handlePostClick}>기록 저장하기</StyledBtn>
                     </StyledModalBox>
                 </StyledModal>
             )}

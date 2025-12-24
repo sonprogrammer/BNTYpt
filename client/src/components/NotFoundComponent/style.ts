@@ -2,56 +2,45 @@ import styled, { keyframes } from "styled-components";
 import tw from "twin.macro";
 
 export const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 `;
 
-export const spin = keyframes`
-from {
-  transform: rotate(0deg);
-}
-to {
-  transform: rotate(360deg);
-}
-`;
-
-export const slideIn = keyframes`
-  from {
-    transform: translateY(-50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+export const float = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
 `;
 
 export const StyledContainer = styled.div`
-  ${tw`flex flex-col items-center justify-center h-screen`}
-  background-color: black;
+  ${tw`flex flex-col items-center justify-center h-screen bg-gray-950`}
   text-align: center;
-  animation: ${fadeIn} 1s ease-in-out;
+  animation: ${fadeIn} 0.8s ease-in-out;
 `;
 
 export const StyledEmoji = styled.div`
-  ${tw`text-5xl mb-5`}
-  animation: ${spin} 2s linear infinite;
+  ${tw`text-8xl mb-8`}
+  animation: ${float} 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
 `;
 
 export const StyledText = styled.div`
-  ${tw`text-5xl text-white font-bold mb-5`}
-  animation: ${slideIn} 1s ease-in-out;
+  ${tw`text-2xl md:text-4xl text-white font-black mb-2 uppercase tracking-tighter`}
+  span {
+    ${tw`text-red-700`}
+  }
+`;
+
+export const StyledSubText = styled.p`
+  ${tw`text-gray-500 mb-10 font-medium`}
 `;
 
 export const StyledBackLink = styled.button`
-  ${tw`text-black bg-white px-5 py-2 rounded-lg text-lg font-medium transition-colors`}
-  &:hover{
-    ${tw`
-        bg-gray-200
-      `}
-  }
+  ${tw`
+    px-8 py-3 
+    bg-red-700 text-white 
+    rounded-full text-sm font-black uppercase tracking-widest
+    transition-all duration-300
+    hover:bg-red-600 hover:shadow-lg hover:shadow-red-900/40
+    active:scale-95
+  `}
 `;

@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import AddMemeberComponent from './AddMemeberComponent'
-import { StyledPtAddBtn } from './style'
+import { StyledDashboardCard, StyledInfoText, StyledMainContainer, StyledPtAddBtn } from './style'
 import { axiosInstance } from '../../utils/axiosInstance'
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -34,30 +34,45 @@ const MainPage = () => {
   }, [getUserPtCount])
 
 
-  const handleClick = () => {
-    setAddMember(true)
-  }
-
-  const closeModal = () => {
-    setAddMember(false)
-  }
   return (
-    <div className='h-full flex flex-col items-center justify-center'>
-      {user?.role === 'trainer' ? (
-        <div className='flex flex-col gap-2 items-center'>
-          <h1 className=' text-xl font-bold'>{user.name}트레이너님</h1>
-          <QrcodeComponent role={user.role} />
-          <StyledPtAddBtn onClick={handleClick}>PT추가</StyledPtAddBtn>
-          {addMemeber && <AddMemeberComponent closeModal={closeModal} />}
-        </div>
-      ) : (
-        <div className='flex flex-col gap-2 items-center'>
-          <h1 className='text-xl font-bold'>{user?.name}님</h1>
-          <h1 className='text-xl font-bold'>남은 pt횟수 : <span className='text-red-700'>{user?.ptCount}</span></h1>
-          <QrcodeComponent role={user?.role} />
-        </div>
-      )}
-    </div>
+    <StyledMainContainer>
+      <StyledDashboardCard>
+        {user?.role === 'trainer' ? (
+          <div className='flex flex-col gap-6 items-center w-full'>
+            <StyledInfoText>
+              <span className="role">TRAINER</span>
+              <h2>{user.name} <span>트레이너님</span></h2>
+              <p>회원님의 QR리더기로 스캔하여 수업을 체크하세요.</p>
+            </StyledInfoText>
+
+            <QrcodeComponent role={user.role} />
+
+            <StyledPtAddBtn onClick={() => setAddMember(true)}>
+              신규 PT 회원 추가
+            </StyledPtAddBtn>
+
+            {addMemeber && <AddMemeberComponent closeModal={() => setAddMember(false)} />}
+          </div>
+        ) : (
+          <div className='flex flex-col gap-6 items-center w-full'>
+            <StyledInfoText>
+              <span className="role member">MEMBER</span>
+              <h2>{user?.name} <span>님</span></h2>
+            </StyledInfoText>
+
+            <div className="pt-count-badge">
+              <span className="label">남은 PT 횟수</span>
+              <span className="count">{user?.ptCount}</span>
+            </div>
+
+            <QrcodeComponent role={user?.role} />
+            
+            <p className="hint-text">트레이너에게 QR 코드를 보여주세요.</p>
+          </div>
+        )}
+      </StyledDashboardCard>
+    </StyledMainContainer>
+  
   )
 }
 

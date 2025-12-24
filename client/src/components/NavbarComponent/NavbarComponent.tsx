@@ -1,36 +1,40 @@
-
-import { StyledMenus } from './style'
-import { Link } from 'react-router-dom'
+import { StyledNavbar, NavItem } from './style'
+import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faClipboard, faComment } from '@fortawesome/free-solid-svg-icons';
-import { faImage } from '@fortawesome/free-solid-svg-icons';
-
+import { faCalendarDays, faClipboardList, faCommentDots, faImages } from '@fortawesome/free-solid-svg-icons';
 
 const NavbarComponent = () => {
   return (
-      <StyledMenus>
-        <Link to="/bodycheck">
-          <button>
-          <FontAwesomeIcon icon={faImage} />
-          </button>
-        </Link>
-        <Link to="/calendar">
-          <button>
-            <FontAwesomeIcon icon={faCalendar} />
-          </button>
-        </Link>
-        <Link to="/chat">
-          <button>
-            <FontAwesomeIcon icon={faComment} />
-          </button>
-        </Link>
-        <Link to="/note">
-          <button>
-            <FontAwesomeIcon icon={faClipboard}/>
-          </button>
-        </Link>
-      </StyledMenus>
+    <StyledNavbar>
+      <NavLink to="/bodycheck" className={({ isActive }) => (isActive ? 'active' : '')}>
+        <NavItem>
+          <FontAwesomeIcon icon={faImages} />
+          <span>앨범</span>
+        </NavItem>
+      </NavLink>
+
+      <NavLink to="/calendar" className={({ isActive }) => (isActive ? 'active' : '')}>
+        <NavItem>
+          <FontAwesomeIcon icon={faCalendarDays} />
+          <span>일지</span>
+        </NavItem>
+      </NavLink>
+
+      <NavLink to="/chat" className={({ isActive }) => (isActive ? 'active' : '')}>
+        <NavItem>
+          <FontAwesomeIcon icon={faCommentDots} />
+          <span>채팅</span>
+        </NavItem>
+      </NavLink>
+
+      <NavLink to="/note" className={({ isActive }) => (isActive ? 'active' : '')}>
+        <NavItem>
+          <FontAwesomeIcon icon={faClipboardList} />
+          <span>노트</span>
+        </NavItem>
+      </NavLink>
+    </StyledNavbar>
   )
 }
 
-export default NavbarComponent
+export default NavbarComponent;

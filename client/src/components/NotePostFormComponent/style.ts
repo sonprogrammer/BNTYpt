@@ -1,100 +1,86 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 
-export const StyledContainerForm  = styled.form`
+export const StyledContainerForm = styled.form`
     ${tw`
-        p-5
-        border-[2px]
-        border-red-950
-        rounded-md
-        shadow-md
-        h-full
-        w-full
-        flex
-        flex-col
+        flex flex-col gap-4
+        w-full h-full
+        bg-transparent
     `}
-`
+`;
 
 export const StyledUpper = styled.section`
-    ${tw`
-        flex
-        items-center
-        relative
-    `}
-`
-
-export const StyledSelect = styled.select`
-        ${tw`
-            bg-stone-400
-            absolute
-            right-3
-        `}
-
-`
+    ${tw`flex flex-col gap-1 mb-2`}
+    .select-wrapper {
+        ${tw`flex justify-end`}
+    }
+`;
 
 export const StyledRecord = styled.h1`
     ${tw`
-        text-center
-        m-3
-        text-3xl
-        font-bold
-        text-red-900
-        flex-1
+        text-xs font-black text-red-600
+        tracking-[0.3em] uppercase
     `}
-`
+`;
+
+export const StyledSelect = styled.select`
+    ${tw`
+        bg-white/10 text-white text-xs font-bold
+        px-3 py-1.5 rounded-lg border border-white/10
+        outline-none cursor-pointer
+    `}
+    option { ${tw`bg-gray-900 text-white`} }
+`;
 
 export const StyledTitle = styled.input`
     ${tw`
-        w-full
-        p-1
-        border-[2px]
-        border-red-900
-        rounded-md
-        mb-1
-        bg-stone-400
-        outline-none
-        pl-5
-        font-bold
+        w-full p-4 rounded-2xl
+        bg-white/5 text-white font-bold text-lg
+        border border-white/10 outline-none
+        placeholder:text-gray-700
+        focus:border-red-700 transition-all
     `}
-`
+`;
 
 export const StyledTextArea = styled.textarea`
     ${tw`
-        w-full
-        h-full
-        p-5 
-        border-[2px]
-        border-red-900
-        rounded-md
-        bg-stone-400
-        resize-none
-        font-bold
-        outline-none
+        w-full flex-1 p-4 rounded-2xl
+        bg-white/5 text-gray-300 font-medium
+        border border-white/10 outline-none
+        placeholder:text-gray-700
+        resize-none leading-relaxed
+        focus:border-red-700 transition-all
     `}
-`
-
+`;
 
 export const StyledSubmitEl = styled.div`
-    ${tw`
-        flex
-        flex-col
-        mt-3
-        h-full
-        justify-end
-    `}
-`
+    ${tw`flex flex-col gap-4 pt-2`}
+
+    .file-input-wrapper {
+        label {
+            ${tw`
+                flex items-center gap-2
+                text-sm font-bold text-gray-400
+                cursor-pointer hover:text-white transition-colors
+            `}
+            svg { ${tw`text-red-700`} }
+        }
+    }
+`;
+
+export const ImagePreviewWrapper = styled.div`
+    ${tw`flex gap-2 overflow-x-auto py-1`}
+    img {
+        ${tw`w-20 h-20 object-cover rounded-xl border border-white/10 shadow-lg`}
+    }
+`;
 
 export const StyledBtn = styled.button`
     ${tw`
-        px-4 
-        py-2 
-        mt-auto
-        bg-blue-950 
-        rounded-md 
-        text-red-600
-        font-bold
+        w-full py-4 rounded-2xl
+        bg-red-700 text-white font-black text-sm
+        hover:bg-red-600 active:scale-95
+        transition-all shadow-lg shadow-red-900/20
+        disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed
     `}
-    &:hover{
-        background-color: rgb(30 58 138);
-    }
-`
+`;

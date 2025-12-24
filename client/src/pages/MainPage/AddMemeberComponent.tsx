@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { StyledBox, StyledBtn, StyledContainer, StyledInput, StyledMember, StyledSelect, StyledXIcon } from './style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faUserPlus, faArrowUp91 } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import { axiosInstance } from '../../utils/axiosInstance';
+import toast from 'react-hot-toast'
 const apiUrl = process.env.REACT_APP_API_URL;
 
 interface AddMemeberComponentProps {
@@ -30,6 +31,7 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
       }
     } catch (error) {
       console.error(error);
+      toast.error('회원 목록을 불러오지 못했습니다')
     }
   },[user.objectId])
 
@@ -42,7 +44,7 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
   };
 
   const handlePtCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPtCount(Number(e.target.value)); // PT 횟수 입력 처리
+    setPtCount(Number(e.target.value)); 
   };
 
   const handleSavePtCount = async () => {
@@ -52,13 +54,13 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
           memberId: selectedMember,
           ptCount,
         });
-        alert("PT 횟수가 성공적으로 저장되었습니다!");
+        toast.success(`${ptCount}회 저장이 완료되었습니다!`)
         closeModal(); 
       } catch (error) {
-        console.error("PT 횟수 저장 실패:", error);
+        console.error("PT 횟수 저장 실패. 다시 시도해주세요");
       }
     } else {
-      alert("회원과 PT 횟수를 선택해 주세요.");
+      toast.error("회원과 정확한 횟수를 입력해 주세요.");
     }
   };
 
@@ -67,33 +69,53 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
     e.stopPropagation();
   };
   return (
-    <StyledContainer onClick={handleContainerClick}>
-      <StyledBox onClick={handleBoxClick}>
+    <StyledContainer onClick={closeModal}>
+      <StyledBox onClick={(e) => e.stopPropagation()}>
         <StyledXIcon onClick={closeModal}>
-          <FontAwesomeIcon icon={faXmark} size='xl' />
+          <FontAwesomeIcon icon={faXmark} />
         </StyledXIcon>
-        <StyledMember>
+        
+        <div className="title-section">
+          <h2>PT 수업 추가</h2>
+          <p>회원을 선택하고 부여할 횟수를 입력하세요.</p>
+        </div>
 
-          <StyledSelect name="member"
+        <StyledMember>
+          <div className="input-label">
+            <FontAwesomeIcon icon={faUserPlus} />
+            <span>대상 회원</span>
+          </div>
+          <StyledSelect 
             value={selectedMember || ''}
             onChange={(e) => setSelectedMember(e.target.value)}
           >
-            <option value="nametag" disabled>member</option>
-            {chatRooms.map((room) => (
-              <option key={room.memberId} value={room.memberId}>
-                {room.memberName}
-              </option>
-            ))}
+            {chatRooms.length === 0 ? (
+                <option value="">연결된 회원이 없습니다</option>
+            ) : (
+                chatRooms.map((room) => (
+                  <option key={room.memberId} value={room.memberId}>
+                    {room.memberName} 회원님
+                  </option>
+                ))
+            )}
           </StyledSelect>
-          <p>회원</p>
         </StyledMember>
+
         <StyledInput>
-          <p>PT횟수 : </p>
-          <input type="number" className='p-3' value={ptCount > 0 ? ptCount : ''} onChange={handlePtCountChange}/>
+          <div className="input-label">
+            <FontAwesomeIcon icon={faArrowUp91} />
+            <span>PT 추가 횟수</span>
+          </div>
+          <input 
+            type="number" 
+            placeholder="0"
+            value={ptCount > 0 ? ptCount : ''} 
+            onChange={(e) => setPtCount(Number(e.target.value))}
+          />
         </StyledInput>
 
         <StyledBtn onClick={handleSavePtCount}>
-          PT 저장하기
+          PT 횟수 부여하기
         </StyledBtn>
       </StyledBox>
     </StyledContainer>

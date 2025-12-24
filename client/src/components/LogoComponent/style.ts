@@ -1,79 +1,55 @@
 import styled from "styled-components"
 import tw from "twin.macro"
 
-
-
-
-
 export const StyledTitle = styled.div`
     ${tw`
-        flex
-        justify-center
-        w-full
-        text-center
-        py-4
-        text-[56px]
+        flex justify-center items-center
+        w-full py-4
+        bg-gray-950 
+        border-b border-white/5 
         relative
-        bg-slate-900
-        `}
-        @media(max-width: 380px){
-                ${tw`
-                    text-[42px]
-                `}
-            }
-        h1{
-            ${tw`
-                text-red-500
-            `}
+        z-50
+    `}
 
-            font-family : "rippedFont";
-        }
-            
-    h3{
+    h1 {
         ${tw`
-            absolute
-            text-slate-500
-            right-12
-            top-10
-            text-3xl
+            text-red-700
+            text-[48px] md:text-[56px]
+            font-black tracking-tighter
+            transition-all duration-300
         `}
-        &:hover{
-            cursor: pointer;
-            color: rgb(185 28 28);
-        }
-        @media(max-width: 800px){
-            display:none;
+        font-family : "rippedFont";
+        filter: drop-shadow(0 0 10px rgba(185, 28, 28, 0.3));
+        
+        &:hover {
+            ${tw`text-red-600 scale-105`}
         }
     }
-    .logout-icon{
+
+    .logout-icon {
         ${tw`
-            absolute
-            right-8
-            top-[35%]
-            text-3xl
-            text-slate-500
+            absolute right-6 md:right-10
+            text-xl md:text-2xl
+            text-gray-600
+            transition-all duration-300
+            cursor-pointer
         `}
-        &:hover{
-            cursor: pointer;
-            color: rgb(185 28 28);
-        }
-        @media(max-width: 380px){
-            ${tw`
-                absolute
-                right-3
-                top-[40%]
-                text-2xl
-                text-slate-500
-            `}
+        
+        &:hover {
+            ${tw`text-red-600 scale-110`}
+            filter: drop-shadow(0 0 8px rgba(185, 28, 28, 0.5));
         }
     }
-    
-`
+
+    @media(max-width: 380px){
+        ${tw`py-3`}
+        h1 { ${tw`text-[38px]`} }
+        .logout-icon { ${tw`right-4 text-xl`} }
+    }
+`;
 
 export const StyledLogoutModal = styled.div`
     ${tw`
-        flex
-        justify-center
-        items-center
+        flex justify-center items-center
     `}
-`
+`;

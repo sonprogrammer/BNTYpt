@@ -1,195 +1,237 @@
-
 import styled from "styled-components";
 import tw from "twin.macro";
 
-
 export const StyledContainer = styled.div`
-    ${tw`
+  ${tw`
         flex
         justify-center
         items-center
-        h-full
+        min-h-screen
         p-4
+        bg-gray-950
     `}
+`;
 
-`
 export const StyledBox = styled.div`
-    ${tw`
+  ${tw`
         relative
-        p-10
-        rounded-xl
-        w-[50%]
-        h-[70%]
-        border-[2px]
-        border-red-950
+        p-8
+        md:p-12
+        rounded-2xl
+        w-full
+        max-w-[450px]
+        border-[1.5px]
+        border-red-950/50
         flex
         flex-col
-        justify-between
         items-center
-        gap-3
+        gap-6
     `}
-    background-color: rgba(82, 82, 82, 0.5);
-    box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.5);
-    max-width: 100%;
-    max-height: 100%;
-    h1{
-        ${tw`
+  background-color: rgba(38, 38, 38, 0.7);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0px 0px 20px rgba(0, 0, 0, 0.3);
+
+  h1 {
+    ${tw`
             font-bold
-            text-[63px]
+            text-5xl
+            md:text-6xl
             text-red-700
+            mb-2
         `}
-                    font-family : "rippedFont";
+    font-family: "rippedFont";
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+  }
 
-        text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.7);
-    }
-    img{
-        width: 100px;
-    }
-    @media(max-width:1224px){
-        ${tw`
-            w-[70%]
-            h-[70%]
-        `}
-    }
+  img {
+    ${tw`w-20 md:w-24`}
+  }
 
-    @media(max-width:768px){
-        ${tw`
-            w-[80%]
-            h-[70%]
-            p-[2opx]
-
-        `}
-    }
-    @media(max-width:480px){
-        w-[90%]
-        h-[60%]
-    }
-`
-
+  @media (max-width: 768px) {
+    ${tw`p-8 gap-5`}
+    width: 95%;
+  }
+`;
 
 export const StyledLoginInput = styled.div`
-    ${tw`
+  ${tw`
         flex
         flex-col
         gap-3
-        w-[80%]
-    `}
-    input{
-        ${tw`
-            p-3
-            rounded-md
-        `}
-    }
-`
-
-export const StyledLoginBtn = styled.button`
-    ${tw`
-        bg-blue-900
-        text-white
-    `}
-    border-radius: 5px;
-    padding: 10px 30px;
-    width: 188.7px;
-`
-
-export const StyledRadios = styled.div`
-    ${tw`
-        flex
-        flex-col
-        items-start
-    `}
-    label{
-        ${tw`
-            flex
-            gap-5
-            text-lg
-            text-white
-            font-bold
-        `}
-    }
-
-`
-
-export const StyledBackBtn = styled.div`
-    ${tw`
-        absolute
-        left-5
-        top-5
-        text-3xl
-        cursor-pointer
-    `}
-    &:hover{
-        color: red;
-    }
-`
-
-
-export const StyledSignUpBtn = styled.button`
-    ${tw`
-        text-white
-        p-2
-    `}
-    &:hover{
-        text-decoration: underline;
-
-    }
-`
-
-export const StyledEmail = styled.div`
-    ${tw`
-        relative
         w-full
     `}
-    input{
-        ${tw`
-            w-full
+  input {
+    ${tw`
+            p-3.5
+            rounded-lg
+            bg-gray-900/80
+            text-white
+            border
+            border-gray-700
+            focus:border-red-800
+            focus:outline-none
+            transition-all
         `}
+  }
+`;
+
+export const StyledRadios = styled.div`
+  ${tw`
+        flex
+        justify-center
+        items-center
+        gap-4
+        w-full
+        my-2
+    `}
+  label {
+    ${tw`
+            flex-1
+            flex
+            items-center
+            justify-center
+            gap-2
+            py-3
+            rounded-xl
+            text-sm
+            font-bold
+            cursor-pointer
+            transition-all
+            border
+        `}
+    input {
+      ${tw`hidden`} 
     }
-`
+    
+    &:hover {
+      ${tw`scale-[1.02]`}
+    }
+    &:active {
+      ${tw`scale-[0.98]`}
+    }
+  }
+`;
+
+export const StyledLoginBtn = styled.button`
+  ${tw`
+        bg-red-800
+        hover:bg-red-700
+        text-white
+        font-bold
+        py-3
+        px-10
+        rounded-lg
+        w-full
+        transition-all
+        shadow-lg
+    `}
+`;
+
+export const StyledSignUpBtn = styled.button`
+  ${tw`
+        text-gray-400
+        text-sm
+        hover:text-white
+        transition-colors
+        mt-2
+    `}
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const StyledBackBtn = styled.div`
+  ${tw`
+        absolute
+        left-6
+        top-6
+        text-2xl
+        text-gray-400
+        cursor-pointer
+        transition-all
+    `}
+  &:hover {
+    ${tw`text-red-600 scale-110`}
+  }
+`;
+export const StyledEmail = styled.div`
+  ${tw`relative w-full`}
+  
+  input {
+    ${tw`
+      w-full p-3.5 pr-[85px] md:pr-[100px]
+      rounded-xl bg-white/5 text-white 
+      border border-white/10 
+      focus:border-red-600 focus:bg-white/10 focus:outline-none 
+      transition-all duration-200
+    `}
+  }
+`;
 
 export const StyledCheckBtn = styled.button`
-    ${tw`
-        absolute
-        right-2
-        top-2
-        bg-red-800
-        text-white
-        p-1
-        rounded-xl
-    `}
-    .icon{
-        display: none;
-    }
-    @media(max-width:500px){
-        .text{
-            display: none;
-        }
-        .icon {
-            display: block;
-            margin-top: 3px;
-            padding: 1px;
-        }
-    }
-`
+  ${tw`
+    absolute 
+    right-2.5 
+    top-1/2 
+    -translate-y-1/2
+    bg-red-800 hover:bg-red-700
+    text-white 
+    text-[11px] md:text-xs 
+    font-bold 
+    px-3 py-2 
+    rounded-lg
+    transition-all
+    shadow-lg
+    active:scale-95
+  `}
 
+  .icon {
+    display: none;
+  }
+
+  @media (max-width: 500px) {
+    ${tw`right-1.5 px-2.5`}
+    .text {
+      display: none;
+    }
+    .icon {
+      ${tw`block text-sm`}
+    }
+  }
+`;
 
 export const StyledPassword = styled.div`
+  ${tw`flex flex-col gap-3.5 w-full`}
+  
+  input {
     ${tw`
-        flex
-        flex-col
-        gap-3
+      w-full p-3.5 
+      rounded-xl bg-white/5 text-white 
+      border border-white/10 
+      focus:border-red-600 focus:bg-white/10 focus:outline-none 
+      transition-all duration-200
     `}
-`
-
-
+  }
+`;
 
 export const StyledSignUp = styled.button`
-    ${tw`
-        bg-blue-900
-        text-white
-    `}
-    border-radius: 5px;
-    padding: 10px 30px;
-    width: 188.7px;
-`
-
+  ${tw`
+    w-full
+    mt-6
+    bg-red-700 
+    hover:bg-red-600 
+    text-white 
+    font-black 
+    text-lg 
+    py-4 
+    rounded-xl 
+    transition-all 
+    transform 
+    active:scale-[0.98]
+    shadow-xl shadow-red-900/20
+  `}
+  
+  &:hover {
+    box-shadow: 0 10px 20px -5px rgba(225, 29, 72, 0.4);
+  }
+`;
