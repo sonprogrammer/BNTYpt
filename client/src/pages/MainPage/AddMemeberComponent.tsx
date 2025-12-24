@@ -39,13 +39,6 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
     fetchMemeber()
   }, [fetchMemeber])
 
-  const handleContainerClick = () => {
-    closeModal();
-  };
-
-  const handlePtCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPtCount(Number(e.target.value)); 
-  };
 
   const handleSavePtCount = async () => {
     if (selectedMember && ptCount > 0) {
@@ -64,10 +57,6 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
     }
   };
 
-  
-  const handleBoxClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
   return (
     <StyledContainer onClick={closeModal}>
       <StyledBox onClick={(e) => e.stopPropagation()}>

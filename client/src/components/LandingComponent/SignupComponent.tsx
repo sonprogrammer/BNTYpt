@@ -15,33 +15,8 @@ const SignupComponent = () => {
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [passwordMismatch, setPasswordMismatch] = useState<boolean>(false);
-
-
-    const handleEamil = (e: React.ChangeEvent<HTMLInputElement>) =>{
-        setEmail(e.target.value)
-    }
-    const handleName = (e: React.ChangeEvent<HTMLInputElement>) =>{
-        setName(e.target.value)
-    }
-
-    const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value)
-        setPasswordMismatch(false)
-    }
-
-    const handledConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const confirmPassword = e.target.value
-        setConfirmPassword(confirmPassword)
-        if(confirmPassword !== password){
-            setPasswordMismatch(true)
-        }else{
-            setPasswordMismatch(false)
-        }
-    }
     
-    const handleRadioChage = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedRole(e.target.value)
-    }
+
 
     const handleRefresh = () => {
         window.location.reload()

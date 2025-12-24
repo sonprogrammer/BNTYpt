@@ -37,15 +37,7 @@ const CalendarComponent = () => {
     const startDay = getDay(firstDayOfMonth);
     const leadingEmptyDays = Array.from({ length: startDay }, (_, i) => addDays(firstDayOfMonth, i - startDay));
 
-    const handlePreviousMonth = () => {
-        setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1))
-    }
-    const handleNextMonth = () => {
-        setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1))
-    }
-    const handleDayClick = (date: Date) => {
-        setSelectedDate(date)
-    }
+  
     const getRecordForDate = (date: Date) => {
         const dateString = format(date, 'yyyy-MM-dd')
         return records.find(record => record.date === dateString)
@@ -92,13 +84,7 @@ const CalendarComponent = () => {
         }
     },[user, fetchCalendar])
 
-    const handleAddClicked = () => {
-        setAdd(!add)
-        if(!add){
-            setWorkout('')
-            setDiet('')
-        }
-    }
+
 
     const handlePostClick = async() => {
         if(!selectedDate){
