@@ -26,15 +26,18 @@ useEffect(() => {
       <StyledLogin>
         <BrandingSection>
           <h1>BNTY</h1>
-          <div className="tagline">당신의 성장을 기록하는 가장 완벽한 방법</div>
+          <div className="tagline">트레이너와 회원을 잇는 최고의 파트너십</div>
           <p className="description">
-            QR 체크인으로 간편한 수업 관리부터,<br />
-            전문적인 식단/운동 일지까지 한곳에서 관리하세요.
+            복잡한 수업 예약과 관리는 이제 그만.<br />
+            <strong>트레이너의 전문적인 가이드</strong>와 <strong>회원의 노력</strong>이<br />
+            BNTY 안에서 하나의 데이터로 실시간 공유됩니다.
           </p>
           <div className="feature-pills">
             <span>#PT_QR_체크인</span>
             <span>#식단_캘린더</span>
+            <span>#1:1_밀착_코칭_일지</span>
             <span>#오운완_앨범</span>
+            <span>#실시간_채팅_피드백</span>
           </div>
         </BrandingSection>
 
