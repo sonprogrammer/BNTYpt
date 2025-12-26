@@ -3,9 +3,9 @@ import styled, { keyframes } from "styled-components";
 
 
 const moveOrb = keyframes`
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(30px, -50px); }
-  100% { transform: translate(0, 0); }
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-15%, 15%) scale(1.3); }
+  100% { transform: translate(5%, -5%) scale(1); }
 `;
 
 export const StyledContainer = styled.div`
@@ -17,21 +17,25 @@ export const StyledContainer = styled.div`
     bg-[#020617]
     flex
     justify-center
+    z-0
     items-center
   `}
+  
 `;
 
 export const BackgroundDecor = styled.div`
-  ${tw`absolute inset-0 overflow-hidden pointer-events-none`}
+  ${tw`absolute inset-0 overflow-hidden pointer-events-none `}
+  z-index: -1;
   
   &::before, &::after {
     content: '';
-    ${tw`absolute rounded-full opacity-30 blur-[120px]`}
+    ${tw`absolute block rounded-full opacity-30 blur-[120px]`}
     animation: ${moveOrb} 10s infinite alternate ease-in-out;
+    will-change: transform;
   }
 
   &::before {
-    width: 400px;
+    width: 600px;
     height: 400px;
     background: #e11d48; 
     top: -100px;
@@ -39,7 +43,7 @@ export const BackgroundDecor = styled.div`
   }
 
   &::after {
-    width: 500px;
+    width: 700px;
     height: 500px;
     background: #1e40af; 
     bottom: -150px;
@@ -60,7 +64,7 @@ export const StyledLogin = styled.div`
     items-center
     justify-center
     gap-12
-    p-6
+    p-8
   `}
 `;
 

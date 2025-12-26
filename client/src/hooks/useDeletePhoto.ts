@@ -17,7 +17,6 @@ const useDeletePhoto = () => {
         },
         onError: (error) => {
             console.log('삭제 실패', error)
-            alert('삭제 실패')
         }
     })
 }

@@ -6,21 +6,23 @@ export const StyledContainer = styled.div`
         flex
         justify-center
         items-center
-        min-h-screen
-        p-4
-        bg-gray-950
+        p-0
+        bg-transparent
+        w-full
+        lg:w-[70%]
     `}
+
 `;
 
 export const StyledBox = styled.div`
   ${tw`
         relative
-        p-8
+        p-7
         md:p-12
         rounded-2xl
         w-full
         max-w-[450px]
-        border-[1.5px]
+        border-[2px]
         border-red-950/50
         flex
         flex-col
@@ -31,6 +33,7 @@ export const StyledBox = styled.div`
   backdrop-filter: blur(12px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0px 0px 20px rgba(0, 0, 0, 0.3);
 
+  
   h1 {
     ${tw`
             font-bold
@@ -49,7 +52,7 @@ export const StyledBox = styled.div`
 
   @media (max-width: 768px) {
     ${tw`p-8 gap-5`}
-    width: 95%;
+    width: 90%;
   }
 `;
 

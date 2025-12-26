@@ -45,7 +45,6 @@ const ChattingBoxComponent = () => {
         })
 
         socket.on('receiveMessage', (message: any) => {
-            console.log('me', message)
             setChatRooms(prev => prev.map(room => {
                 if(room._id === message.chatRoomId){
                     const read = message.readBy.includes(user.objectId)

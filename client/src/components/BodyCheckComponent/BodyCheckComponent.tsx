@@ -9,7 +9,7 @@ import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faCamera } from '@fortawesome/free-solid-svg-icons'
-import { confirmDelete, showSuccess } from '../../utils/alert'
+import toast from 'react-hot-toast'
 import useDeletePhoto from '../../hooks/useDeletePhoto'
 import { BeatLoader } from 'react-spinners'
 
@@ -70,16 +70,13 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
 
   const handleDelete = async(e: React.MouseEvent,photoId: string) => {
     e.stopPropagation()
-    const confirmed = await confirmDelete()
-    if(confirmed){
       deleteMutation.mutate(photoId, {
         onSuccess: () => {
-          showSuccess('삭제되었습니다')
+          toast.success('삭제되었습니다!')
           setPhotos(prev => prev.filter(p=> p.imageId !== photoId))
 
         }
       })
-    }
   }
 
   return (

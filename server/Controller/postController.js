@@ -91,7 +91,6 @@ const deletePosts = async(req, res) => {
     try {
         
         const photo = await Post.findById(photoId)
-        console.log('photo', photo)
         if(!photo){
             return res.status(404).json({success: false,message: 'there is no photo'})
         }

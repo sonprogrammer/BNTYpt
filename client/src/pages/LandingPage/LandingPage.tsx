@@ -13,17 +13,17 @@ const navigate = useNavigate()
 
 
 useEffect(() => {
-  if(user?.email){
+  if(user?.name){
     toast.success(`${user?.name} 환영합니다.`)
       navigate('/browse')
   }
-} ,[user?.email, navigate, user?.name])
+} ,[navigate, user?.name])
   
   return (
     <StyledContainer>
-      <BackgroundDecor />
+      <BackgroundDecor></BackgroundDecor>
 
-      <StyledLogin>
+      <StyledLogin className='login'>
         <BrandingSection>
           <h1>BNTY</h1>
           <div className="tagline">트레이너와 회원을 잇는 최고의 파트너십</div>

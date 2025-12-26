@@ -11,8 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
 import usePutNote from '../../hooks/usePutNote';
-import { confirmDelete, showSuccess } from '../../utils/alert'
-
+import toast from 'react-hot-toast'
 
 
 interface Post {
@@ -61,18 +60,13 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
 
 
   const handleDelete = async(noteId: string) => {
-    const confirmed = await confirmDelete()
-
-    if(confirmed){
       deletMutation.mutate(noteId, {
         onSuccess: () => {
           refetch()
-          showSuccess('삭제되었습니다')
-          // setAskDelete(false)
+          toast.success('삭제되었습니다!')
           setModalOpen(false)
         }
       })
-    }
 
   }
 
@@ -89,10 +83,10 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
         onSuccess: (res) => {
           setSelectedPost(res.note)
           setEditMode(false)
-          alert('수정 완료')
+          toast.success('수정 완료')
         },
         onError: () => {
-          alert('수정 실패')
+          toast.error('수정 실패')
         }
       }
     )

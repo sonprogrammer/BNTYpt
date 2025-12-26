@@ -18,7 +18,6 @@ const usePutNote = (memberId: string, trainerId: string) => {
         },
         onError: (error) => {
             console.error('수정 실패', error)
-            alert('수정 실패했습니다.')
         }
     })
 }

@@ -58,7 +58,6 @@ const LandingComponent = () => {
                 setUser(newUser)
                 saveUserToLocalStorage(newUser)
                 saveAccessToken(accessToken)
-                toast.success('로그인 성공!')
                 navigate('/browse')
             } else {
                 console.error('login failed :', res.data.message)
@@ -114,7 +113,6 @@ const LandingComponent = () => {
                 setUser(newUser);
                 saveUserToLocalStorage(newUser)
                 saveAccessToken(accessToken)
-                toast.success('로그인 성공!')
                 navigate('/browse')
 
             } else {
@@ -135,14 +133,14 @@ const LandingComponent = () => {
     }
 
     return (
-        <StyledContainer>
+        <StyledContainer className='con'>
             {
                 signup ? (
                     <SignupComponent />
                 )
                     : (
 
-                        <StyledBox>
+                        <StyledBox className='box'>
                             <h1>BNTY</h1>
                             <StyledLoginInput>
                                 <input type="email" placeholder='ID' value={email} onChange={(e) => setEmail(e.target.value)} />

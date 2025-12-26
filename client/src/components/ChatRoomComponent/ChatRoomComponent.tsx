@@ -166,7 +166,6 @@ const ChatRoomComponent = () => {
             if (selectedFile) {
                 const formData = new FormData()
                 formData.append('file', selectedFile)
-                console.log('form', formData)
                 const res = await axiosInstance.post(`${apiUrl}/api/chat/upload`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 })

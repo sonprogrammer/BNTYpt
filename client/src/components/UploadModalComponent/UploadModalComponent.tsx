@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { StyledContainer, StyledInput, StyledTitle } from './style'
-
+import toast from 'react-hot-toast'
 interface UploadModalComponentProps{
   onClose: () => void;
   addPost: (post: { text: string; images: File[]; date: Date; }) => void;
@@ -33,7 +33,7 @@ const UploadModalComponent = ({onClose, addPost} : UploadModalComponentProps) =>
 
   const handleUpload =() => {
     if(!imageFile || !description){
-      alert('please provide a description and a file to upload')
+      toast.error('게시할 글과 이미지를 입력해주세요!')
       return
     }
 
