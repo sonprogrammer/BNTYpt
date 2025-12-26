@@ -67,7 +67,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
       let res;
       if (user.kakaoId) {
         formData['kakaoId'] = user.kakaoId;
-        res = await axios.post(`${apiUrl}/api/posts`, formData, {
+        res = await axiosInstance.post(`${apiUrl}/api/posts`, formData, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user.kakaoAccessToken}`

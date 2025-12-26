@@ -45,7 +45,6 @@ const CalendarComponent = () => {
 
     
 
-
     const fetchCalendar = useCallback(async() => {
         try {
             let url= ''
@@ -74,16 +73,16 @@ const CalendarComponent = () => {
             }
         } catch (error) {
             console.log('err', error)
+            toast.error('데이터를 불러오지 못했습니다.')
         }
     },[user])
 
     useEffect(()=>{
-        if(!user || !user.email) return
+        if(!user) return
         if(user.email || user.kakaoId){
             fetchCalendar() 
         }
     },[user, fetchCalendar])
-
 
 
     const handlePostClick = async() => {
@@ -100,6 +99,7 @@ const CalendarComponent = () => {
                 diet: diet,
             }
            if(user.kakaoId){
+
             formData.kakaoId = user.kakaoId
            }else if(user.email){
             formData.email = user.email
@@ -107,11 +107,11 @@ const CalendarComponent = () => {
            const res = await axiosInstance.post(`${apiUrl}/api/calendar`, formData)
             if(res.data.success){
                 const newRecord: Records = {
-                    date: formatDate,
-                    workout: workout,
-                    diet: diet,
-                    kakaoId: user.kakaoId,
-                    email: user.email,
+                    date: format(res.data.post.date, 'yyyy-MM-dd'),
+                    workout: res.data.post.workout,
+                    diet: res.data.post.diet,
+                    // kakaoId: user.kakaoId,
+                    // email: user.email,
                 }
     
                 setRecords([...records, newRecord])

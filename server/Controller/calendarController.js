@@ -12,9 +12,11 @@ const createPost = async (req, res) => {
     } = req.body
 
     try {
-
+        let user
+        let type
         if(email){
             user = await regularUser.findOne( { email})
+            type='regularUser'
             if(!user){
                 return res.status(404).json({ success: false, message: 'user not found'})
             }
@@ -22,6 +24,7 @@ const createPost = async (req, res) => {
 
         if(kakaoId){
             user = await kakaoUser.findOne( { kakaoId })
+            type='kakaoUser'
             if(!user){
                 return res.status(404).json({ success: false, message: 'user not found'})
             }
@@ -35,12 +38,15 @@ const createPost = async (req, res) => {
             date,
             workout,
             diet,
-            userId : user._id
+            userId : user._id,
+            userType: type
         })
+ 
         await newPost.save()
         res.status(200).json({
             success: true,
-            message: 'Success'
+            message: 'Success',
+            post: newPost
         })
     } catch (error) {
         res.status(500).json({
@@ -57,15 +63,18 @@ const getUserCalendar = async(req, res) => {
         let user
         if(email) {
             user = await regularUser.findOne({ email })
-        }else if(kakaoId) {
-            user = await kakaoUser.findOne({ kakaoId })
+            if (!user) {
+                user = await kakaoUser.findOne({ email });
+            }
+        } else if (kakaoId) {
+            user = await kakaoUser.findOne({ kakaoId });
         }
 
         if(!user){
             return res.status(404).json({ success: false, message: 'user not found'})
         }
 
-        const calendars = await Calendar.find({ userId: user._id}).populate('userId',  'workout diet')
+        const calendars = await Calendar.find({ userId: user._id})
         return res.status(200).json({ success: true, calendars })
     } catch (error) {
         console.error('error', error)
