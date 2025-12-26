@@ -4,9 +4,7 @@ import { OnResultFunction } from 'react-qr-scanner'
 import { StyledContainer, StyledMemberBox, StyledQrReader, StyledTrainerBox } from './style'
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
-// import axios from 'axios';
-import { showSuccessAlert, showFailAlert } from '../../utils/toast';
-import { ToastContainer } from 'react-toastify';
+import toast from 'react-hot-toast'
 import 'react-toastify/dist/ReactToastify.css';
 import { axiosInstance } from '../../utils/axiosInstance';
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -44,11 +42,11 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                         ptCount: res.data.ptCount
                     }))
         
-                    showSuccessAlert('수업 시작')
+                    toast.success('수업 시작')
                     setMemberClicked(false)
                 } catch (error) {
                     console.error('error', error)
-                    showFailAlert('다시 스캔해주세요')
+                    toast.error('다시 스캔해주세요')
                 }finally{
                     setIsScanning(false)
                 }
@@ -112,7 +110,7 @@ const QrcodeComponent = ({ role } : QrcodeComponentProps) => {
                     }
                 </StyledMemberBox>
             )}
-            <ToastContainer/>
+
         </StyledContainer>
     )
 }
