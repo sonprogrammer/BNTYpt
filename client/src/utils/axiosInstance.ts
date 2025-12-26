@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getAccessToken } from "./accessToken";
+import {toast} from 'react-hot-toast'
 
 
 
@@ -35,6 +36,11 @@ axiosInstance.interceptors.response.use(
 
             } catch (error) {
                 console.error('토큰 갱신 실패', error)
+                toast.error('토큰 만료, 재로그인 해주세요')
+                localStorage.clear()
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000)
             }
         }
         return Promise.reject(err)
