@@ -26,6 +26,7 @@ Actually i study and work part time as a trainer now, and i or members was incon
 5. styled-component
 6. tailwind
 7. javascript
+8. recoil
 
 ## major functions
 | pages |  function  |
