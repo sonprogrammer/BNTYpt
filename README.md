@@ -18,6 +18,11 @@ i've heard news a few times about companies selling their member information to 
 Actually i study and work part time as a trainer now, and i or members was inconvenience about something. so i want to solve these things. that's why i developped it.<br> 
 
 
+## 🏗️ System Architecture & Flow
+<img width="1616" height="1104" alt="Bntyflow" src="https://github.com/user-attachments/assets/b8c97a15-0567-442f-8a75-a0d765a963b9" />
+
+
+
 ## STACK
 1. typescript
 2. react
