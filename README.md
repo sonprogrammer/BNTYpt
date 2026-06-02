@@ -69,14 +69,16 @@ Actually i study and work part time as a trainer now, and i or members was incon
 - Notification
   - rebuilt alert and notification popups 
 
+
+<!--
 ## Major color 
 1. gray
 2. dark red
 3. dark blue
+-->
 
-
-## Pages
-<p align="center" justify-contents="center">
+<!-- ## Pages
+ <p align="center" justify-contents="center">
   <p>when role is member</p>
   <img src="https://github.com/user-attachments/assets/7ada0cb3-68df-42b2-a857-ee2464a884f2" alt="Member Page" width="400"/>
   <p>when role is trainer</p>
@@ -84,8 +86,7 @@ Actually i study and work part time as a trainer now, and i or members was incon
   <p>login</p>
   <img src="https://github.com/user-attachments/assets/1f120099-ca50-43d1-bea2-9ae89ce6639f" alt="Login Page" width="400"/>
 
-</p>
-
+</p> -->
 
 
 ## troubleshooting  🔫
