@@ -19,7 +19,6 @@ interface Post {
 
 
 const NoteComponent = () => {
-    // const [role, setRole] = useState<string>('')
     const [posts, setPosts] = useState<Post[]>([])
     const [modalOpen, setModalOpen] = useState<boolean>(false)
     const [user] = useRecoilState(userState)

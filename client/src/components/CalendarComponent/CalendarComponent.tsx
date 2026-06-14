@@ -36,19 +36,6 @@ const CalendarComponent = () => {
 
     const [user] = useRecoilState(userState)
 
-    // const firstDayOfMonth = startOfMonth(currentDate)
-    // const lastDayOfMonth = endOfMonth(currentDate)
-    // const days = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth })
-
-    // const startDay = getDay(firstDayOfMonth);
-    // const leadingEmptyDays = Array.from({ length: startDay }, (_, i) => addDays(firstDayOfMonth, i - startDay));
-
-  
-    // const getRecordForDate = (date: Date) => {
-    //     const dateString = format(date, 'yyyy-MM-dd')
-    //     return records.find(record => record.date === dateString)
-    // }
-
     const { days, leadingEmptyDays } = useMemo(() => {
         const firstDayOfMonth = startOfMonth(currentDate)
         const lastDayOfMonth = endOfMonth(currentDate)
@@ -92,37 +79,6 @@ const CalendarComponent = () => {
         }
     }, [user])
     
-    // const fetchCalendar = useCallback(async() => {
-    //     try {
-    //         let url= ''
-    //         if(user.email){
-    //             url = `${apiUrl}/api/calendar/user/email/${user.email}`
-    //           }else if(user.kakaoId){
-    //             url = `${apiUrl}/api/calendar/user/kakao/${user.kakaoId}`
-    //           }
-            
-
-    //         const res = await axiosInstance.get(url)
-    //         if(res.data.success){
-    //             const formattedRecords = res.data.calendars.map((record: {
-    //                 _id: string;
-    //                 workout: string;
-    //                 diet: string;
-    //                 date: string;
-    //                 userId: string;
-    //                 __v: number;
-    //             }) => ({
-    //                 ...record,
-    //                 date: format(new Date(record.date), 'yyyy-MM-dd'),
-    //             }));
-    
-    //             setRecords(formattedRecords);
-    //         }
-    //     } catch (error) {
-    //         console.log('err', error)
-    //         toast.error('데이터를 불러오지 못했습니다.')
-    //     }
-    // },[user])
 
     useEffect(()=>{
         if(!user) return
@@ -157,8 +113,6 @@ const CalendarComponent = () => {
                     date: format(res.data.post.date, 'yyyy-MM-dd'),
                     workout: res.data.post.workout,
                     diet: res.data.post.diet,
-                    // kakaoId: user.kakaoId,
-                    // email: user.email,
                 }
     
                 setRecords([...records, newRecord])

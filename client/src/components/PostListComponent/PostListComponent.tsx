@@ -12,16 +12,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import usePutNote from '../../hooks/usePutNote';
 import toast from 'react-hot-toast'
 
-
-// interface Post {
-//   [key: string]: any;
-//   text: string;
-//   images: string[];
-//   uploadTime: string;
-//   imageUrl?: string;
-//   title: string;
-// }
-
 interface Post {
   _id: string;       
   title: string;     
