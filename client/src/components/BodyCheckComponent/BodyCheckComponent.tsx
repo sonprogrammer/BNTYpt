@@ -7,8 +7,6 @@ import { useEffect } from 'react'
 import { axiosInstance } from '../../utils/axiosInstance';
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faCamera } from '@fortawesome/free-solid-svg-icons'
 import { Trash2, Camera } from 'lucide-react'
 import toast from 'react-hot-toast'
 import useDeletePhoto from '../../hooks/useDeletePhoto'
