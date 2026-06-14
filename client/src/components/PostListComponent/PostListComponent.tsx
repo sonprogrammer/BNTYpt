@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { PostItemComponent } from '../PostItemComponent';
 import { StyledCloseBtn, StyledContainer, StyledDate, StyledEditBox, StyledEditBtnGroup, StyledEditText, StyledEditTitle, StyledImage, StyledModalBox, StyledModalContainer, StyledText, StyledTitle, StyledTrainerFn } from './style';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  faX } from '@fortawesome/free-solid-svg-icons'
+import { X } from 'lucide-react'
 import dayjs from 'dayjs';
 import useDeleteNote from '../../hooks/useDeleteNote';
 import { useRecoilValue } from 'recoil';
@@ -14,19 +13,35 @@ import usePutNote from '../../hooks/usePutNote';
 import toast from 'react-hot-toast'
 
 
-interface Post {
-  [key: string]: any;
-  text: string;
-  images: string[];
-  uploadTime: string;
-  imageUrl?: string;
-  title: string;
-}
+// interface Post {
+//   [key: string]: any;
+//   text: string;
+//   images: string[];
+//   uploadTime: string;
+//   imageUrl?: string;
+//   title: string;
+// }
 
+interface Post {
+  _id: string;       
+  title: string;     
+  text: string;      
+  images: string[];  
+  uploadTime: string;
+  trainerId: string; 
+  memberId: string;  
+  __v: number;       
+  imageUrl?: string; 
+}
 interface PostListProps {
   eachMember: Post[]
   refetch: () => void
 }
+
+const getOptimizedImageUrl = (url: string) => {
+  if (!url || !url.includes('cloudinary.com')) return url;
+  return url.replace('/upload/', '/upload/f_auto,q_auto,w_600/');
+};
 
 const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false)
@@ -34,18 +49,20 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
   const [editMode, setEditMode] = useState<boolean>(false)
   const [editTitle, setEditTitle] = useState<string>('')
   const [editText, setEditText] = useState<string>('')
-  // const [askDelete, setAskDelete] = useState<boolean>(false)
 
   const currentUserRole = useRecoilValue(userRoleSelector)
 
-  const trainerId = selectedPost?.trainerId
-  const memberId = selectedPost?.memberId
+  const trainerId = selectedPost?.trainerId || ''
+  const memberId = selectedPost?.memberId || ''
 
   const deletMutation = useDeleteNote(memberId, trainerId)
   const editMutation = usePutNote(memberId, trainerId)
 
 
-  const orderedPosts = eachMember?.sort((a, b) => new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime())
+  const orderedPosts = useMemo(() => {
+    if (!eachMember) return [];
+    return [...eachMember].sort((a, b) => new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime());
+  }, [eachMember])
 
   const handleClick = (post: Post) => {
     setModalOpen(true)
@@ -96,14 +113,14 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
   return (
     <StyledContainer>
       {orderedPosts.map((post, i) => (
-        <PostItemComponent key={i} post={post} handleClick={() => handleClick(post)} />
+        <PostItemComponent key={post._id || i} post={post} handleClick={() => handleClick(post)} />
       ))}
       
       {modalOpen && selectedPost && (
         <StyledModalContainer onClick={handleCloseModal}>
           <StyledModalBox onClick={(e) => e.stopPropagation()}>
             <StyledCloseBtn onClick={handleCloseModal}>
-              <FontAwesomeIcon icon={faX} />
+              <X size={18} />
             </StyledCloseBtn>
 
             {editMode ? (
@@ -151,7 +168,7 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
                 {selectedPost.images && selectedPost.images.length > 0 && (
                   <StyledImage>
                     {selectedPost.images.map((image, index) => (
-                      <img key={index} src={image} alt={'노트이미지'} />
+                      <img key={index} src={getOptimizedImageUrl(image)} alt={'노트이미지'}/>
                     ))}
                   </StyledImage>
                 )}

@@ -43,7 +43,7 @@ const NoteComponent = () => {
             : { eachMemberNote: memberNotesQuery.data, refetch: memberNotesQuery.refetch };
     }, [isTrainer, trainerNotesQuery.data, trainerNotesQuery.refetch, memberNotesQuery.data, memberNotesQuery.refetch]);
     
-
+    console.log('eachmemeber', eachMemberNote)
     useEffect(() => {
         if (!user || !user.objectId) return
         if (!isTrainer) {
