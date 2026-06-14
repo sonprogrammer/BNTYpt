@@ -1,14 +1,15 @@
-import { useCallback, useState } from 'react'
-import { QrcodeComponent } from '../../components'
+import { lazy, Suspense, useCallback, useState } from 'react'
+// import { QrcodeComponent } from '../../components'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
-import AddMemeberComponent from './AddMemeberComponent'
+// import AddMemeberComponent from './AddMemeberComponent'
 import { StyledDashboardCard, StyledInfoText, StyledMainContainer, StyledPtAddBtn } from './style'
 import { axiosInstance } from '../../utils/axiosInstance'
 const apiUrl = process.env.REACT_APP_API_URL;
 
-
+const AddMemeberComponent = lazy(() => import('./AddMemeberComponent'))
+const QrcodeComponent = lazy(() => import('../../components').then(module => ({ default: module.QrcodeComponent })))
 
 const MainPage = () => {
   const [addMemeber, setAddMember] = useState<boolean>(false)
@@ -27,7 +28,7 @@ const MainPage = () => {
     } catch (error) {
       console.error(error)
     }
-  },[user?.objectId, setUser])
+  }, [user?.objectId, setUser])
 
   useEffect(() => {
     getUserPtCount()
@@ -37,42 +38,44 @@ const MainPage = () => {
   return (
     <StyledMainContainer>
       <StyledDashboardCard>
-        {user?.role === 'trainer' ? (
-          <div className='flex flex-col gap-6 items-center w-full'>
-            <StyledInfoText>
-              <span className="role">TRAINER</span>
-              <h2>{user.name} <span>트레이너님</span></h2>
-              <p>회원님의 QR리더기로 스캔하여 수업을 체크하세요.</p>
-            </StyledInfoText>
+        <Suspense fallback={<div className='animate-pulse w-full rounded-[2.5rem]'></div>}>
+          {user?.role === 'trainer' ? (
+            <div className='flex flex-col gap-6 items-center w-full'>
+              <StyledInfoText>
+                <span className="role">TRAINER</span>
+                <h2>{user.name} <span>트레이너님</span></h2>
+                <p>회원님의 QR리더기로 스캔하여 수업을 체크하세요.</p>
+              </StyledInfoText>
 
-            <QrcodeComponent role={user.role} />
+              <QrcodeComponent role={user.role} />
 
-            <StyledPtAddBtn onClick={() => setAddMember(true)}>
-              신규 PT 회원 추가
-            </StyledPtAddBtn>
+              <StyledPtAddBtn onClick={() => setAddMember(true)}>
+                신규 PT 회원 추가
+              </StyledPtAddBtn>
 
-            {addMemeber && <AddMemeberComponent closeModal={() => setAddMember(false)} />}
-          </div>
-        ) : (
-          <div className='flex flex-col gap-6 items-center w-full'>
-            <StyledInfoText>
-              <span className="role member">MEMBER</span>
-              <h2>{user?.name} <span>님</span></h2>
-            </StyledInfoText>
-
-            <div className="pt-count-badge">
-              <span className="label">남은 PT 횟수</span>
-              <span className="count">{user?.ptCount}</span>
+              {addMemeber && <AddMemeberComponent closeModal={() => setAddMember(false)} />}
             </div>
+          ) : (
+            <div className='flex flex-col gap-6 items-center w-full'>
+              <StyledInfoText>
+                <span className="role member">MEMBER</span>
+                <h2>{user?.name} <span>님</span></h2>
+              </StyledInfoText>
 
-            <QrcodeComponent role={user?.role} />
-            
-            <p className="hint-text">트레이너에게 QR 코드를 보여주세요.</p>
-          </div>
-        )}
+              <div className="pt-count-badge">
+                <span className="label">남은 PT 횟수</span>
+                <span className="count">{user?.ptCount ?? '-'}</span>
+              </div>
+
+              <QrcodeComponent role={user?.role} />
+
+              <p className="hint-text">트레이너에게 QR 코드를 보여주세요.</p>
+            </div>
+          )}
+        </Suspense>
       </StyledDashboardCard>
     </StyledMainContainer>
-  
+
   )
 }
 

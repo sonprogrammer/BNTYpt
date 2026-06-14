@@ -1,13 +1,12 @@
 
 import { StyledTitle } from './style'
 import { Link, useNavigate } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import { usePostLogout } from '../../hooks/usePostLogout';
 import { useState } from 'react';
 import LogoutModal from '../LogoutModalComponent/LogoutModalComponent';
+import { LogOut } from 'lucide-react';
 
 
 
@@ -41,7 +40,7 @@ const LogoComponent = () => {
       <StyledTitle>
         <Link to="/browse"><h1>B N T Y</h1></Link>
         <div className='logout-icon' onClick={handleLogoutClick}>
-          <FontAwesomeIcon icon={faRightFromBracket} />
+          <LogOut size={22} className="cursor-pointer" strokeWidth={3.5} />
         </div>
       </StyledTitle>
 
