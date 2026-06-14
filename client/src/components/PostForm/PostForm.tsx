@@ -4,8 +4,7 @@ import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import { axiosInstance } from '../../utils/axiosInstance';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCloudArrowUp, faImage } from '@fortawesome/free-solid-svg-icons'
+import { Image as ImageIcon, CloudUpload } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -98,7 +97,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
   return (
     <StyledContainerForm onSubmit={handleSubmit}>
       <StyledTitle>
-        <FontAwesomeIcon icon={faImage} className="mr-3" />
+        <ImageIcon size={20} className="mr-3" />
         오늘의 기록
       </StyledTitle>
       
@@ -112,7 +111,7 @@ const PostForm = ({ addPost } : PostFormProps) => {
         <FileInputWrapper>
           <input type="file" id="file-upload" multiple accept="image/*" onChange={handleImageChange} />
           <label htmlFor="file-upload">
-            <FontAwesomeIcon icon={faCloudArrowUp} size="lg" />
+            <CloudUpload size={24} />
             <span>{images.length > 0 ? `${images.length}장의 사진 선택됨` : '사진 올리기 (클릭)'}</span>
           </label>
         </FileInputWrapper>

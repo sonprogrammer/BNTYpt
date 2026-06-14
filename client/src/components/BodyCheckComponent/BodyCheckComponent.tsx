@@ -108,7 +108,7 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
         <StyledText>{photo.uploadTime}</StyledText>
       </StyledBox>
     ));
-  }, [photos, clickedForDelete]);
+  }, [photos, clickedForDelete, handleDelete]);
 
   return (
     <StyledContainer>

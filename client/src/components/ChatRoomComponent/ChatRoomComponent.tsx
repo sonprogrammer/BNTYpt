@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { StyledArrow, StyledContainer, StyledMessage, StyledMessageBox, StyledPlus, StyledSendEl, Styledupper } from './style'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { SendHorizontal, Image as ImageIcon, MessageSquareText, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import socket from '../../socket';
 import { axiosInstance } from '../../utils/axiosInstance';
 import { BeatLoader } from 'react-spinners';
-import { faPaperPlane, faImage, faCommentDots, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -227,7 +226,7 @@ const ChatRoomComponent = () => {
             <Styledupper>
                 <StyledArrow>
                     <Link to='/chat'>
-                        <FontAwesomeIcon icon={faArrowLeft} />
+                        <ArrowLeft size={20} />
                     </Link>
                 </StyledArrow>
                 <h2>{userId}</h2>
@@ -259,7 +258,7 @@ const ChatRoomComponent = () => {
                     ))
                 ) : (
                     <div className='flex flex-col items-center justify-center h-full opacity-20'>
-                        <FontAwesomeIcon icon={faCommentDots} size="3x" className="mb-4" />
+                        <MessageSquareText size={48} className="mb-4" />
                         <p className='font-bold text-xl'>대화 내용이 없습니다.</p>
                     </div>
                 )}
@@ -268,7 +267,7 @@ const ChatRoomComponent = () => {
 
             <StyledSendEl>
                 <StyledPlus onClick={handlePlusClick}>
-                    <FontAwesomeIcon icon={faImage} />
+                    <ImageIcon size={20} />
                 </StyledPlus>
                 
                 <div className="input-wrapper">
@@ -290,7 +289,7 @@ const ChatRoomComponent = () => {
 
                 <input type="file" ref={fileInputRef} onChange={handleFilePreview} className='hidden' accept='image/*,video/*' />
                 <button className="send-btn" onClick={handleSendMessage}>
-                    <FontAwesomeIcon icon={faPaperPlane} />
+                    <SendHorizontal size={20} />
                 </button>
             </StyledSendEl>
         </StyledContainer>

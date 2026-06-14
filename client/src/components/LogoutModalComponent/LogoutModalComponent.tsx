@@ -1,6 +1,5 @@
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { LogOut } from 'lucide-react';
 import { ButtonGroup, IconWrapper, ModalBox, Overlay } from "./style";
 
 interface LogoutModalProps {
@@ -13,7 +12,7 @@ const LogoutModal = ({ onConfirm, onCancel }: LogoutModalProps) => {
     <Overlay onClick={onCancel}>
       <ModalBox onClick={(e) => e.stopPropagation()}>
         <IconWrapper>
-          <FontAwesomeIcon icon={faRightFromBracket} />
+          <LogOut size={24} />
         </IconWrapper>
         <h2>로그아웃 하시겠습니까?</h2>
         <p>로그아웃 시 서비스 이용을 위해 다시 로그인해야 합니다.</p>

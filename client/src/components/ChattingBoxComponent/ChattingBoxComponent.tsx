@@ -5,9 +5,7 @@ import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import socket from '../../socket'
 import { BeatLoader } from 'react-spinners'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComments } from '@fortawesome/free-solid-svg-icons'
-
+import { MessageSquareText, ChevronRight } from 'lucide-react'
 
 
 
@@ -84,7 +82,7 @@ const ChattingBoxComponent = () => {
         <>
         {orderedChatRooms.length === 0 ? (
             <StyledNotMember>
-                <FontAwesomeIcon icon={faComments} size="2x" className="mb-4 opacity-20" />
+                <MessageSquareText size={48} className="mb-4 opacity-20" />
                 <p>연결된 대화 상대가 없습니다.</p>
             </StyledNotMember> 
         ) : (
@@ -102,7 +100,9 @@ const ChattingBoxComponent = () => {
                             <p className="msg-text">{room.lastMessage || '새로운 대화가 없습니다.'}</p>
                         </LastMsgWrapper>
                     </StyledContent>
-                    <div className="arrow-icon">〉</div>
+                    <div className="arrow-icon">
+                        <ChevronRight size={20} />
+                    </div>
                 </StyledContainer>
             ))
         )}

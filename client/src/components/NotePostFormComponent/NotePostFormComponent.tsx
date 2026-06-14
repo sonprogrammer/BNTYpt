@@ -4,8 +4,7 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import axios from 'axios';
 import { axiosInstance } from '../../utils/axiosInstance';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCloudArrowUp, faImage } from '@fortawesome/free-solid-svg-icons';
+import { Image as ImageIcon, CloudUpload } from 'lucide-react';
 import toast from 'react-hot-toast'
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -160,7 +159,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
             <StyledSubmitEl>
                 <div className="file-input-wrapper">
                     <label htmlFor="file-upload">
-                        <FontAwesomeIcon icon={faImage} />
+                        <ImageIcon size={18} />
                         {images.length > 0 ? `${images.length}장의 사진 선택됨` : '사진 첨부 (최대 3장)'}
                     </label>
                     <input id="file-upload" type="file" multiple accept="image/*" onChange={handleImageChange} className="hidden" />
@@ -177,7 +176,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
                 <StyledBtn type="submit" disabled={isUploading}>
                     {isUploading ? '기록 업로드 중...' : (
                         <>
-                            <FontAwesomeIcon icon={faCloudArrowUp} className="mr-2" />
+                            <CloudUpload size={18} className="mr-2" />
                             게시하기
                         </>
                     )}

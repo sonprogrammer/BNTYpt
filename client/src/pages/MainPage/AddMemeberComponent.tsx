@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { StyledBox, StyledBtn, StyledContainer, StyledInput, StyledMember, StyledSelect, StyledXIcon } from './style'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark, faUserPlus, faArrowUp91 } from '@fortawesome/free-solid-svg-icons';
+import { X, UserPlus, ArrowUp10 } from 'lucide-react';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../utils/userState';
 import { axiosInstance } from '../../utils/axiosInstance';
@@ -61,7 +60,7 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
     <StyledContainer onClick={closeModal}>
       <StyledBox onClick={(e) => e.stopPropagation()}>
         <StyledXIcon onClick={closeModal}>
-          <FontAwesomeIcon icon={faXmark} />
+          <X size={20} />
         </StyledXIcon>
         
         <div className="title-section">
@@ -71,7 +70,7 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
 
         <StyledMember>
           <div className="input-label">
-            <FontAwesomeIcon icon={faUserPlus} />
+            <UserPlus size={18} />
             <span>대상 회원</span>
           </div>
           <StyledSelect 
@@ -92,7 +91,7 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
 
         <StyledInput>
           <div className="input-label">
-            <FontAwesomeIcon icon={faArrowUp91} />
+            <ArrowUp10 size={18} />
             <span>PT 추가 횟수</span>
           </div>
           <input 
