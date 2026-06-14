@@ -1,5 +1,6 @@
 @font-face {
-    font-family: "RippedFont";
-    src: url("../fonts/rippedFont2.ttf") format("truetype");
+    font-family: "rippedFont";
+    src: url("../fonts/rippedFont2.woff2") format("woff2");
+    font-display: swap;
   }
   

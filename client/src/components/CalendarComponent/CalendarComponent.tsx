@@ -1,8 +1,7 @@
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isSameMonth, isSameDay, getDay, addDays } from 'date-fns'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Dot, DotWrapper, StyledBox, StyledBtn, StyledCell, StyledCloseBtn, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon, StyledModal, StyledModalBox, StyledModalContents, StyledModalTextArea, StyledTitle } from './style'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark, faAngleRight, faAngleLeft, faPlus, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
+import { CalendarCheck, Plus, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import { axiosInstance } from '../../utils/axiosInstance';
@@ -17,7 +16,14 @@ type Records = {
     kakaoId? : string;
     email? : string;
     userType? : string;
+}
 
+interface CalendarsData{
+    _id: string;
+    diet: string;
+    workout: string
+    date: Date
+    userId: string
 }
 
 const CalendarComponent = () => {
@@ -30,52 +36,93 @@ const CalendarComponent = () => {
 
     const [user] = useRecoilState(userState)
 
-    const firstDayOfMonth = startOfMonth(currentDate)
-    const lastDayOfMonth = endOfMonth(currentDate)
-    const days = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth })
+    // const firstDayOfMonth = startOfMonth(currentDate)
+    // const lastDayOfMonth = endOfMonth(currentDate)
+    // const days = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth })
 
-    const startDay = getDay(firstDayOfMonth);
-    const leadingEmptyDays = Array.from({ length: startDay }, (_, i) => addDays(firstDayOfMonth, i - startDay));
+    // const startDay = getDay(firstDayOfMonth);
+    // const leadingEmptyDays = Array.from({ length: startDay }, (_, i) => addDays(firstDayOfMonth, i - startDay));
 
   
-    const getRecordForDate = (date: Date) => {
-        const dateString = format(date, 'yyyy-MM-dd')
-        return records.find(record => record.date === dateString)
-    }
+    // const getRecordForDate = (date: Date) => {
+    //     const dateString = format(date, 'yyyy-MM-dd')
+    //     return records.find(record => record.date === dateString)
+    // }
 
-    
+    const { days, leadingEmptyDays } = useMemo(() => {
+        const firstDayOfMonth = startOfMonth(currentDate)
+        const lastDayOfMonth = endOfMonth(currentDate)
+        const startDay = getDay(firstDayOfMonth)
+        
+        return {
+            days: eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth }),
+            leadingEmptyDays: Array.from({ length: startDay }, (_, i) => addDays(firstDayOfMonth, i - startDay))
+        }
+    }, [currentDate])
+
+    const recordsMap = useMemo(() => {
+        const map: Record<string, Records> = {}
+        records.forEach(record => {
+            if (record.date) map[record.date] = record
+        })
+        return map
+    }, [records])
+
 
     const fetchCalendar = useCallback(async() => {
         try {
             let url= ''
             if(user.email){
                 url = `${apiUrl}/api/calendar/user/email/${user.email}`
-              }else if(user.kakaoId){
+            } else if(user.kakaoId){
                 url = `${apiUrl}/api/calendar/user/kakao/${user.kakaoId}`
-              }
+            }
             
-
             const res = await axiosInstance.get(url)
             if(res.data.success){
-                const formattedRecords = res.data.calendars.map((record: {
-                    _id: string;
-                    workout: string;
-                    diet: string;
-                    date: string;
-                    userId: string;
-                    __v: number;
-                }) => ({
+                const formattedRecords = res.data.calendars.map((record:CalendarsData) => ({
                     ...record,
                     date: format(new Date(record.date), 'yyyy-MM-dd'),
                 }));
-    
                 setRecords(formattedRecords);
             }
         } catch (error) {
             console.log('err', error)
             toast.error('데이터를 불러오지 못했습니다.')
         }
-    },[user])
+    }, [user])
+    
+    // const fetchCalendar = useCallback(async() => {
+    //     try {
+    //         let url= ''
+    //         if(user.email){
+    //             url = `${apiUrl}/api/calendar/user/email/${user.email}`
+    //           }else if(user.kakaoId){
+    //             url = `${apiUrl}/api/calendar/user/kakao/${user.kakaoId}`
+    //           }
+            
+
+    //         const res = await axiosInstance.get(url)
+    //         if(res.data.success){
+    //             const formattedRecords = res.data.calendars.map((record: {
+    //                 _id: string;
+    //                 workout: string;
+    //                 diet: string;
+    //                 date: string;
+    //                 userId: string;
+    //                 __v: number;
+    //             }) => ({
+    //                 ...record,
+    //                 date: format(new Date(record.date), 'yyyy-MM-dd'),
+    //             }));
+    
+    //             setRecords(formattedRecords);
+    //         }
+    //     } catch (error) {
+    //         console.log('err', error)
+    //         toast.error('데이터를 불러오지 못했습니다.')
+    //     }
+    // },[user])
 
     useEffect(()=>{
         if(!user) return
@@ -125,8 +172,8 @@ const CalendarComponent = () => {
             toast.error('저장에 실패했습니다.')
         }
     }
-
-    const selectedRecord = selectedDate ? getRecordForDate(selectedDate) : null;
+    const selectedDateString = useMemo(() => format(selectedDate, 'yyyy-MM-dd'), [selectedDate])
+    const selectedRecord = recordsMap[selectedDateString] || null;
 
 
     return (
@@ -134,19 +181,19 @@ const CalendarComponent = () => {
             <StyledBox>
                 <StyledContainer>
                     <StyledTitle>
-                        <h1><FontAwesomeIcon icon={faCalendarCheck} className="mr-2 text-red-600" />기록 캘린더</h1>
+                        <h1><CalendarCheck size={22} className="mr-2 text-red-600 inline-block align-text-bottom" />기록 캘린더</h1>
                         <button className="add-btn" onClick={() => setAdd(true)}>
-                            <FontAwesomeIcon icon={faPlus} />
+                            <Plus size={18} />
                         </button>
                     </StyledTitle>
                     
                     <StyledHeader>
                         <StyledIcon onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}>
-                            <FontAwesomeIcon icon={faAngleLeft} />
+                            <ChevronLeft size={20} />
                         </StyledIcon>
                         <h2>{format(currentDate, 'MMMM yyyy')}</h2>
                         <StyledIcon onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}>
-                            <FontAwesomeIcon icon={faAngleRight} />
+                            <ChevronRight size={20} />
                         </StyledIcon>
                     </StyledHeader>
 
@@ -154,7 +201,8 @@ const CalendarComponent = () => {
                         {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => <StyledDay key={day}>{day}</StyledDay>)}
                         {leadingEmptyDays.map((_, i) => <div key={`empty-${i}`} />)}
                         {days.map(day => {
-                            const record = getRecordForDate(day)
+                            const dateString = format(day, 'yyyy-MM-dd')
+                            const record = recordsMap[dateString]
                             return (
                                 <StyledCell
                                     key={day.toString()}
@@ -194,7 +242,7 @@ const CalendarComponent = () => {
             {add && (
                 <StyledModal onClick={() => setAdd(false)}>
                     <StyledModalBox onClick={(e) => e.stopPropagation()}>
-                        <StyledCloseBtn onClick={() => setAdd(false)}><FontAwesomeIcon icon={faXmark} /></StyledCloseBtn>
+                        <StyledCloseBtn onClick={() => setAdd(false)}><X size={20} /></StyledCloseBtn>
                         <StyledModalContents>
                             <label>오늘의 운동</label>
                             <StyledModalTextArea 

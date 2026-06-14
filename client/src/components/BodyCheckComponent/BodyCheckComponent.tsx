@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { ImageWrapper, StyledBox, StyledContainer, StyledDelete, StyledImgContainer, StyledNothing, StyledText, StyledTitle } from './style'
 import dayjs from 'dayjs'
 
@@ -9,6 +9,7 @@ import { useRecoilState } from 'recoil'
 import { userState } from '../../utils/userState'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faCamera } from '@fortawesome/free-solid-svg-icons'
+import { Trash2, Camera } from 'lucide-react'
 import toast from 'react-hot-toast'
 import useDeletePhoto from '../../hooks/useDeletePhoto'
 import { BeatLoader } from 'react-spinners'
@@ -25,7 +26,7 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
   const deleteMutation = useDeletePhoto()
 
 
-  const fetchPost = useCallback( async () => {
+  const fetchPost = useCallback(async () => {
     try {
       let url = ``
 
@@ -50,7 +51,7 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
     } catch (error) {
       console.error('er', error)
     }
-  },[user])
+  }, [user])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,16 +69,48 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
 
   }, [refresh, user, fetchPost])
 
-  const handleDelete = async(e: React.MouseEvent,photoId: string) => {
+  const handleDelete = async (e: React.MouseEvent, photoId: string) => {
     e.stopPropagation()
-      deleteMutation.mutate(photoId, {
-        onSuccess: () => {
-          toast.success('삭제되었습니다!')
-          setPhotos(prev => prev.filter(p=> p.imageId !== photoId))
+    deleteMutation.mutate(photoId, {
+      onSuccess: () => {
+        toast.success('삭제되었습니다!')
+        setPhotos(prev => prev.filter(p => p.imageId !== photoId))
 
-        }
-      })
+      }
+    })
   }
+  const getOptimizedImageUrl = (url: string) => {
+    if (!url || !url.includes('cloudinary.com')) return url || '/notfound.png';
+    return url.replace('/upload/', '/upload/f_auto,q_auto,w_400/');
+  }
+
+  const renderedPhotos = useMemo(() => {
+    return photos.map((photo) => (
+      <StyledBox
+        key={photo.imageId}
+        onClick={() => setClickedForDelete(clickedForDelete === photo.imageId ? null : photo.imageId)}
+      >
+        <StyledTitle>{photo.text || "No Title"}</StyledTitle>
+
+        <ImageWrapper>
+          <img
+            src={getOptimizedImageUrl(photo.imageUrl)} 
+            alt="body-check"
+            onError={(e) => { e.currentTarget.src = '/notfound.png'; }}
+            loading="lazy"
+            decoding="async" 
+          />
+          {clickedForDelete === photo.imageId && (
+            <StyledDelete onClick={(e) => handleDelete(e, photo.imageId)}>
+              <Trash2 size={18} />
+            </StyledDelete>
+          )}
+        </ImageWrapper>
+
+        <StyledText>{photo.uploadTime}</StyledText>
+      </StyledBox>
+    ));
+  }, [photos, clickedForDelete]);
 
   return (
     <StyledContainer>
@@ -90,34 +123,12 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
         <>
           {photos.length === 0 ? (
             <StyledNothing>
-              <FontAwesomeIcon icon={faCamera} size="2xl" className="mb-4 opacity-20" />
-              <p>아직 등록된 기록이 없어요.<br/>오늘의 몸을 기록해보세요!</p>
+              <Camera size={48} className="mb-4 opacity-20" />
+              <p>아직 등록된 기록이 없어요.<br />오늘의 몸을 기록해보세요!</p>
             </StyledNothing>
           ) : (
             <StyledImgContainer>
-              {photos.map((photo) => (
-                <StyledBox 
-                  key={photo.imageId} 
-                  onClick={() => setClickedForDelete(clickedForDelete === photo.imageId ? null : photo.imageId)}
-                >
-                  <StyledTitle>{photo.text || "No Title"}</StyledTitle>
-                  
-                  <ImageWrapper>
-                    <img 
-                      src={photo.imageUrl || '/notfound.png'} 
-                      alt="body-check"
-                      onError={(e) => { e.currentTarget.src = '/notfound.png'; }}
-                    />
-                    {clickedForDelete === photo.imageId && (
-                      <StyledDelete onClick={(e) => handleDelete(e, photo.imageId)}>
-                        <FontAwesomeIcon icon={faTrash} />
-                      </StyledDelete>
-                    )}
-                  </ImageWrapper>
-
-                  <StyledText>{photo.uploadTime}</StyledText>
-                </StyledBox>
-              ))}
+              {renderedPhotos}
             </StyledImgContainer>
           )}
         </>

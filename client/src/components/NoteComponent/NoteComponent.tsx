@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { PostListComponent } from '../PostListComponent';
 import { StyledClose, StyledMember, StyledMembersGroup, StyledNavText, StyledNoteContainer, StyledNothing, StyledPostBox, StyledPostForm, StyledRecordBtn } from './style';
 import { useRecoilState } from 'recoil';
@@ -7,8 +7,7 @@ import { NotePostFormComponent } from '../NotePostFormComponent';
 import useGetMembers from '../../hooks/useGetMemers';
 import useGetEachMemberNote from '../../hooks/useGetEachMemberNote';
 import useGetTrainerMemberNote from '../../hooks/useGetTrainerMemberNote';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faUsers, faQrcode,faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Users, Plus, QrCode, X } from 'lucide-react';
 import { BeatLoader } from 'react-spinners'
 
 interface Post {
@@ -18,15 +17,18 @@ interface Post {
     imageUrl?: string;
 }
 
+
 const NoteComponent = () => {
-    const [role, setRole] = useState<string>('')
+    // const [role, setRole] = useState<string>('')
     const [posts, setPosts] = useState<Post[]>([])
     const [modalOpen, setModalOpen] = useState<boolean>(false)
     const [user] = useRecoilState(userState)
     const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
 
-    const { data: members, isLoading } = useGetMembers(user?.objectId)
+    const userRole = user?.role;
+    const isTrainer = userRole === 'trainer';
 
+    const { data: members =[], isLoading } = useGetMembers(user?.objectId)
 
 
     //*트레이너가 보는것    
@@ -34,26 +36,20 @@ const NoteComponent = () => {
     //*회원이 보는것
     const memberNotesQuery = useGetEachMemberNote(user?.objectId);
 
+
+    const { eachMemberNote, refetch } = useMemo(() => {
+        return isTrainer 
+            ? { eachMemberNote: trainerNotesQuery.data, refetch: trainerNotesQuery.refetch }
+            : { eachMemberNote: memberNotesQuery.data, refetch: memberNotesQuery.refetch };
+    }, [isTrainer, trainerNotesQuery.data, trainerNotesQuery.refetch, memberNotesQuery.data, memberNotesQuery.refetch]);
     
 
-    const eachMemberNote = user?.role === 'trainer'
-        ? trainerNotesQuery.data
-        : memberNotesQuery.data;
-
-    const refetch = user?.role === 'trainer'
-        ? trainerNotesQuery.refetch
-        : memberNotesQuery.refetch;
-
     useEffect(() => {
-        if(!user || !user.objectId) return
-        if (user.role === 'trainer') {
-            setRole(user.role)
-        } else {
+        if (!user || !user.objectId) return
+        if (!isTrainer) {
             setSelectedMemberId(user.objectId)
         }
-
-    }, [user])
-
+    }, [user, isTrainer])
 
     const handleMemberClick = (memeberId: string) => {
         setSelectedMemberId(memeberId)
@@ -87,14 +83,16 @@ const NoteComponent = () => {
 
     return (
         <StyledNoteContainer>
-            {role === 'trainer' ? (
+            {isTrainer ? (
                 <>
-                    {members?.length > 0 ? (
+                    {members && members?.length > 0 ? (
                         <>
                             <StyledMembersGroup>
-                                <div className="label"><FontAwesomeIcon icon={faUsers} className="mr-2"/>회원 목록</div>
+                                <div className="label">
+                                    <Users size={18} className="mr-2 inline-block align-text-bottom" />회원 목록
+                                </div>
                                 <div className="member-list">
-                                    {members.map((m: any) => (
+                                    {members.map((m) => (
                                         <StyledMember 
                                             key={m.memberId} 
                                             active={selectedMemberId === m.memberId}
@@ -107,7 +105,7 @@ const NoteComponent = () => {
                             </StyledMembersGroup>
 
                             <StyledRecordBtn onClick={handleModalOpen}>
-                                <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                                <Plus size={16} className="mr-2 inline-block align-middle" />
                                 운동 일지 기록 추가
                             </StyledRecordBtn>
 
@@ -125,7 +123,7 @@ const NoteComponent = () => {
                         </>)
                         : (
                             <StyledNothing>
-                                <FontAwesomeIcon icon={faQrcode} size="3x" className="mb-4 opacity-20" />
+                                <QrCode size={48} className="mb-4 opacity-20 mx-auto" />
                                 <p>QR코드를 통해 회원을 등록 후 사용하세요.</p>
                             </StyledNothing>
                         )
@@ -135,7 +133,7 @@ const NoteComponent = () => {
                         <StyledPostBox onClick={handleClosModal}>
                             <StyledPostForm onClick={(e) => e.stopPropagation()}>
                                 <StyledClose onClick={handleClosModal}>
-                                    <FontAwesomeIcon icon={faXmark} />
+                                    <X size={20} />
                                 </StyledClose>
                                 <NotePostFormComponent addPost={addPost} closeModal={handleClosModal} />
                             </StyledPostForm>
