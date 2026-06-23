@@ -50,7 +50,7 @@ const MainPage = () => {
               <QrcodeComponent role={user.role} />
 
               <StyledPtAddBtn onClick={() => setAddMember(true)}>
-                신규 PT 회원 추가
+                수업 일수 추가
               </StyledPtAddBtn>
 
               {addMemeber && <AddMemeberComponent closeModal={() => setAddMember(false)} />}
