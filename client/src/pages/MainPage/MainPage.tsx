@@ -69,7 +69,7 @@ const MainPage = () => {
 
               <QrcodeComponent role={user?.role} />
 
-              <p className="hint-text">트레이너에게 QR 코드를 보여주세요.</p>
+              <p className="hint-text">트레이너의 QR 코드를 스캔해주세요.</p>
             </div>
           )}
         </Suspense>

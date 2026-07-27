@@ -12,7 +12,12 @@ import { axiosInstance } from '../../utils/axiosInstance';
 import toast from 'react-hot-toast'
 const apiUrl = process.env.REACT_APP_API_URL;
 
+type KakaoDataType = {
+    response: {
+        access_token: string;
+    }
 
+}
 
 
 const LandingComponent = () => {
@@ -35,7 +40,7 @@ const LandingComponent = () => {
     }
 
 
-    const kakaoOnSuccess = async (data: any) => {
+    const kakaoOnSuccess = async (data: KakaoDataType) => {
         const kakaoaccessToken = data.response.access_token
         if (!selectedRole) {
             toast.error('역할을 선택해 해주세요!')
