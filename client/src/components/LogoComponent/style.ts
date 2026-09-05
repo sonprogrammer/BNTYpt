@@ -22,7 +22,7 @@ export const StyledTitle = styled.div`
         filter: drop-shadow(0 0 10px rgba(185, 28, 28, 0.3));
         
         &:hover {
-            ${tw`text-red-600 scale-105`}
+            ${tw`text-red-600`}
         }
     }
 

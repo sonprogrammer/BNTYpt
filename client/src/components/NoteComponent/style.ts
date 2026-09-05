@@ -43,9 +43,18 @@ export const StyledRecordBtn = styled.button`
         w-full py-4 mt-2
         bg-white/5 border border-dashed border-white/20
         text-white font-bold rounded-2xl
-        hover:bg-white/10 hover:border-red-700/50 hover:text-red-500
-        transition-all active:scale-95
+        transition-all
     `}
+    &:hover{
+        ${tw`
+            text-red-500
+            border-red-700/50 
+            bg-white/10
+            `}
+    }
+    &:active{
+        ${tw` scale-95`}
+    }
 `;
 
 export const StyledNavText = styled.section`

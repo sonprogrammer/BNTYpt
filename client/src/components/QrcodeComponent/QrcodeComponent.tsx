@@ -61,11 +61,11 @@ const QrcodeComponent = ({ role }: QrcodeComponentProps) => {
 
         }
         if (error) {
-            console.log('error 발생', error)
+            console.error('error 발생', error)
         }
     };
     const handleQrError = (err: any) => {
-        console.log('QR error', err);
+        console.error('QR error', err);
     };
 
     const handleClick = (e: React.MouseEvent<HTMLElement>) => {

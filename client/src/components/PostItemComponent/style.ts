@@ -10,10 +10,12 @@ export const StyledContainer = styled.div`
         rounded-2xl
         transition-all duration-300
         cursor-pointer
-        hover:bg-white/10
-        hover:border-red-800/50
-        hover:-translate-y-1
     `}
+    &:hover{
+        ${tw`
+            bg-red-500/10
+            `}
+    }
 `;
 
 export const StyledUpper = styled.section`

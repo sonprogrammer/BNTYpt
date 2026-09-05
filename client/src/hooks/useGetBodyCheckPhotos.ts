@@ -32,7 +32,6 @@ const getBodyCheckPhotos = async (email?: string, kakaoId?: string): Promise<Bod
   }
 
   const res = await axiosInstance.get<BodyCheckRes>(url)
-
   return res.data.posts.map(post => ({
     imageUrl: post.images[0],
     uploadTime: dayjs(post.date).format('YYYY-MM-DD'),
@@ -46,6 +45,6 @@ export function useGetBodyCheckPhotos(email?:string, kakaoId?:string){
   return useQuery({
     queryKey: ['bodyCheckPhotos', email, kakaoId],
     queryFn: () => getBodyCheckPhotos(email, kakaoId),
-    enabled: !!email || !kakaoId
+    enabled: !!email || !!kakaoId
   })
 }

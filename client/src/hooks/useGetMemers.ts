@@ -43,7 +43,7 @@ const getMembers = async(userId: string) => {
             return []
         }
     } catch (error) {
-        console.log('error getMembersHooks', error)
+        console.error('error getMembersHooks', error)
     }
 }
 

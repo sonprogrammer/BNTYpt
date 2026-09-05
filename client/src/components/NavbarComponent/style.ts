@@ -44,6 +44,6 @@ export const NavItem = styled.div.attrs({ className: 'nav-item-inner' })`
 
   &:hover {
     ${tw`text-gray-300`}
-    svg { ${tw`scale-110`} }
+    svg { ${tw`scale-110 text-red-500`} }
   }
 `;

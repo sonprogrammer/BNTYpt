@@ -1,6 +1,6 @@
 
 import { StyledAdd } from './style'
-import { Camera, Plus } from 'lucide-react';
+import { Camera } from 'lucide-react';
 
 interface AddPhotoComponentProps {
   onClick: () => void;
@@ -11,7 +11,6 @@ const AddPhotoComponent = ({onClick} : AddPhotoComponentProps) => {
     <StyledAdd onClick={onClick}>
       <div className="icon-wrapper">
         <Camera  />
-        <Plus />
       </div>
     </StyledAdd>
   )

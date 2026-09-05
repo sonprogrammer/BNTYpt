@@ -46,7 +46,7 @@ const LandingComponent = () => {
     }
 
     const kakaoOnFailure = (error: any) => {
-        console.log('카톡 로그인 오류', error);
+        console.error('카톡 로그인 오류', error);
         toast.error('카카오톡 로그인 오류 잠시후 다시 시도해주세요')
     };
 

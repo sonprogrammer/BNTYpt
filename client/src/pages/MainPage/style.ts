@@ -81,7 +81,7 @@ export const StyledInput = styled.div`
 
 export const StyledBtn = styled.button`
     ${tw`
-        w-full py-4 mt-2
+        w-full h-full py-4 mt-2
         bg-red-700 hover:bg-red-600
         text-white font-black text-lg
         rounded-xl transition-all

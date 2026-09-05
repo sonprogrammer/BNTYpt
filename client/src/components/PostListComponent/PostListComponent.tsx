@@ -101,7 +101,7 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
 
 
   return (
-    <StyledContainer>
+    <StyledContainer className='afasd'>
       {orderedPosts.map((post, i) => (
         <PostItemComponent key={post._id || i} post={post} handleClick={() => handleClick(post)} />
       ))}

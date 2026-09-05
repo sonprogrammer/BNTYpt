@@ -16,7 +16,7 @@ const useDeletePhoto = () => {
             queryClient.invalidateQueries({queryKey: ['bodyCheckPhotos']})
         },
         onError: (error) => {
-            console.log('삭제 실패', error)
+            console.error('삭제 실패', error)
         }
     })
 }

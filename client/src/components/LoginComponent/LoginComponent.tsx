@@ -18,7 +18,7 @@ const LoginComponent = () => {
         const idToken = data.response.access_token  
     }
     const kakaoOnFailure = (error: any) => {
-        console.log(error);
+        console.error(error);
     };
     return (
         <StyledBox>

@@ -14,7 +14,6 @@ interface MemberByTRes{
 
 const getMemberByT = async (objectId: string) => {
     const res = await axiosInstance.get<MemberByTRes>(`${apiUrl}/api/chat/chatrooms/${objectId}`)
-    console.log('resgetByt', res.data)
     return res.data
 }
 

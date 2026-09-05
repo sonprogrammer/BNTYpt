@@ -3,7 +3,7 @@ import tw from "twin.macro";
 
 export const StyledContainer = styled.div`
     ${tw`
-        mt-5 w-full h-full
+        mt-5 w-full 
         grid grid-cols-2 md:grid-cols-3
         gap-4 md:gap-6
         auto-rows-[250px]
