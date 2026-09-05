@@ -1,16 +1,10 @@
 import React, { useState } from 'react'
 import KakaoLogin from 'react-kakao-login'
 import { StyledBox, StyledContainer, StyledLoginBtn, StyledLoginInput, StyledRadios, StyledSignUpBtn } from './style'
-import axios from 'axios'
-import { useRecoilState } from 'recoil';
-import { userState } from '../../utils/userState';
-import { useNavigate } from 'react-router-dom';
-import { saveUserToLocalStorage } from '../../utils/localStorage';
 import SignupComponent from './SignupComponent';
-import { saveAccessToken } from '../../utils/accessToken';
-import { axiosInstance } from '../../utils/axiosInstance';
 import toast from 'react-hot-toast'
-const apiUrl = process.env.REACT_APP_API_URL;
+import { useKakaoLogin } from '../../hooks/useKakaoLogin';
+import { useRegularLogin } from '../../hooks/useRegularLogin';
 
 type KakaoDataType = {
     response: {
@@ -22,13 +16,13 @@ type KakaoDataType = {
 
 const LandingComponent = () => {
     const [selectedRole, setSelectedRole] = useState<string>('')
-    const [, setLoading] = useState<boolean>(false)
-    const [, setUser] = useRecoilState(userState)
     const [signup, setSignup] = useState<boolean>(false)
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
-    const navigate = useNavigate()
+
+    const { mutate: kakaoLogin } = useKakaoLogin()
+    const { mutate: regularLogin} = useRegularLogin()
 
     const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID || '';
 
@@ -41,39 +35,14 @@ const LandingComponent = () => {
 
 
     const kakaoOnSuccess = async (data: KakaoDataType) => {
-        const kakaoaccessToken = data.response.access_token
-        if (!selectedRole) {
-            toast.error('역할을 선택해 해주세요!')
+        if(!selectedRole){
+            toast.error('역할을 선택해주세요')
             return
         }
-        try {
-            setLoading(true)
-            const res = await axiosInstance.post(`${apiUrl}/api/user/login/kakao`, {
-                kakaoaccessToken,
-                role: selectedRole
-            })
-            if (res.data.success) {
-                const newUser = ({
-                    kakaoId: res.data.kakaoId,
-                    name: res.data.name,
-                    role: selectedRole,
-                    objectId: res.data.objectId
-                });
-                const accessToken = res.data.token
-                setUser(newUser)
-                saveUserToLocalStorage(newUser)
-                saveAccessToken(accessToken)
-                navigate('/browse')
-            } else {
-                console.error('login failed :', res.data.message)
-            }
-        } catch (error) {
-            toast.error('아이디 혹은 비밀번호를 확인해주세요!')
-
-            console.error('error login : ', error)
-        } finally {
-            setLoading(false)
-        }
+        kakaoLogin({
+            kakaoaccessToken: data.response.access_token,
+            role: selectedRole
+        })
     }
 
     const kakaoOnFailure = (error: any) => {
@@ -95,46 +64,12 @@ const LandingComponent = () => {
             toast.error('역할을 선택하세요')
             return;
         }
-
-        try {
-            setLoading(true);
-            const res = await axiosInstance.post(`${apiUrl}/api/user/login/regular`, {
-                email,
-                password,
-                role: selectedRole
-            });
-
-
-            if (res.data.success) {
-                const newUser = {
-                    email: res.data.user.email,
-                    name: res.data.user.name,
-                    role: res.data.user.role,
-                    objectId: res.data.user.objectId,
-                    ptCount: res.data.user.ptCount
-                };
-                const accessToken = res.data.user.token
-
-                setUser(newUser);
-                saveUserToLocalStorage(newUser)
-                saveAccessToken(accessToken)
-                navigate('/browse')
-
-            } else {
-                console.log(res.data.error)
-                toast.error('에러 발생. 잠시후 시도해 주세요')
-
-            }
-        } catch (error) {
-            console.error('로그인 중 오류 발생:', error);
-            if (axios.isAxiosError(error) && error.response) {
-                toast.error(error.response.data.message || '로그인에 실패했습니다. 다시 시도해주세요.');
-            } else {
-                toast.error('로그인에 실패했습니다 시도해주세요.');
-            }
-        } finally {
-            setLoading(false);
-        }
+        regularLogin({
+            email,
+            password,
+            role: selectedRole
+        })
+        
     }
 
     return (

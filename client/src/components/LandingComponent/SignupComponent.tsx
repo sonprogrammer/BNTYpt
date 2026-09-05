@@ -1,39 +1,28 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { StyledBackBtn, StyledBox, StyledCheckBtn, StyledEmail, StyledLoginInput, StyledPassword, StyledRadios, StyledSignUp } from './style'
-import { UserCheck, ArrowLeft } from 'lucide-react';
-import axios from 'axios';
+import { ArrowLeft, Loader2, CheckCircle2, XCircle } from 'lucide-react';
 import toast from 'react-hot-toast'
-const apiUrl = process.env.REACT_APP_API_URL;
+import { useCheckEmail } from '../../hooks/useCheckEmail';
+import { useSignup } from '../../hooks/useSignup';
 
 
 
 const SignupComponent = () => {
     const [selectedRole, setSelectedRole] = useState<string>('')
     const [email, setEmail] = useState<string>('')
+
     const [name, setName] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [passwordMismatch, setPasswordMismatch] = useState<boolean>(false);
 
-
+    const { isLoading, emailChecked, isAvailable } = useCheckEmail(email)
+    const { signup } = useSignup()
 
     const handleRefresh = () => {
         window.location.reload()
     }
 
-    const checkEmail = async () => {
-        try {
-            const res = await axios.get(`${apiUrl}/api/user/check-email?email=${email}`)
-            if (res.data.exists) {
-                toast.error('이미 사용 중인 이메일입니다.')
-            } else {
-                toast.success('사용 가능한 이메일입니다.')
-            }
-        } catch (error) {
-            console.log(error)
-            toast.error('이메일 중복 확인 중 오류가 발생했습니다.')
-        }
-    }
 
 
 
@@ -47,22 +36,7 @@ const SignupComponent = () => {
             toast.error('역할을 선택해주세요.')
             return
         }
-        try {
-            const res = await axios.post(`${apiUrl}/api/user/signup`, {
-                email,
-                name,
-                password,
-                role: selectedRole
-            })
-
-            if (res.data.success) {
-                toast.success('가입을 축하합니다! 로그인해주세요.')
-                handleRefresh()
-            }
-        } catch (error) {
-            console.log('error', error)
-            toast.error('가입 중 오류가 발생했습니다.')
-        }
+        signup({ email, password, name, role: selectedRole })
     }
 
     return (
@@ -74,10 +48,25 @@ const SignupComponent = () => {
             <StyledLoginInput>
                 <StyledEmail>
                     <input type="email" placeholder='ID (Email)' onChange={(e) => setEmail(e.target.value)} />
-                    <StyledCheckBtn onClick={checkEmail}>
-                        <span className="text">중복확인</span>
-                        <UserCheck size={16} className="icon" />
+                    <StyledCheckBtn>
+                        {isLoading ? (
+                            <Loader2
+                                size={18}
+                                className="animate-spin text-stone-500"
+                            />
+                        ) : emailChecked && isAvailable ? (
+                            <CheckCircle2
+                                size={18}
+                                className="text-green-500"
+                            />
+                        ) : emailChecked && !isAvailable ? (
+                            <XCircle
+                                size={18}
+                                className="text-red-500"
+                            />
+                        ) : null}
                     </StyledCheckBtn>
+
                 </StyledEmail>
 
                 <input type="text" placeholder='Name' onChange={(e) => setName(e.target.value)} />
@@ -116,7 +105,7 @@ const SignupComponent = () => {
                 </label>
             </StyledRadios>
 
-            <StyledSignUp onClick={handleSignup}>가입하기</StyledSignUp>
+            <StyledSignUp disabled={!isAvailable} onClick={handleSignup}>가입하기</StyledSignUp>
         </StyledBox>
     )
 }

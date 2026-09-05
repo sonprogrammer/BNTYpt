@@ -1,28 +1,22 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { FileInputWrapper, PreviewContainer, StyledBtn, StyledContainerForm, StyledSubmitEl, StyledTitle, StyledTitleInput } from './style';
-import axios from 'axios';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userState } from '../../utils/userState';
-import { axiosInstance } from '../../utils/axiosInstance';
 import { Image as ImageIcon, CloudUpload } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
-const apiUrl = process.env.REACT_APP_API_URL;
+import { useCreateBodyCheckPost } from '../../hooks/useCreateBodyCheckPost';
 
 
 
-interface PostFormProps {
-  addPost: (post: { text: string; images: string[]; uploadTime: string; }) => void;
-}
 
-
-const PostForm = ({ addPost } : PostFormProps) => {
+const PostForm = ({onSuccess}: {onSuccess: () => void}) => {
   const [text, setText] = useState<string>('');
   const [images, setImages] = useState<File[]>([]);
   const [imagePreview, setImagePreview] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(false)
-  const [user] = useRecoilState(userState)
+  const user = useRecoilValue(userState)
 
+  const { mutate: createPost, isPending} = useCreateBodyCheckPost()
 
   const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => setText(e.target.value);
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,14 +29,6 @@ const PostForm = ({ addPost } : PostFormProps) => {
     }
   };
 
-//*추가
-  const uploadImageToCloudinary = async(file: File): Promise<string> => {
-    const formData = new FormData();
-    formData.append('file', file)
-    formData.append('upload_preset', 'ods04138@gmail.com')
-    const res = await axios.post('https://api.cloudinary.com/v1_1/dqrsksfho/image/upload', formData);
-    return res.data.secure_url
-  }
 
 
 
@@ -50,46 +36,22 @@ const PostForm = ({ addPost } : PostFormProps) => {
     e.preventDefault();
     if (!text || images.length === 0) return toast.error('내용과 사진을 모두 등록해주세요!');
 
-    setLoading(true);
     const toastId = toast.loading('이미지를 업로드 중입니다...');
 
-    try {
-      const uploadedImageUrls = await Promise.all(
-        images.map(image => uploadImageToCloudinary(image))
-      );
-      
-      const formData: Record<string, any> = {
-        text,
-        images: uploadedImageUrls
-      };
-
-      let res;
-      if (user.kakaoId) {
-        formData['kakaoId'] = user.kakaoId;
-        res = await axiosInstance.post(`${apiUrl}/api/posts`, formData, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${user.kakaoAccessToken}`
-          }
-        });
-      } else {
-        formData['email'] = user.email;
-        res = await axiosInstance.post(`${apiUrl}/api/posts`, formData);
+    createPost({text,files: images, email: user?.email, kakaoId: user?.kakaoId}, {
+      onSuccess: () => {
+        toast.success('저장 완료', {id: toastId})
+        setText('')
+        setImages([])
+        setImagePreview([])
+        onSuccess()
+      },
+      onError: (error) => {
+        console.error(error)
+        toast.error('업로드 실패',{ id: toastId})
       }
+    })
 
-      if (res.data.success) {
-        toast.success('기록이 저장되었습니다! 💪', { id: toastId });
-        addPost({ text, images: res.data.post.images, uploadTime: res.data.post.date });
-        setText('');
-        setImages([]);
-        setImagePreview([]);
-      }
-    } catch (error) {
-      console.error('Error', error);
-      toast.error('업로드에 실패했습니다.', { id: toastId });
-    } finally {
-      setLoading(false);
-    }
   };
 
 
@@ -126,8 +88,8 @@ const PostForm = ({ addPost } : PostFormProps) => {
           )}
         </PreviewContainer>
 
-        <StyledBtn type="submit" disabled={loading}>
-          {loading ? <BeatLoader color="#fff" size={8} /> : '게시하기'}
+        <StyledBtn type="submit" disabled={isPending}>
+          {isPending ? <BeatLoader color="#fff" size={8} /> : '게시하기'}
         </StyledBtn>
       </StyledSubmitEl>
     </StyledContainerForm>

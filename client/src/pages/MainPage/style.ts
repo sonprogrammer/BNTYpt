@@ -3,7 +3,8 @@ import tw from 'twin.macro'
 
 export const StyledContainer = styled.div`
     ${tw`
-        fixed inset-0
+        fixed 
+        inset-0
         w-full h-full
         flex justify-center items-center
         z-[100]
@@ -16,7 +17,7 @@ export const StyledContainer = styled.div`
 export const StyledBox = styled.div`
     ${tw`
         relative
-        w-full max-w-[450px]
+        max-w-[450px]
         bg-[#111827]
         rounded-[2rem]
         p-8 md:p-10

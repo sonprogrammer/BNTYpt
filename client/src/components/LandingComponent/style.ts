@@ -171,36 +171,17 @@ export const StyledEmail = styled.div`
   }
 `;
 
-export const StyledCheckBtn = styled.button`
+export const StyledCheckBtn = styled.div`
   ${tw`
-    absolute 
-    right-2.5 
-    top-1/2 
+    absolute
+    right-3
+    top-1/2
     -translate-y-1/2
-    bg-red-800 hover:bg-red-700
-    text-white 
-    text-[11px] md:text-xs 
-    font-bold 
-    px-3 py-2 
-    rounded-lg
-    transition-all
-    shadow-lg
-    active:scale-95
+    flex
+    items-center
+    justify-center
+    pointer-events-none
   `}
-
-  .icon {
-    display: none;
-  }
-
-  @media (max-width: 500px) {
-    ${tw`right-1.5 px-2.5`}
-    .text {
-      display: none;
-    }
-    .icon {
-      ${tw`block text-sm`}
-    }
-  }
 `;
 
 export const StyledPassword = styled.div`
@@ -232,9 +213,27 @@ export const StyledSignUp = styled.button`
     transform 
     active:scale-[0.98]
     shadow-xl shadow-red-900/20
+
+    disabled:bg-gray-500
+    disabled:cursor-not-allowed
+    disabled:opacity-50
+    disabled:hover:bg-gray-500
   `}
   
   &:hover {
     box-shadow: 0 10px 20px -5px rgba(225, 29, 72, 0.4);
+  }
+  &:disabled{
+  ${tw`
+    bg-gray-500
+    cursor-not-allowed
+    opacity-50
+    `}
+    }
+  &:disabled:hover {
+  ${tw`
+      bg-gray-500
+      shadow-none
+    `}
   }
 `;

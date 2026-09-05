@@ -1,65 +1,54 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { StyledBox, StyledBtn, StyledContainer, StyledInput, StyledMember, StyledSelect, StyledXIcon } from './style'
 import { X, UserPlus, ArrowUp10 } from 'lucide-react';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userState } from '../../utils/userState';
-import { axiosInstance } from '../../utils/axiosInstance';
+import { createPortal } from 'react-dom';
 import toast from 'react-hot-toast'
-const apiUrl = process.env.REACT_APP_API_URL;
+import { useGetMemberByT } from '../../hooks/useGetMemberByT';
+import { useAddPtCount } from '../../hooks/useAddPtCount';
+
 
 interface AddMemeberComponentProps {
   closeModal: () => void;
 }
 
+
 const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
   const [selectedMember, setSelectedMember] = useState<string | null>(null);
-  const [chatRooms, setChatRooms] = useState<any[]>([]);
   const [ptCount, setPtCount] = useState<number>(0);
-  const [user] = useRecoilState(userState)
+  const user = useRecoilValue(userState)
 
-  const fetchMemeber = useCallback( async () => {
-    try {
-      const res = await axiosInstance.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`)
-      const memberNames = res.data.chatRooms.map((room: any) => ({
-        memberId: room.memberId,
-        memberName: room.opponentName
-      }))
-      setChatRooms(memberNames)
-      if (memberNames.length > 0) {
-        setSelectedMember(memberNames[0].memberId);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error('회원 목록을 불러오지 못했습니다')
-    }
-  },[user.objectId])
+  const { data, isPending } =useGetMemberByT(user?.objectId)
+  const { mutate: addPtCount, isPending: isSaving} = useAddPtCount()
 
-  useEffect(() => {
-    fetchMemeber()
-  }, [fetchMemeber])
+  const chatRooms = data?.chatRooms ?? []
 
+  const currentMemberId = selectedMember ?? chatRooms[0]?.memberId ?? ''
 
   const handleSavePtCount = async () => {
-    if (selectedMember && ptCount > 0) {
-      try {
-        await axiosInstance.post(`${apiUrl}/api/chat/pt`, {
-          memberId: selectedMember,
-          ptCount,
-        });
-        toast.success(`${ptCount}회 저장이 완료되었습니다!`)
-        closeModal(); 
-      } catch (error) {
-        console.error("PT 횟수 저장 실패. 다시 시도해주세요");
-      }
-    } else {
-      toast.error("회원과 정확한 횟수를 입력해 주세요.");
+    if(!currentMemberId || ptCount <= 0){
+      toast.error('회원과 정확한 횟수를 입력해주세요')
+      return
     }
+    addPtCount({memberId: currentMemberId, ptCount},{
+      onSuccess: () => {
+        toast.success(`${ptCount}회 저장`)
+        closeModal()
+      },
+      onError: (error) => {
+        console.error(error)
+        toast.error('PT 저장 실패')
+      }
+      
+    })
+    
   };
 
-  return (
-    <StyledContainer onClick={closeModal}>
+  return createPortal(
+    <StyledContainer className='df' onClick={() => closeModal()}>
       <StyledBox onClick={(e) => e.stopPropagation()}>
-        <StyledXIcon onClick={closeModal}>
+        <StyledXIcon onClick={() => closeModal()}>
           <X size={20} />
         </StyledXIcon>
         
@@ -74,15 +63,16 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
             <span>대상 회원</span>
           </div>
           <StyledSelect 
-            value={selectedMember || ''}
+            value={currentMemberId}
             onChange={(e) => setSelectedMember(e.target.value)}
+            disabled={isPending}
           >
             {chatRooms.length === 0 ? (
                 <option value="">연결된 회원이 없습니다</option>
             ) : (
                 chatRooms.map((room) => (
                   <option key={room.memberId} value={room.memberId}>
-                    {room.memberName} 회원님
+                    {room.opponentName} 회원님
                   </option>
                 ))
             )}
@@ -102,11 +92,12 @@ const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
           />
         </StyledInput>
 
-        <StyledBtn onClick={handleSavePtCount}>
-          PT 횟수 부여하기
+        <StyledBtn disabled={isSaving} onClick={handleSavePtCount}>
+          {isSaving ? "저장 중..." : "PT 횟수 저장하기"}
         </StyledBtn>
       </StyledBox>
-    </StyledContainer>
+    </StyledContainer>,
+    document.body
   )
 }
 

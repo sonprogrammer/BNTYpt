@@ -4,12 +4,7 @@ import { StyledCloseBtn, StyledModalOverlay, StyledPageContainer, StyledPostForm
 import { X } from 'lucide-react';
 const BodyCheckComponent = lazy(() => import('../../components/BodyCheckComponent/BodyCheckComponent'));
 
-interface Post {
-  text: string;
-  images: string[];
-  uploadTime: string;
-  imageUrl?: string;
-}
+
 
 const AlbumSkeleton = () => (
   <div className="w-full animate-pulse p-4">
@@ -23,8 +18,7 @@ const AlbumSkeleton = () => (
 
 const BodyCheckPage = () => {
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
-  const [posts, setPosts] = useState<Post[]>([])
-  const [refresh, setRefresh] = useState<boolean>(false)
+
 
   const handleAddPhotoClick = () => {
     setShowUploadModal(true)
@@ -32,17 +26,13 @@ const BodyCheckPage = () => {
   const handleCloseModal = () => {
     setShowUploadModal(false);
   };
-  const addPost = (post: Post) => {
-    setPosts([post, ...posts])
-    handleCloseModal()
-    setRefresh(p => !p)
-  }
+
 
 
   return (
     <StyledPageContainer>
       <Suspense fallback={<AlbumSkeleton />}>
-        <BodyCheckComponent refresh={refresh} />
+        <BodyCheckComponent  />
       </Suspense>
 
       {!showUploadModal && (
@@ -61,7 +51,7 @@ const BodyCheckPage = () => {
               <p>운동 후의 멋진 모습을 기록하세요!</p>
             </div>
 
-            <PostForm addPost={addPost} />
+            <PostForm onSuccess={handleCloseModal}/>
           </StyledPostFormContainer>
         </StyledModalOverlay>
       )}

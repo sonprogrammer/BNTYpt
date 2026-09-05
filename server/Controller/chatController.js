@@ -187,22 +187,22 @@ const setPtCount = async (req, res) => {
 const getPtCount = async (req, res) => {
   const { memberId } = req.params;
   try {
-    const [regularUser, kakaoUser] = await Promise.all([
-      regularUser.findOne({_id: memeberId}),
+    const [regularUserData, kakaoUserData] = await Promise.all([
+      regularUser.findOne({_id: memberId}),
       kakaoUser.findOne({_id: memberId})
     ])
     
-    const user = regularUser || kakaoUser
+    const user = regularUserData || kakaoUserData
     
     if (!user) {
       return res.status(404).json({ message: "User is not found" });
     }
 
-    res.status(200).json({ success: true, message: user.ptCount });
+    res.status(200).json({ success: true, data: user.ptCount });
   } catch (error) {
     console.log("error", error);
     if (!res.headersSent) {
-      return res.status(500).json({ success: false, message: "Internal Server Error" });
+      return res.status(500).json({ success: false, message: "Interndal Server Error" });
     }
   }
 };

@@ -1,39 +1,19 @@
-import { lazy, Suspense, useCallback, useState } from 'react'
-// import { QrcodeComponent } from '../../components'
-import { useEffect } from 'react'
-import { useRecoilState } from 'recoil'
+import { lazy, Suspense, useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import { userState } from '../../utils/userState'
-// import AddMemeberComponent from './AddMemeberComponent'
 import { StyledDashboardCard, StyledInfoText, StyledMainContainer, StyledPtAddBtn } from './style'
-import { axiosInstance } from '../../utils/axiosInstance'
-const apiUrl = process.env.REACT_APP_API_URL;
+import { useGetUserPtCount } from '../../hooks/useGetUserPtCount'
 
 const AddMemeberComponent = lazy(() => import('./AddMemeberComponent'))
 const QrcodeComponent = lazy(() => import('../../components').then(module => ({ default: module.QrcodeComponent })))
 
 const MainPage = () => {
   const [addMemeber, setAddMember] = useState<boolean>(false)
-  const [user, setUser] = useRecoilState(userState)
+  const user = useRecoilValue(userState)
 
-  const getUserPtCount = useCallback(async () => {
-    if (!user?.objectId) return
-    try {
-      const res = await axiosInstance.get(`${apiUrl}/api/chat/pt/${user.objectId}`)
+  const { data, isPending } = useGetUserPtCount(user?.objectId, user?.role === 'member')
 
-      if (res.data.success) {
-        setUser((prevState: any) => ({ ...prevState, ptCount: res.data.message }));
-
-      }
-
-    } catch (error) {
-      console.error(error)
-    }
-  }, [user?.objectId, setUser])
-
-  useEffect(() => {
-    getUserPtCount()
-  }, [getUserPtCount])
-
+  const ptCount = data?.data
 
   return (
     <StyledMainContainer>
@@ -64,7 +44,13 @@ const MainPage = () => {
 
               <div className="pt-count-badge">
                 <span className="label">남은 PT 횟수</span>
-                <span className="count">{user?.ptCount ?? '-'}</span>
+                <span className="count">
+                  {isPending ?
+                    <span className="inline-block w-20 h-20 rounded-md bg-white/10 animate-pulse" />
+                    :
+                      ptCount ?? '-'
+                  }
+                </span>
               </div>
 
               <QrcodeComponent role={user?.role} />

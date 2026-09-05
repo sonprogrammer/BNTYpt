@@ -37,7 +37,6 @@ export const FileInputWrapper = styled.div`
       w-full py-8 border-2 border-dashed border-white/10
       rounded-2xl bg-white/5
       text-gray-400 cursor-pointer
-      hover:bg-white/10 hover:border-red-600/50
       transition-all
     `}
     span { ${tw`mt-2 text-sm`} }

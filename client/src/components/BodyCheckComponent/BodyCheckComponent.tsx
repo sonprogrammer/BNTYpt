@@ -1,82 +1,34 @@
 import React, { useCallback, useMemo } from 'react'
 import { ImageWrapper, StyledBox, StyledContainer, StyledDelete, StyledImgContainer, StyledNothing, StyledText, StyledTitle } from './style'
-import dayjs from 'dayjs'
-
 import { useState } from 'react'
-import { useEffect } from 'react'
-import { axiosInstance } from '../../utils/axiosInstance';
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { userState } from '../../utils/userState'
 import { Trash2, Camera } from 'lucide-react'
 import toast from 'react-hot-toast'
 import useDeletePhoto from '../../hooks/useDeletePhoto'
 import { BeatLoader } from 'react-spinners'
+import { useGetBodyCheckPhotos } from '../../hooks/useGetBodyCheckPhotos'
 
-const apiUrl = process.env.REACT_APP_API_URL;
 
-
-function BodyCheckComponent({ refresh }: { refresh: boolean }) {
-  const [photos, setPhotos] = useState<{ imageUrl: string, uploadTime: string, text: string, imageId: string }[]>([])
-  const [user] = useRecoilState(userState)
-  const [loading, setLoading] = useState<boolean>(false)
+function BodyCheckComponent() {
+  const user = useRecoilValue(userState)
   const [clickedForDelete, setClickedForDelete] = useState<string | null>(null)
 
   const deleteMutation = useDeletePhoto()
 
-
-  const fetchPost = useCallback(async () => {
-    try {
-      let url = ``
-
-      if (user.email) {
-        url = `${apiUrl}/api/posts/user/email/${user.email}`
-      } else if (user.kakaoId) {
-        url = `${apiUrl}/api/posts/user/kakao/${user.kakaoId}`
-      }
-
-      const res = await axiosInstance.get(url)
+  const { data: photos=[], isPending} = useGetBodyCheckPhotos(user?.email, user?.kakaoId)
 
 
-      const formatedPost = res.data.posts.map((post: any) => ({
-        imageUrl: post.images[0],
-        uploadTime: dayjs(post.date).format('YYYY-MM-DD'),
-        text: post.text,
-        imageId: post._id
-      })).sort((a: any, b: any) => new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime())
-
-
-      setPhotos(formatedPost)
-    } catch (error) {
-      console.error('er', error)
-    }
-  }, [user])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return
-      setLoading(true)
-      try {
-        await fetchPost()
-      } catch (error) {
-        console.log(error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-
-  }, [refresh, user, fetchPost])
-
-  const handleDelete = async (e: React.MouseEvent, photoId: string) => {
+  const handleDelete = useCallback ((e: React.MouseEvent, photoId: string) => {
     e.stopPropagation()
     deleteMutation.mutate(photoId, {
       onSuccess: () => {
         toast.success('삭제되었습니다!')
-        setPhotos(prev => prev.filter(p => p.imageId !== photoId))
-
+        setClickedForDelete(null)
       }
     })
-  }
+  },[deleteMutation])
+
   const getOptimizedImageUrl = (url: string) => {
     if (!url || !url.includes('cloudinary.com')) return url || '/notfound.png';
     return url.replace('/upload/', '/upload/f_auto,q_auto,w_400/');
@@ -112,7 +64,7 @@ function BodyCheckComponent({ refresh }: { refresh: boolean }) {
 
   return (
     <StyledContainer>
-      {loading ? (
+      {isPending ? (
         <div className='flex flex-col justify-center items-center h-[400px] gap-4'>
           <BeatLoader color="#e11d48" size={12} />
           <p className="text-gray-500 text-sm">기록을 불러오는 중...</p>

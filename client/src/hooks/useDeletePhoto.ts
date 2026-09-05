@@ -13,7 +13,7 @@ const useDeletePhoto = () => {
     return useMutation({
         mutationFn: deletePhoto,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['userPhotos']})
+            queryClient.invalidateQueries({queryKey: ['bodyCheckPhotos']})
         },
         onError: (error) => {
             console.log('삭제 실패', error)

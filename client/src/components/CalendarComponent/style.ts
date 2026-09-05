@@ -12,9 +12,30 @@ export const StyledContainer = styled.div`
 export const StyledTitle = styled.div`
     ${tw`flex justify-between items-center mb-6`}
     h1 { ${tw`text-xl font-black text-white`} }
-    .add-btn {
-        ${tw`w-10 h-10 flex items-center justify-center bg-red-700 text-white rounded-full hover:bg-red-600 transition-all shadow-lg shadow-red-900/20 active:scale-90`}
-    }
+`;
+
+export const StyledAddBtn = styled.button`
+  ${tw`
+    p-3
+    flex
+    items-center
+    justify-center
+    bg-red-600
+    text-white
+    rounded-full
+    transition-all
+    shadow-lg
+    shadow-red-900/20
+    active:scale-90
+  `}
+
+  &:hover {
+    ${tw`bg-red-700`}
+  }
+
+  svg {
+    background: transparent;
+  }
 `;
 
 export const StyledHeader = styled.header`
