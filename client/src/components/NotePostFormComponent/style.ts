@@ -23,13 +23,12 @@ export const StyledRecord = styled.h1`
     `}
 `;
 
-export const StyledSelect = styled.select`
+export const StyledMemberName = styled.h1`
     ${tw`
         bg-white/10 text-white text-xs font-bold
         px-3 py-1.5 rounded-lg border border-white/10
         outline-none cursor-pointer
     `}
-    option { ${tw`bg-gray-900 text-white`} }
 `;
 
 export const StyledTitle = styled.input`

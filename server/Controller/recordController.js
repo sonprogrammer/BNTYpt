@@ -4,7 +4,7 @@ const Record = require('../Models/recordModel')
 
 const createRecord = async(req, res) => {
     try {
-        const { text,title, userObjectId, images, opponentName } = req.body
+        const { text,title, userObjectId, images, memberId } = req.body
         let user = await regularUser.findById(userObjectId);
         if (!user) {
             user = await kakaoUser.findById(userObjectId);
@@ -21,7 +21,7 @@ const createRecord = async(req, res) => {
             images,
             trainerId : user._id,
             uploadTime: new Date().toISOString(),
-            memberId: opponentName,
+            memberId,
         })
 
         await newRecord.save()

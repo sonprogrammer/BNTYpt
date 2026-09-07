@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil'
 
 import { StyledDashboardCard, StyledInfoText, StyledMainContainer, StyledPtAddBtn } from './style'
 import { useGetUserPtCount } from '../../hooks/useGetUserPtCount'
-import { accessTokenState, userState } from '../../state/userState'
+import {  userState } from '../../state/userState'
 
 const AddMemeberComponent = lazy(() => import('./AddMemeberComponent'))
 const QrcodeComponent = lazy(() => import('../../components').then(module => ({ default: module.QrcodeComponent })))
@@ -11,8 +11,6 @@ const QrcodeComponent = lazy(() => import('../../components').then(module => ({ 
 const MainPage = () => {
   const [addMemeber, setAddMember] = useState<boolean>(false)
   const user = useRecoilValue(userState)
-  const accessToken = useRecoilValue(accessTokenState)
-  console.log('accessToken', accessToken)
 
   const { data, isPending } = useGetUserPtCount(user?.objectId, user?.role === 'member')
 

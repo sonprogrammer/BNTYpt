@@ -11,16 +11,8 @@ import { Users, Plus, QrCode, X, NotebookPen } from 'lucide-react';
 import { BeatLoader } from 'react-spinners'
 import { userState } from '../../state/userState';
 
-interface Post {
-    text: string;
-    images: string[];
-    uploadTime: string;
-    imageUrl?: string;
-}
-
 
 const NoteComponent = () => {
-    const [posts, setPosts] = useState<Post[]>([])
     const [modalOpen, setModalOpen] = useState<boolean>(false)
     const [user] = useRecoilState(userState)
     const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
@@ -30,6 +22,7 @@ const NoteComponent = () => {
 
     const { data: members = [], isLoading } = useGetMembers(user?.objectId)
 
+    const selectedMember = members.find(m => m.memberId === selectedMemberId)
 
     //*트레이너가 보는것    
     const trainerNotesQuery = useGetTrainerMemberNote(selectedMemberId, user?.objectId);
@@ -37,7 +30,7 @@ const NoteComponent = () => {
     const memberNotesQuery = useGetEachMemberNote(user?.objectId);
 
 
-    const { eachMemberNote =[], refetch } = useMemo(() => {
+    const { eachMemberNote = [], refetch } = useMemo(() => {
         return isTrainer
             ? { eachMemberNote: trainerNotesQuery.data, refetch: trainerNotesQuery.refetch }
             : { eachMemberNote: memberNotesQuery.data, refetch: memberNotesQuery.refetch };
@@ -54,12 +47,6 @@ const NoteComponent = () => {
         setSelectedMemberId(memeberId)
     }
 
-
-
-    const addPost = (post: Post) => {
-        setPosts([post, ...posts])
-        refetch()
-    }
 
     const handleModalOpen = () => {
         setModalOpen(true)
@@ -97,16 +84,18 @@ const NoteComponent = () => {
                                             active={selectedMemberId === m.memberId}
                                             onClick={() => handleMemberClick(m.memberId)}
                                         >
-                                            {m.memebersName}
+                                            {m.membersName}
                                         </StyledMember>
                                     ))}
                                 </div>
                             </StyledMembersGroup>
 
-                            <StyledRecordBtn onClick={handleModalOpen}>
-                                <Plus size={16} className="mr-2 inline-block align-middle" />
-                                운동 일지 기록 추가
-                            </StyledRecordBtn>
+                            {selectedMember &&
+                                <StyledRecordBtn onClick={handleModalOpen}>
+                                    <Plus size={16} className="mr-2 inline-block align-middle" />
+                                    운동 일지 기록 추가
+                                </StyledRecordBtn>
+                            }
 
                             {selectedMemberId === null ? (
                                 <StyledNavText>
@@ -145,13 +134,13 @@ const NoteComponent = () => {
                         )
                     }
 
-                    {modalOpen && (
+                    {modalOpen && selectedMember && (
                         <StyledPostBox onClick={handleClosModal}>
                             <StyledPostForm onClick={(e) => e.stopPropagation()}>
                                 <StyledClose onClick={handleClosModal}>
                                     <X size={20} />
                                 </StyledClose>
-                                <NotePostFormComponent addPost={addPost} closeModal={handleClosModal} />
+                                <NotePostFormComponent selectedMember={selectedMember} closeModal={handleClosModal} />
                             </StyledPostForm>
                         </StyledPostBox>
                     )}

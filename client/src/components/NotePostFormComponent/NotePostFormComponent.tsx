@@ -1,13 +1,13 @@
-import React, { FormEvent, useCallback, useEffect, useState } from 'react'
-import { ImagePreviewWrapper, StyledBtn, StyledContainerForm, StyledRecord, StyledSelect, StyledSubmitEl, StyledTextArea, StyledTitle, StyledUpper } from './style';
-import { useRecoilState } from 'recoil';
+import React, { FormEvent, useState } from 'react'
+import { ImagePreviewWrapper, StyledBtn, StyledContainerForm, StyledRecord, StyledMemberName, StyledSubmitEl, StyledTextArea, StyledTitle, StyledUpper } from './style';
+import { useRecoilValue } from 'recoil';
 
 import axios from 'axios';
-import { axiosInstance } from '../../utils/axiosInstance';
 import { Image as ImageIcon, CloudUpload } from 'lucide-react';
 import toast from 'react-hot-toast'
 import { userState } from '../../state/userState';
-const apiUrl = process.env.REACT_APP_API_URL;
+import { usePostNote } from '../../hooks/usePostNote';
+
 
 interface Record {
     title: string;
@@ -16,50 +16,31 @@ interface Record {
     uploadTime: string;
     imageUrl?: string;
     userObjectId: string;
-    opponentName: string | null;
+    memberId: string
+}
+
+interface MemberInfo {
+    memberId: string
+    membersName: string
 }
 
 interface NotePostFormComponentProps {
-    addPost: (post: { text: string; images: string[]; uploadTime: string;}) => void;
     closeModal: () => void;
+    selectedMember: MemberInfo
 }
 
 
-const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentProps) => {
+const NotePostFormComponent = ({ closeModal, selectedMember }: NotePostFormComponentProps) => {
     const [text, setText] = useState<string>('');
     const [title, setTitle] = useState<string>('');
     const [images, setImages] = useState<File[]>([]);
     const [previewImages, setPreviewImages] = useState<string[]>([]);
-    const [selectedMember, setSelectedMember] = useState<string | null>(null);
-    const [chatRooms, setChatRooms] = useState<any[]>([]);
-    const [isUploading, setIsUploading] = useState<boolean>(false);
-
-    const [user] = useRecoilState(userState)
 
 
+    const user = useRecoilValue(userState)
 
-    const fetchMemeber = useCallback(async (userId: string) => {
-        try {
-            const res = await axiosInstance.get(`${apiUrl}/api/chat/chatrooms/${user.objectId}`)
-            const memberNames = res.data.chatRooms.map((room: any) => ({
-                memberId: room.memberId,
-                memberName: room.opponentName
-            }))
+    const { mutateAsync: createNote, isPending} = usePostNote()
 
-            setChatRooms(memberNames)
-
-            if (memberNames.length > 0) {
-                setSelectedMember(memberNames[0].memberId);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    },[user.objectId])
-
-    useEffect(() => {
-        const userId = user.objectId
-        fetchMemeber(userId)
-    }, [user.objectId, fetchMemeber])
 
    
 
@@ -90,7 +71,6 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
         };
 
         try {
-            setIsUploading(true)
             const uploadedImageUrls = await Promise.all(
                 images.map(image => uploadImageToCloudinary(image))
             )
@@ -102,23 +82,20 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
                 images: uploadedImageUrls,
                 uploadTime: new Date().toISOString(),
                 userObjectId: user.objectId,
-                opponentName: selectedMember,
+                memberId: selectedMember.memberId
             }
-            await axiosInstance.post(`${apiUrl}/api/records`, formData)
+            await createNote(formData)
 
-            addPost(formData)
             setText('');
             setImages([]);
             setPreviewImages([]);
-            setSelectedMember(chatRooms[0]?.memberId || null);
             toast.success('노트 일지를 작성하셨습니다')
             closeModal();
 
 
         } catch (error) {
             console.error('Error', error)
-        }finally {
-            setIsUploading(false)
+            toast.error('노트 작성 실패')
         }
 
     };
@@ -131,17 +108,10 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
             <StyledUpper>
                 <StyledRecord>NEW RECORD</StyledRecord>
                 <div className="select-wrapper">
-                    <StyledSelect 
-                        value={selectedMember || ''}
-                        onChange={(e) => setSelectedMember(e.target.value)}
+                    <StyledMemberName 
                     >
-                        <option value={''} disabled>회원 선택</option>
-                        {chatRooms.map((room) => (
-                            <option key={room.memberId} value={room.memberId}>
-                                {room.memberName}
-                            </option>
-                        ))}
-                    </StyledSelect>
+                        {`${selectedMember.membersName} 회원님`}
+                    </StyledMemberName>
                 </div>
             </StyledUpper>
 
@@ -174,8 +144,8 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
                     </ImagePreviewWrapper>
                 )}
 
-                <StyledBtn type="submit" disabled={isUploading}>
-                    {isUploading ? '기록 업로드 중...' : (
+                <StyledBtn type="submit" disabled={isPending}>
+                    {isPending ? '기록 업로드 중...' : (
                         <>
                             <CloudUpload size={18} className="mr-2" />
                             <p>게시하기</p>

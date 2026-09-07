@@ -36,7 +36,7 @@ const getMembers = async(userId: string) => {
         if(res.data){
             const memebersName = res.data.chatRooms.map((room) => ({
                 memberId: room.memberId,
-                memebersName: room.opponentName
+                membersName: room.opponentName
             }))
             return memebersName
         }else{
