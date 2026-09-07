@@ -2,9 +2,10 @@ import React, { useState, lazy, Suspense } from 'react'
 import { OnResultFunction } from 'react-qr-scanner'
 import { StyledContainer, StyledMemberBox, StyledTrainerBox } from './style'
 import { useRecoilState } from 'recoil';
-import { userState } from '../../utils/userState';
+
 import toast from 'react-hot-toast'
 import { axiosInstance } from '../../utils/axiosInstance';
+import { userState } from '../../state/userState';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const QRCodeCanvas = lazy(() => import('qrcode.react').then(module => ({ default: module.QRCodeCanvas })))

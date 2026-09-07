@@ -4,10 +4,11 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import toast from 'react-hot-toast';
-import { userState } from '../utils/userState';
+
 import { saveUserToLocalStorage } from '../utils/localStorage';
-import { saveAccessToken } from '../utils/accessToken';
+
 import axios from 'axios';
+import { userState, accessTokenState } from '../state/userState';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -27,6 +28,7 @@ interface KakaoLoginResponse {
 
 export const useKakaoLogin = () => {
   const setUser = useSetRecoilState(userState);
+  const setAccessToken = useSetRecoilState(accessTokenState)
   const navigate = useNavigate();
 
   return useMutation({
@@ -55,7 +57,7 @@ export const useKakaoLogin = () => {
       setUser(newUser);
 
       saveUserToLocalStorage(newUser);
-      saveAccessToken(data.token);
+      setAccessToken(data.token);
 
       navigate('/browse');
     },

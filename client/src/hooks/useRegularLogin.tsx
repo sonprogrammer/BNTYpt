@@ -1,11 +1,11 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useSetRecoilState } from "recoil";
-import { userState } from "../utils/userState";
+
 import { useNavigate } from "react-router-dom";
 import { saveUserToLocalStorage } from "../utils/localStorage";
-import { saveAccessToken } from "../utils/accessToken";
 import { useMutation } from "@tanstack/react-query";
+import { userState, accessTokenState } from "../state/userState";
 
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -39,6 +39,7 @@ const regularLogin = async ({email,password,role}:RegularLoginParams) => {
 
 export const useRegularLogin = () => {
     const setUser = useSetRecoilState(userState);
+    const setAccessToken = useSetRecoilState(accessTokenState)
     const navigate = useNavigate();
 
     return useMutation({
@@ -57,7 +58,7 @@ export const useRegularLogin = () => {
             }
 
             setUser(newUser)
-            saveAccessToken(data.user.token)
+            setAccessToken(data.user.token)
             saveUserToLocalStorage(newUser)
             navigate('/browse')
         },

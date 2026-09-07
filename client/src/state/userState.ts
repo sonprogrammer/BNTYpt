@@ -1,24 +1,26 @@
 import { atom, selector } from "recoil"
-import { getUserFromLocalStorage } from "./localStorage"
-import { getAccessToken } from "./accessToken"
+import { getUserFromLocalStorage } from "../utils/localStorage"
 
 const defaultUser = getUserFromLocalStorage()
-const accessToken = getAccessToken()
 
 
 export const userState = atom({
     key: 'userState',
-    default: defaultUser && accessToken ? defaultUser :{
+    default: defaultUser ??{
         kakaoId: null,
         id: null,
         email: null,
         name: null,
         role: null as string | null,
-        token: null as string | null, 
         objectId: null as string | null, 
         _id: null as string | null ,
         ptCount: null as number | null
     }
+})
+
+export const accessTokenState = atom<string | null>({
+    key: 'accessTokenState',
+    default: null
 })
 
 export const userRoleSelector = selector<string | null>({

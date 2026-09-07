@@ -9,6 +9,7 @@ import './assets/styles/fonts.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import { AxiosInterceptor } from './components/AxiosInterceptor';
 
 
 const root = ReactDOM.createRoot(
@@ -20,6 +21,7 @@ root.render(
   <QueryClientProvider client={queryClient}>
   <RecoilRoot>
     <BrowserRouter>
+    <AxiosInterceptor />
     <Toaster position="top-center" reverseOrder={false} />
       <App />
     </BrowserRouter>

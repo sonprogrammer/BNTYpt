@@ -4,12 +4,13 @@ import { StyledArrow, StyledContainer, StyledMessage, StyledMessageBox, StyledPl
 import { SendHorizontal, Image as ImageIcon, MessageSquareText, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { userState } from '../../utils/userState';
+
 import { BeatLoader } from 'react-spinners';
 import { useGetChatRoomId } from '../../hooks/useGetChatRoomId';
 import { useGetChatMsgs } from '../../hooks/useGetChatMsgs';
 import { useChatRealtime } from '../../hooks/useChatRealtime';
 import { useSendChatMsg } from '../../hooks/useSendChatMsg';
+import { userState } from '../../state/userState';
 
 
 

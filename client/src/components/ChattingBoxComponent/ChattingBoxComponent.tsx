@@ -2,10 +2,11 @@ import { useMemo} from 'react'
 import { StyledContainer, StyledContent, StyledProfile, StyledNotMember, LastMsgWrapper, UnreadBadge } from './style'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
-import { userState } from '../../utils/userState'
+
 import { BeatLoader } from 'react-spinners'
 import { MessageSquareText, ChevronRight } from 'lucide-react'
 import { useChatRooms } from '../../hooks/useChatRooms'
+import { userState } from '../../state/userState'
 
 
 const ChattingBoxComponent = () => {

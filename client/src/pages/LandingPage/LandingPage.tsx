@@ -2,13 +2,14 @@
 import { useNavigate } from 'react-router-dom'
 import { LandingComponent } from '../../components'
 import { BackgroundDecor, BrandingSection, StyledContainer, StyledLogin } from './style'
-import { useRecoilState } from 'recoil'
-import { userState } from '../../utils/userState'
+import { useRecoilValue } from 'recoil'
+
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
+import { userState } from '../../state/userState'
 
 const LandingPage = () => {
-  const [user] = useRecoilState(userState)
+  const user = useRecoilValue(userState)
 const navigate = useNavigate()
 
 

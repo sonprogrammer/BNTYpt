@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from 'react'
 import { PostListComponent } from '../PostListComponent';
 import { StyledClose, StyledMember, StyledMembersGroup, StyledNavText, StyledNoteContainer, StyledNothing, StyledPostBox, StyledPostForm, StyledRecordBtn } from './style';
 import { useRecoilState } from 'recoil';
-import { userState } from '../../utils/userState';
+
 import { NotePostFormComponent } from '../NotePostFormComponent';
 import useGetMembers from '../../hooks/useGetMemers';
 import useGetEachMemberNote from '../../hooks/useGetEachMemberNote';
 import useGetTrainerMemberNote from '../../hooks/useGetTrainerMemberNote';
 import { Users, Plus, QrCode, X, NotebookPen } from 'lucide-react';
 import { BeatLoader } from 'react-spinners'
+import { userState } from '../../state/userState';
 
 interface Post {
     text: string;

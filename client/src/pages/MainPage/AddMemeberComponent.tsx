@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { StyledBox, StyledBtn, StyledContainer, StyledInput, StyledMember, StyledSelect, StyledXIcon } from './style'
 import { X, UserPlus, ArrowUp10 } from 'lucide-react';
 import { useRecoilValue } from 'recoil';
-import { userState } from '../../utils/userState';
+
 import { createPortal } from 'react-dom';
 import toast from 'react-hot-toast'
 import { useGetMemberByT } from '../../hooks/useGetMemberByT';
 import { useAddPtCount } from '../../hooks/useAddPtCount';
+import { userState } from '../../state/userState';
 
 
 interface AddMemeberComponentProps {

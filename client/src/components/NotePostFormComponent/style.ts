@@ -77,10 +77,25 @@ export const ImagePreviewWrapper = styled.div`
 
 export const StyledBtn = styled.button`
     ${tw`
-        w-full py-4 rounded-2xl
+        w-full py-4 rounded-2xl flex flex-col items-center 
         bg-red-700 text-white font-black text-sm
-        hover:bg-red-600 active:scale-95
         transition-all shadow-lg shadow-red-900/20
-        disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed
     `}
+    &:hover{
+        ${tw`
+            bg-red-600
+            `}
+    }
+    &:active{
+        ${tw`
+            scale-95
+            `}
+    }
+    &:disabled{
+        ${tw`
+            bg-gray-800
+            text-gray-500
+            cursor-not-allowed
+            `}
+    }
 `;

@@ -3,11 +3,12 @@ import { useMemo, useState } from 'react'
 import { Dot, DotWrapper, StyledAddBtn, StyledBox, StyledBtn, StyledCell, StyledCloseBtn, StyledContainer, StyledDay, StyledDetail, StyledGrid, StyledHeader, StyledIcon, StyledModal, StyledModalBox, StyledModalContents, StyledModalTextArea, StyledTitle } from './style'
 import { CalendarCheck, Plus, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useRecoilValue } from 'recoil'
-import { userState } from '../../utils/userState'
+
 import toast from 'react-hot-toast'
 import { useGetCalendarRecords } from '../../hooks/useGetCalendarRecords'
 import { useAddCalendarRecord } from '../../hooks/useAddCalendarRecord'
 import { BeatLoader } from 'react-spinners'
+import { userState } from '../../state/userState'
 
 
 type Records = {

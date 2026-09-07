@@ -1,11 +1,12 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { FileInputWrapper, PreviewContainer, StyledBtn, StyledContainerForm, StyledSubmitEl, StyledTitle, StyledTitleInput } from './style';
 import { useRecoilValue } from 'recoil';
-import { userState } from '../../utils/userState';
+
 import { Image as ImageIcon, CloudUpload } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
 import { useCreateBodyCheckPost } from '../../hooks/useCreateBodyCheckPost';
+import { userState } from '../../state/userState';
 
 
 

@@ -1,11 +1,12 @@
 import React, { FormEvent, useCallback, useEffect, useState } from 'react'
 import { ImagePreviewWrapper, StyledBtn, StyledContainerForm, StyledRecord, StyledSelect, StyledSubmitEl, StyledTextArea, StyledTitle, StyledUpper } from './style';
 import { useRecoilState } from 'recoil';
-import { userState } from '../../utils/userState';
+
 import axios from 'axios';
 import { axiosInstance } from '../../utils/axiosInstance';
 import { Image as ImageIcon, CloudUpload } from 'lucide-react';
 import toast from 'react-hot-toast'
+import { userState } from '../../state/userState';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 interface Record {
@@ -177,7 +178,7 @@ const NotePostFormComponent = ({ addPost, closeModal }: NotePostFormComponentPro
                     {isUploading ? '기록 업로드 중...' : (
                         <>
                             <CloudUpload size={18} className="mr-2" />
-                            게시하기
+                            <p>게시하기</p>
                         </>
                     )}
                 </StyledBtn>

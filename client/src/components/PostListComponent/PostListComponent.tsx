@@ -5,12 +5,13 @@ import { X } from 'lucide-react'
 import dayjs from 'dayjs';
 import useDeleteNote from '../../hooks/useDeleteNote';
 import { useRecoilValue } from 'recoil';
-import { userRoleSelector } from '../../utils/userState';
+
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
 import usePutNote from '../../hooks/usePutNote';
 import toast from 'react-hot-toast'
+import { userRoleSelector } from '../../state/userState';
 
 interface Post {
   _id: string;       

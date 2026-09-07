@@ -2,12 +2,13 @@ import React, { useCallback, useMemo } from 'react'
 import { ImageWrapper, StyledBox, StyledContainer, StyledDelete, StyledImgContainer, StyledNothing, StyledText, StyledTitle } from './style'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import { userState } from '../../utils/userState'
+
 import { Trash2, Camera } from 'lucide-react'
 import toast from 'react-hot-toast'
 import useDeletePhoto from '../../hooks/useDeletePhoto'
 import { BeatLoader } from 'react-spinners'
 import { useGetBodyCheckPhotos } from '../../hooks/useGetBodyCheckPhotos'
+import { userState } from '../../state/userState'
 
 
 function BodyCheckComponent() {

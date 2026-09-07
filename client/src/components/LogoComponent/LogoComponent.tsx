@@ -2,11 +2,12 @@
 import { StyledTitle } from './style'
 import { Link, useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import { userState } from '../../utils/userState'
+
 import { usePostLogout } from '../../hooks/usePostLogout';
 import { useState } from 'react';
 import LogoutModal from '../LogoutModalComponent/LogoutModalComponent';
 import { LogOut } from 'lucide-react';
+import { userState } from '../../state/userState';
 
 
 
