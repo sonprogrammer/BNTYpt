@@ -21,6 +21,9 @@ export function useGetUserPtCount(memberId: string, enabled = true){
     return useQuery({
         queryKey: ['userPtCount', memberId],
         queryFn: () => getUserPtCount(memberId),
+        staleTime: 1000 * 60 * 30,
+        gcTime: 1000 * 60 * 60,
+        refetchOnWindowFocus: 'always',
         enabled: !!memberId && enabled
     })
 }

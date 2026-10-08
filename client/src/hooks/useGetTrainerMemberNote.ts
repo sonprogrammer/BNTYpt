@@ -11,6 +11,8 @@ const useGetTrainerMemberNote = (memberId: string | null, trainerId: string) => 
         queryKey: ['trainerMemberNotes', memberId, trainerId],
         queryFn: () => getMemberNotes(memberId!, trainerId),
         enabled: !!memberId && !!trainerId,
+        staleTime: 1_000 * 60 * 10,
+        gcTime: 1_000 * 60 * 30,
     })
 }
 

@@ -45,6 +45,8 @@ export function useGetBodyCheckPhotos(email?:string, kakaoId?:string){
   return useQuery({
     queryKey: ['bodyCheckPhotos', email, kakaoId],
     queryFn: () => getBodyCheckPhotos(email, kakaoId),
+    staleTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 30,
     enabled: !!email || !!kakaoId
   })
 }

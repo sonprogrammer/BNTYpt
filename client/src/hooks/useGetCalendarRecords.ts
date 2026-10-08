@@ -34,6 +34,8 @@ export function useGetCalendarRecords(email?: string, kakaoId?: string) {
     return useQuery({
         queryKey: ['calendar', email, kakaoId],
         queryFn: () => getCalendarRecords(email, kakaoId),
+        staleTime: 1_000 * 60 * 10,
+        gcTime: 1_000 * 60 * 30,
         enabled: !!email || !!kakaoId
     })
 }

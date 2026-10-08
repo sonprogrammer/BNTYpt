@@ -50,7 +50,8 @@ const getMembers = async(userId: string) => {
 const useGetMembers = (userId: string) => {
     return useQuery({
         queryKey: ['Trainermembers', userId],
-        queryFn: () => getMembers(userId)
+        queryFn: () => getMembers(userId),
+        
     })
 }
 

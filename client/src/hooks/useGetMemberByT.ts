@@ -21,6 +21,8 @@ export function useGetMemberByT(objectId: string) {
     return useQuery({
         queryKey: ['membersByTrainer', objectId],
         queryFn: () => getMemberByT(objectId!),
+        staleTime: 1_000 * 60 * 10,
+        gcTime: 1_000 * 60 * 30,
         enabled: !!objectId
     })
 }

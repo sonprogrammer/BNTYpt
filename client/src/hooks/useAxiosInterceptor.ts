@@ -15,7 +15,7 @@ export const useAxiosInterceptor = () => {
     const requestInterceptor =
       axiosInstance.interceptors.request.use(
         (config) => {
-          if (accessToken) {
+          if (accessToken && !config.headers.Authorization) {
             config.headers.Authorization = `Bearer ${accessToken}`;
           }
 
@@ -24,52 +24,48 @@ export const useAxiosInterceptor = () => {
         (error) => Promise.reject(error)
       );
 
-    const responseInterceptor =
-      axiosInstance.interceptors.response.use(
-        (res) => res,
+    const responseInterceptor = axiosInstance.interceptors.response.use(
+      (res) => res,
 
-        async (error) => {
-          const originalRequest = error.config;
+      async (error) => {
+        const originalRequest = error.config;
 
-          if (
-            (error.response?.status === 401  &&
-            !originalRequest._retry)
-          ) {
-            originalRequest._retry = true;
+        if ((error.response?.status === 401 && !originalRequest._retry)) {
+          originalRequest._retry = true;
 
-            try {
-              const res = await axios.post(
-                `${process.env.REACT_APP_API_URL}/api/user/refresh`,
-                {},
-                {
-                  withCredentials: true,
-                }
-              );
+          try {
+            const res = await axios.post(
+              `${process.env.REACT_APP_API_URL}/api/user/refresh`,
+              {},
+              {
+                withCredentials: true,
+              }
+            );
 
-              const newAccessToken = res.data.accessToken;
+            const newAccessToken = res.data.accessToken;
 
-              setAccessToken(newAccessToken);
+            setAccessToken(newAccessToken);
 
-              originalRequest.headers.Authorization =
-                `Bearer ${newAccessToken}`;
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-              return axiosInstance(originalRequest);
-            } catch (error) {
-              console.error("토큰 갱신 실패", error);
+            return axiosInstance(originalRequest);
+          } catch (error) {
+            console.error("토큰 갱신 실패", error);
 
-              setAccessToken(null);
+            setAccessToken(null);
 
-              toast.error("토큰 만료, 재로그인 해주세요");
+            toast.error("토큰 만료, 재로그인 해주세요");
 
-              setTimeout(() => {
-                window.location.href = "/";
-              }, 1000);
-            }
+            setTimeout(() => {
+              window.location.href = "/";
+            }, 1000);
+            return Promise.reject(error);
           }
-
-          return Promise.reject(error);
         }
-      );
+
+        return Promise.reject(error);
+      }
+    );
 
     return () => {
       axiosInstance.interceptors.request.eject(

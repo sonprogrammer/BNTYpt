@@ -43,7 +43,7 @@ const loginRegularUser = async (req, res) => {
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" },
-    ); //! 시간바꾸기
+    ); 
 
     const refreshToken = jwt.sign(
       {
