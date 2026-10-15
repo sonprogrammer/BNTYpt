@@ -43,7 +43,7 @@ const loginRegularUser = async (req, res) => {
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" },
-    ); 
+    );
 
     const refreshToken = jwt.sign(
       {
@@ -84,9 +84,43 @@ const loginRegularUser = async (req, res) => {
 
 //* 카카오톡 로그인
 const loginKakaoUser = async (req, res) => {
-  const { kakaoaccessToken, role } = req.body;
+  const { code, selectedRole } = req.body;
+
+  if (selectedRole !== "member" && selectedRole !== "trainer") {
+    return res
+      .status(400)
+      .json({ message: "please check your role type", success: false });
+  }
+
+  if (typeof code !== "string" || !code.trim()) {
+    return res
+      .status(400)
+      .json({ message: "인가 코드가 필요합니다.", success: false });
+  }
 
   try {
+    const params = new URLSearchParams({
+      grant_type: "authorization_code",
+      client_id: process.env.KAKAO_REST_API_KEY,
+      redirect_uri: process.env.KAKAO_REDIRECT_URI,
+      code,
+    });
+
+    const tokenRes = await fetch("https://kauth.kakao.com/oauth/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+      body: params,
+    });
+
+    
+    const tokenData = await tokenRes.json();
+    
+    if (!tokenRes.ok || !tokenData.access_token) {
+      return res.status(400).json({ message: "failed to issue kakao token" });
+    }
+    const kakaoaccessToken = tokenData.access_token;
     const userInfoRes = await axios.get("https://kapi.kakao.com/v2/user/me", {
       headers: {
         Authorization: `Bearer ${kakaoaccessToken}`,
@@ -96,13 +130,13 @@ const loginKakaoUser = async (req, res) => {
     const userInfo = userInfoRes.data;
     const kakaoId = userInfo.id;
 
-    let user = await kakaoUser.findOne({ kakaoId, role });
+    let user = await kakaoUser.findOne({ kakaoId, role: selectedRole });
 
     if (!user) {
       user = new kakaoUser({
         kakaoId,
         name: userInfo.properties.nickname,
-        role,
+        role: selectedRole,
       });
       await user.save();
     }
@@ -136,7 +170,7 @@ const loginKakaoUser = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "login successful",
       objectId: user._id,
@@ -148,7 +182,7 @@ const loginKakaoUser = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: "internal server errro" });
+    return res.status(500).json({ success: false, message: "internal server errro" });
   }
 };
 
@@ -178,7 +212,7 @@ const signupUser = async (req, res, next) => {
         .status(409)
         .json({ success: false, message: "이미 사용중인 이메일 입니다." });
     }
-    
+
     let hashedPassword = await bcryptjs.hash(password, 10);
 
     await regularUser.create({

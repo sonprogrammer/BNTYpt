@@ -17,7 +17,7 @@ interface CalendaRes{
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const getCalendarRecords = async(email?: string, kakaoId?: string) => {
+const getCalendarRecords = async(email?: string, kakaoId?: string ) => {
     let url= ''
     if(email){
         url = `${apiUrl}/api/calendar/user/email/${email}`

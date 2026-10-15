@@ -1,20 +1,22 @@
 import { atom, selector } from "recoil"
-import { getUserFromLocalStorage } from "../utils/localStorage"
+interface UserState {
+  kakaoId?: string 
+  objectId: string | null
+  email?: string
+  name: string | null
+  role: string | null
+  ptCount: number | null
+}
 
-const defaultUser = getUserFromLocalStorage()
-
-
-export const userState = atom({
+export const userState = atom<UserState>({
     key: 'userState',
-    default: defaultUser ??{
-        kakaoId: null,
-        id: null,
-        email: null,
+    default: {
+        kakaoId: undefined, 
+        email: undefined,
         name: null,
-        role: null as string | null,
-        objectId: null as string | null, 
-        _id: null as string | null ,
-        ptCount: null as number | null
+        role: null ,
+        objectId: null,
+        ptCount: null
     }
 })
 

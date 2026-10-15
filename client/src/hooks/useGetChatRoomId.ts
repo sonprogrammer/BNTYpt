@@ -15,7 +15,7 @@ interface ChatRoomRes{
     chatRooms: ChatRoom[]
 }
 
-const getChatRoomId = async(currentUserId:string, opponentName: string) => {
+const getChatRoomId = async(currentUserId:string | null, opponentName: string) => {
     const res = await axiosInstance.get<ChatRoomRes>(`${apiUrl}/api/chat/chatrooms/${currentUserId}`)
     const room = res.data.chatRooms.find(room => 
         (room.trainerId === currentUserId || room.memberId === currentUserId) && room.opponentName === opponentName
@@ -23,7 +23,7 @@ const getChatRoomId = async(currentUserId:string, opponentName: string) => {
     return room?._id ?? null
 }
 
-export function useGetChatRoomId(currentUserId?:string, opponentName?: string){
+export function useGetChatRoomId(currentUserId:string | null, opponentName?: string){
     return useQuery({
         queryKey: ['chatRoomId', currentUserId, opponentName],
         queryFn: () => getChatRoomId(currentUserId!, opponentName!),

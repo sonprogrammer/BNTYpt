@@ -1,54 +1,31 @@
 import React, { useState } from 'react'
-import KakaoLogin from 'react-kakao-login'
 import { StyledBox, StyledContainer, StyledLoginBtn, StyledLoginInput, StyledRadios, StyledSignUpBtn } from './style'
 import SignupComponent from './SignupComponent';
 import toast from 'react-hot-toast'
 import { useKakaoLogin } from '../../hooks/useKakaoLogin';
 import { useRegularLogin } from '../../hooks/useRegularLogin';
 
-type KakaoDataType = {
-    response: {
-        access_token: string;
-    }
 
-}
 
 
 const LandingComponent = () => {
-    const [selectedRole, setSelectedRole] = useState<string>('')
+    const [selectedRole, setSelectedRole] = useState<'trainer' | 'member' | null>(null)
     const [signup, setSignup] = useState<boolean>(false)
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
 
-    const { mutate: kakaoLogin } = useKakaoLogin()
     const { mutate: regularLogin} = useRegularLogin()
-
-    const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID || '';
-
 
 
 
     const handleRadioChage = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedRole(e.target.value)
-    }
-
-
-    const kakaoOnSuccess = async (data: KakaoDataType) => {
-        if(!selectedRole){
-            toast.error('역할을 선택해주세요')
-            return
+        const role = e.target.value
+        if(role==='trainer' || role ==='member'){
+            setSelectedRole(role)
+            sessionStorage.setItem('login-role', role) //로그인 완료되면 삭제 처리하기 카카오 콜백 땜에 그럼
         }
-        kakaoLogin({
-            kakaoaccessToken: data.response.access_token,
-            role: selectedRole
-        })
     }
-
-    const kakaoOnFailure = (error: any) => {
-        console.error('카톡 로그인 오류', error);
-        toast.error('카카오톡 로그인 오류 잠시후 다시 시도해주세요')
-    };
 
 
     const hanldeSignup = () => {
@@ -108,22 +85,7 @@ const LandingComponent = () => {
                             <div className="flex flex-col gap-3 w-full items-center">
 
                                 <StyledLoginBtn onClick={handleLogin}>로그인</StyledLoginBtn>
-                                <KakaoLogin
-                                    token={kakaoClientId}
-                                    onSuccess={kakaoOnSuccess}
-                                    onFail={kakaoOnFailure}
-                                    style={{
-                                        width: '100%',
-                                        backgroundColor: '#FEE500',
-                                        color: '#000',
-                                        borderRadius: '10px',
-                                        padding: '14px',
-                                        border: 'none',
-                                        fontWeight: 'bold',
-                                        fontSize: '1rem',
-                                        cursor: 'pointer'
-                                    }}
-                                />
+                                
 
                             </div>
                             <StyledSignUpBtn onClick={hanldeSignup}>신규 회원이신가요? 가입하기</StyledSignUpBtn>

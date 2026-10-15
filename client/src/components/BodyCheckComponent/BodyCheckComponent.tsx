@@ -17,8 +17,8 @@ function BodyCheckComponent() {
 
   const deleteMutation = useDeletePhoto()
 
-  const { data: photos=[], isPending} = useGetBodyCheckPhotos(user?.email, user?.kakaoId)
-
+  
+  const { data: photos=[], isPending} = useGetBodyCheckPhotos(user.email, user.kakaoId)
 
   const handleDelete = useCallback ((e: React.MouseEvent, photoId: string) => {
     e.stopPropagation()

@@ -37,14 +37,5 @@
   }
 }
 html, body {
-  /* height: 100%;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center; */
   box-sizing: border-box;
-  /* display: flex;
-  flex-direction: column;
-  margin: 0;
-  height: 100vh; */
 }

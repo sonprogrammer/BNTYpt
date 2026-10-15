@@ -13,7 +13,7 @@ interface ReceiveMsg {
     readBy?: string[];
 }
 
-export function useChatRealtime(chatRoomId?:string, currentUserId?: string){
+export function useChatRealtime(chatRoomId:string | undefined, currentUserId: string | null){
     const queryClient = useQueryClient()
     
     useEffect(() => {

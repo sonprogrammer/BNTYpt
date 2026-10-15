@@ -22,7 +22,7 @@ export interface BodyCheckPhoto {
 }
 
 
-const getBodyCheckPhotos = async (email?: string, kakaoId?: string): Promise<BodyCheckPhoto[]> => {
+const getBodyCheckPhotos = async (email?: string , kakaoId?: string): Promise<BodyCheckPhoto[]> => {
   let url = ``
 
   if (email) {
@@ -41,7 +41,7 @@ const getBodyCheckPhotos = async (email?: string, kakaoId?: string): Promise<Bod
 
 }
 
-export function useGetBodyCheckPhotos(email?:string, kakaoId?:string){
+export function useGetBodyCheckPhotos(email?: string, kakaoId?: string){
   return useQuery({
     queryKey: ['bodyCheckPhotos', email, kakaoId],
     queryFn: () => getBodyCheckPhotos(email, kakaoId),

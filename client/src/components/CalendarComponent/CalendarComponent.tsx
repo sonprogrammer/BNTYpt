@@ -31,7 +31,7 @@ const CalendarComponent = () => {
 
 
 
-    const { data } = useGetCalendarRecords(user?.email, user?.kakaoId)
+    const { data } = useGetCalendarRecords(user.email, user.kakaoId)
     const { mutate: addRecord, isPending: isAdding } = useAddCalendarRecord()
 
 

@@ -4,6 +4,8 @@ import './App.css'
 import { NotFoundComponent } from './components'
 import { Route, Routes } from 'react-router-dom'
 import { BodyCheckPageSkeleton, CalendarPageSkeleton, ChatPageSkeleton, ChatRoomPageSkeleton, LandingPageSplash, MainPageSkeleton, NotePageSkeleton } from './skeleton';
+import { KakaoInitializer } from './components/KakaoLogin/KakaoInitializer';
+
 
 
 
@@ -15,9 +17,13 @@ const LandingPage = lazy(() =>
   new Promise<{ default: React.ComponentType<any> }>(resolve => {
     setTimeout(() => {
       import('./pages/LandingPage').then(module => resolve({ default: module.LandingPage }));
-    }, 2000); // 2초 지연
+    }, 1000); // 1초 지연
   })
 );
+
+export const KakaoCallbackPage = lazy(() => 
+  import('./pages/KakaoCallback').then(module => ({default: module.KakaoCallbackPage}))
+)
 export const MainPage = lazy(() =>
   import('./pages/MainPage').then(module => ({ default: module.MainPage }))
 );
@@ -45,6 +51,7 @@ function App() {
 
   return (
     <>
+    <KakaoInitializer />
       <Routes>
         <Route path='/' element={
           <Suspense fallback={<LandingPageSplash />}>
@@ -54,6 +61,7 @@ function App() {
         
 
         <Route path='*' element={<NotFoundComponent />} />
+        <Route path='/callback' element={<KakaoCallbackPage />} />
 
         <Route element={<LayoutPage />}>
           <Route path='/browse' element={

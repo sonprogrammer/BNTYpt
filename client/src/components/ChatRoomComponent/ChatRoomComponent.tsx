@@ -27,10 +27,10 @@ const ChatRoomComponent = () => {
     const [preview, setPreview] = useState<string | null>(null)
 
 
-    const { data: chatRoomId, isPending: isRoomPending } = useGetChatRoomId(user?.objectId, opponentName)
-    const { data: messages = [], isPending: isMsgPending } = useGetChatMsgs(chatRoomId ?? undefined, user?.objectId)
+    const { data: chatRoomId, isPending: isRoomPending } = useGetChatRoomId(user.objectId, opponentName)
+    const { data: messages = [], isPending: isMsgPending } = useGetChatMsgs(chatRoomId ?? undefined, user.objectId)
 
-    useChatRealtime(chatRoomId ?? undefined, user?.objectId)
+    useChatRealtime(chatRoomId ?? undefined, user.objectId)
 
     const { mutateAsync: sendMsg, isPending: isSending } = useSendChatMsg()
 

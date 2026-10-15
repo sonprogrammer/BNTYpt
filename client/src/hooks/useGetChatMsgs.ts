@@ -42,7 +42,7 @@ const getChatMsgs = async(chatRoomId: string, currentUserId: string): Promise<Ch
     }))
 }
 
-export function useGetChatMsgs(chatRoomId?: string, currentUserId?: string) {
+export function useGetChatMsgs(chatRoomId: string | undefined, currentUserId: string | null) {
     return useQuery({
         queryKey: ['chatMessages', chatRoomId],
         queryFn: () => getChatMsgs(chatRoomId!, currentUserId!),

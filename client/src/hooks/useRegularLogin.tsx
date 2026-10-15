@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import { useSetRecoilState } from "recoil";
 
 import { useNavigate } from "react-router-dom";
-import { saveUserToLocalStorage } from "../utils/localStorage";
 import { useMutation } from "@tanstack/react-query";
 import { userState, accessTokenState } from "../state/userState";
 
@@ -49,6 +48,7 @@ export const useRegularLogin = () => {
                 toast.error(data.message ?? '로그인에 실패했습니다')
                 return 
             }
+            
             const newUser = {
                 email: data.user.email,
                 name: data.user.name,
@@ -59,7 +59,6 @@ export const useRegularLogin = () => {
 
             setUser(newUser)
             setAccessToken(data.user.token)
-            saveUserToLocalStorage(newUser)
             navigate('/browse')
         },
         onError: (error) => {
