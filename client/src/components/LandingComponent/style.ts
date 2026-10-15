@@ -127,7 +127,9 @@ export const StyledLoginBtn = styled.button`
         w-full
         transition-all
         shadow-lg
+
     `}
+  
 `;
 
 export const StyledSignUpBtn = styled.button`

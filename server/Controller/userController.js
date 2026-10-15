@@ -56,7 +56,7 @@ const loginRegularUser = async (req, res) => {
       { expiresIn: "7d" },
     );
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie("bntyRefreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
@@ -129,7 +129,7 @@ const loginKakaoUser = async (req, res) => {
       { expiresIn: "7d" },
     );
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie("bntyRefreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
@@ -194,7 +194,7 @@ const signupUser = async (req, res, next) => {
 };
 
 const logout = async (req, res) => {
-  res.clearCookie("refreshToken", {
+  res.clearCookie("bntyRefreshToken", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",

@@ -5,7 +5,7 @@ const kakaoUser = require('../Models/kakaoUserModel')
 const refreshToken = async(req, res) => {
     try{
 
-        const refresh = req.cookies.refreshToken
+        const refresh = req.cookies.bntyRefreshToken
         
         
         if(!refresh){
