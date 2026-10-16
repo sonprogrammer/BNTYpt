@@ -6,9 +6,11 @@ import { accessTokenState, isAuthLoadingState, UserState, userState } from "../s
 
 
 
-const authApi = axios.create({
-  baseURL: `${process.env.REACT_APP_API_URL}/api`,
-  withCredentials: true
+export const authApi = axios.create({
+    baseURL: process.env.NODE_ENV === "production"
+        ? "/api"
+        : `${process.env.REACT_APP_API_URL}/api`,
+    withCredentials: true
 })
 
 export const axiosInstance = axios.create({
