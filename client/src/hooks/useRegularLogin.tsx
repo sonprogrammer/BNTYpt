@@ -6,9 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { userState, accessTokenState } from "../state/userState";
 
-
 const apiUrl = process.env.REACT_APP_API_URL;
-
 interface RegularLoginParams{
     email: string;
     password: string;
@@ -32,6 +30,7 @@ const regularLogin = async ({email,password,role}:RegularLoginParams) => {
     const res = await axios.post<RegularLoginResponse>(`${apiUrl}/api/user/login/regular`, {
         email, password, role
     },{withCredentials: true})
+    console.log('res', res.data)
     return res.data
 }
 

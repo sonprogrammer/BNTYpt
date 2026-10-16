@@ -31,12 +31,11 @@ export function KakaoCallbackPage() {
             }
 
             try {
-                const res = await axios.post(`${apiUrl}/api/users/login/kakao`, { code, selectedRole }, { withCredentials: true })
-
-                if (res.status === 200) {
+                const res = await axios.post(`${apiUrl}/api/user/login/kakao`, { code, selectedRole }, { withCredentials: true })
+                if (res.status === 200 && res.data.success) {
                     const userData = res.data.user
                     setUser(userData)
-                    setAccessToken(userData.data.token)
+                    setAccessToken(userData.token)
                     sessionStorage.removeItem('login-role')
                     toast.success('로그인 성공')
                     navigate('/browse', { replace: true })
@@ -51,12 +50,16 @@ export function KakaoCallbackPage() {
         void handleKakaoCallback()
     }, [navigate, setAccessToken, setUser])
 
-//TODO BNTY 배포할때 rest api랑 콜백 주소 넣어주면되 ㅁ
 
 
     return (
-        <div>
-
+        <div role="status" className="flex min-h-screen flex-col items-center justify-center bg-[#111111] px-6">
+            <div className="relative mb-7 flex h-20 w-20 items-center justify-center">
+                <div className="absolute inset-0 animate-spin rounded-full border-2 border-white/5 border-t-red-500 motion-reduce:animate-none" />
+            </div>
+            <p className="text-lg font-bold tracking-tight text-gray-100">카카오 로그인 중이에요</p>
+            <p className="mt-2 text-sm text-gray-500">곧 BNTY로 이동할게요.</p>
+            <span className="mt-10 text-xs font-bold tracking-[0.3em] text-gray-600">BNTY</span>
         </div>
     )
 }

@@ -1,8 +1,9 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "../utils/axiosInstance";
+import { axiosInstance } from "./useAxiosInterceptor";
+import { useRecoilValue } from "recoil";
+import { userState } from "../state/userState";
 
-const apiUrl = process.env.REACT_APP_API_URL;
 
 interface ChatRoom {
     _id: string;
@@ -15,18 +16,17 @@ interface ChatRoomRes{
     chatRooms: ChatRoom[]
 }
 
-const getChatRoomId = async(currentUserId:string | null, opponentName: string) => {
-    const res = await axiosInstance.get<ChatRoomRes>(`${apiUrl}/api/chat/chatrooms/${currentUserId}`)
-    const room = res.data.chatRooms.find(room => 
-        (room.trainerId === currentUserId || room.memberId === currentUserId) && room.opponentName === opponentName
-    )
+const getChatRoomId = async(opponentName: string) => {
+    const res = await axiosInstance.get<ChatRoomRes>(`/chat/chatrooms`)
+    const room = res.data.chatRooms.find(room => room.opponentName === opponentName)
     return room?._id ?? null
 }
 
-export function useGetChatRoomId(currentUserId:string | null, opponentName?: string){
+export function useGetChatRoomId( opponentName?: string){
+    const user = useRecoilValue(userState)
     return useQuery({
-        queryKey: ['chatRoomId', currentUserId, opponentName],
-        queryFn: () => getChatRoomId(currentUserId!, opponentName!),
-        enabled: !!currentUserId && !!opponentName
+        queryKey: ['chatRoomId', user.objectId, opponentName],
+        queryFn: () => getChatRoomId(opponentName!),
+        enabled:!!opponentName && !!user.objectId
     })
 }

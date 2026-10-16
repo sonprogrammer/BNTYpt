@@ -1,8 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "../utils/axiosInstance";
-
-const apiUrl = process.env.REACT_APP_API_URL;
-
+import { axiosInstance } from "./useAxiosInterceptor";
 
 interface UserPtCountRes{
     success: boolean
@@ -12,15 +9,15 @@ interface UserPtCountRes{
 
 
 const getUserPtCount = async (memberId: string)=> {
-    const res = await axiosInstance.get<UserPtCountRes>(`${apiUrl}/api/chat/pt/${memberId}`)
+    const res = await axiosInstance.get<UserPtCountRes>(`/chat/pt/${memberId}`)
     return res.data
 }
 
 // * user의 objectId
-export function useGetUserPtCount(memberId: string, enabled = true){
+export function useGetUserPtCount(memberId: string | null, enabled = true){
     return useQuery({
         queryKey: ['userPtCount', memberId],
-        queryFn: () => getUserPtCount(memberId),
+        queryFn: () => getUserPtCount(memberId!),
         staleTime: 1000 * 60 * 30,
         gcTime: 1000 * 60 * 60,
         refetchOnWindowFocus: 'always',

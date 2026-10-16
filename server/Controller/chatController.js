@@ -2,47 +2,82 @@ const ChatRoom = require("../Models/chatModel");
 const kakaoUser = require("../Models/kakaoUserModel");
 const regularUser = require("../Models/regularUserModel");
 const cloudinary = require("../utils/cloudinary");
+const mongoose = require("mongoose");
+
+const findMember = async (memberId) => {
+  return (
+    (await regularUser.findById(memberId)) ||
+    (await kakaoUser.findById(memberId))
+  );
+};
 
 const createChatRoom = async (req, res) => {
-  const { trainerInfo, memberInfo } = req.body;
-
+  const { trainerId } = req.body;
+  const memberId = req.user?.id;
+  if (!memberId) {
+    return res.status(401).json({ success: false, message: "login required" });
+  }
+  if (req.user.role !== "member") {
+    return res.status(403).json({
+      success: false,
+      message: "회원만 QR 체크인을 할 수 있습니다.",
+    });
+  }
+  if (typeof trainerId !== "string" || !mongoose.isValidObjectId(trainerId)) {
+    return res.status(400).json({
+      success: false,
+      message: "유효하지 않은 트레이너 QR코드입니다.",
+    });
+  }
   try {
     const trainer =
-      (await kakaoUser.findOne({ kakaoId: trainerInfo })) ||
-      (await regularUser.findOne({ email: trainerInfo }));
+      (await kakaoUser.findById(trainerId)) ||
+      (await regularUser.findById(trainerId));
     const member =
-      (await kakaoUser.findOne({ kakaoId: memberInfo })) ||
-      (await regularUser.findOne({ email: memberInfo }));
+      (await kakaoUser.findById(memberId)) ||
+      (await regularUser.findById(memberId));
 
-    if (!trainer || !member) {
-      return res
-        .status(404)
-        .json({ success: false, message: "not found User" });
+    if (!member || member.role !== "member") {
+      return res.status(403).json({
+        success: false,
+        message: "회원 정보를 확인할 수 없습니다.",
+      });
     }
+    if (!trainer || trainer.role !== "trainer") {
+      return res.status(404).json({
+        success: false,
+        message: "트레이너를 찾을 수 없습니다.",
+      });
+    }
+    const existingRoom = await ChatRoom.findOne({ trainerId, memberId });
 
-    let existChatRoom = await ChatRoom.findOne({
-      trainerId: trainer._id,
-      memberId: member._id,
-    });
-
-    if (!existChatRoom) {
+    if (!existingRoom) {
       const chatRoom = new ChatRoom({
         trainerId: trainer._id,
         trainerName: trainer.name,
         memberId: member._id,
         memberName: member.name,
-        message: [],
+        messages: [],
       });
       await chatRoom.save();
     }
-    res.status(200).json({ success: true, message: "chatroom is created" });
+    return res
+      .status(200)
+      .json({ success: true, message: "chatroom is ready" });
   } catch (error) {
-    res.status(500).json({ success: false, message: "error" });
+    console.error("createChatRoom", error);
+    return res.status(500).json({
+      success: false,
+      message: "채팅방 연결에 실패했습니다.",
+    });
   }
 };
 
 const getChatRooms = async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.user.id;
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "login required" });
+  }
 
   try {
     const user =
@@ -84,7 +119,7 @@ const getChatRooms = async (req, res) => {
           ...room._doc,
           opponentName,
         };
-      })
+      }),
     );
     res.status(200).json({
       success: true,
@@ -98,6 +133,7 @@ const getChatRooms = async (req, res) => {
 
 const getMessages = async (req, res) => {
   const { chatRoomId } = req.params;
+  const userId = req.user.id.toString();
   try {
     const chatRoom = await ChatRoom.findById(chatRoomId);
     if (!chatRoom) {
@@ -108,7 +144,22 @@ const getMessages = async (req, res) => {
     if (!chatRoom.messages || chatRoom.messages.length === 0) {
       return res.status(200).json({ success: true, messages: [] });
     }
-    res.status(200).json({ success: true, message: chatRoom.messages });
+
+    const isParticipant =
+      String(chatRoom.trainerId) === userId ||
+      String(chatRoom.memberId) === userId;
+
+    if (!isParticipant) {
+      return res.status(403).json({
+        success: false,
+        message: "dont have authorization",
+      });
+    }
+    const messages = (chatRoom.messages ?? []).map((msg) => ({
+      ...msg.toObject(),
+      isMine: String(msg.sender) === userId,
+    }));
+    return res.status(200).json({ success: true, messages });
   } catch (error) {
     console.error(error);
     res.status(404).json({ success: false, message: "server error" });
@@ -116,6 +167,11 @@ const getMessages = async (req, res) => {
 };
 
 const uploadFile = async (req, res) => {
+  const userId = req.user.id;
+  if (!userId) {
+    return res.status(401).json({ message: "login required", success: false });
+  }
+
   try {
     if (!req.file)
       return res.status(400).json({ success: false, message: "not found" });
@@ -123,77 +179,191 @@ const uploadFile = async (req, res) => {
     cloudinary.uploader
       .upload_stream({ resource_type: "auto" }, (err, result) => {
         if (err) {
-          console.error(err)
+          console.error(err);
           return res
             .status(500)
-            .json({ success: false, message: "upload failed" })
+            .json({ success: false, message: "upload failed" });
         }
-        return res.status(200).json({ success: true, url: result.secure_url })
+        return res.status(200).json({ success: true, url: result.secure_url });
       })
-      .end(req.file.buffer)
+      .end(req.file.buffer);
   } catch (error) {
-    res.status(500).json({success: false, message: 'internal sever eeorr'})
+    res.status(500).json({ success: false, message: "internal sever eeorr" });
   }
 };
 
 const sendMessage = async (req, res) => {
-  const { chatRoomId, sender, message, type, data } = req.body;
+  const { chatRoomId, message, type, data } = req.body;
+  const userId = req.user.id;
+  if (!userId) {
+    return res
+      .status(401)
+      .json({ success: false, message: "credentail required" });
+  }
 
   try {
     const chatRoom = await ChatRoom.findById(chatRoomId);
+
     if (!chatRoom) {
-      return res.status(404).json({ message: "can not find chattingroom" });
+      return res
+        .status(404)
+        .json({ success: false, message: "can not find chattingroom" });
+    }
+
+    const isParticipant =
+      String(chatRoom.memberId) === String(userId) ||
+      String(chatRoom.trainerId) === String(userId);
+
+    if (!isParticipant) {
+      return res
+        .status(403)
+        .json({ success: false, message: "there is no authorization" });
     }
 
     const newMessage = {
-      sender,
+      sender: userId,
       type: type || "text",
       message: message || null,
       data: data || null,
+      readBy: [userId],
       timestamp: new Date(),
     };
 
     chatRoom.messages.push(newMessage);
     await chatRoom.save();
 
-    res.status(200).json(chatRoom);
+    const savedMessage = chatRoom.messages[chatRoom.messages.length - 1];
+
+    res.status(200).json({ success: true, message: savedMessage });
   } catch (error) {
     res.status(500).json({ message: "errror" });
   }
 };
 
-const setPtCount = async (req, res) => {
-  const { ptCount, memberId } = req.body;
+const addPtCount = async (req, res) => {
+  const trainerId = req.user?.id;
+  const { memberId, ptCount } = req.body;
+
+  if (!trainerId) {
+    return res.status(401).json({ message: "login required", success: false });
+  }
+  if (req.user.role !== "trainer") {
+    return res
+      .status(403)
+      .json({ success: false, message: "트레이너만 추가할 수 있습니다." });
+  }
+  if (typeof memberId !== "string" || !mongoose.isValidObjectId(memberId)) {
+    return res
+      .status(400)
+      .json({ success: false, message: "유효하지 않은 회원 ID입니다." });
+  }
+  if (!Number.isSafeInteger(ptCount) || ptCount <= 0) {
+    return res
+      .status(400)
+      .json({ success: false, message: "추가 횟수는 양의 정수여야 합니다." });
+  }
+
   try {
-    let user = await regularUser.findOne({ _id: memberId });
-    if (!user) {
-      user = await kakaoUser.findOne({ _id: memberId });
-    }
-    if (!user) {
-      return res.status(404).json({ message: "User is not found" });
-    }
+    const relationship = await ChatRoom.exists({ trainerId, memberId });
 
-    user.ptCount = (user.ptCount || 0) + ptCount;
-
-    await user.save();
-    res
+    if (!relationship) {
+      return res
+        .status(403)
+        .json({ success: false, message: "연결된 트레이너가 아닙니다." });
+    }
+    const member = await findMember(memberId);
+    if (!member || member.role !== "member") {
+      return res
+        .status(404)
+        .json({ success: false, message: "회원을 찾을 수 없습니다." });
+    }
+    const updatedMember = await member.constructor.findOneAndUpdate(
+      { _id: memberId, role: "member" },
+      { $inc: { ptCount } },
+      { new: true },
+    );
+    if (!updatedMember) {
+      return res
+        .status(404)
+        .json({ success: false, message: "회원을 찾을 수 없습니다." });
+    }
+    return res
       .status(200)
-      .json({ message: "PT count decremented", ptCount: user.ptCount });
+      .json({ success: true, ptCount: updatedMember.ptCount });
   } catch (error) {
-    console.error(error);
+    console.error("addPtCount", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "internal server error" });
+  }
+};
+
+const subtractPtCount = async (req, res) => {
+  const memberId = req.user?.id;
+  const { trainerId } = req.body;
+  if (!memberId) {
+    return res.status(401).json({ success: false, message: "login required" });
+  }
+  if (req.user.role !== "member") {
+    return res
+      .status(403)
+      .json({ success: false, message: "회원만 체크인할 수 있습니다." });
+  }
+  if (typeof trainerId !== "string" || !mongoose.isValidObjectId(trainerId)) {
+    return res
+      .status(400)
+      .json({ success: false, message: "유효하지 않은 트레이너 ID입니다." });
+  }
+  try {
+    const relationship = await ChatRoom.exists({ trainerId, memberId });
+    if (!relationship) {
+      return res
+        .status(403)
+        .json({ success: false, message: "연결된 트레이너가 아닙니다." });
+    }
+    const member = await findMember(memberId);
+    if (!member || member.role !== "member") {
+      return res
+        .status(404)
+        .json({ success: false, message: "회원을 찾을 수 없습니다." });
+    }
+    const updatedMember = await member.constructor.findOneAndUpdate(
+      { _id: memberId, role: "member", ptCount: { $gte: 1 } },
+      { $inc: { ptCount: -1 } },
+      { new: true },
+    );
+    if (!updatedMember) {
+      return res.status(409).json({
+        success: false,
+        message: "차감 가능한 PT 횟수가 없습니다.",
+      });
+    }
+    return res
+      .status(200)
+      .json({ success: true, ptCount: updatedMember.ptCount });
+  } catch (error) {
+    console.error("subtractPtCount", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "internalv sever erro" });
   }
 };
 
 const getPtCount = async (req, res) => {
   const { memberId } = req.params;
+  const userId = req.user?.id
+  if(!userId){
+    return res.status(401).json({message: 'login required', success: false})
+  }
+
   try {
     const [regularUserData, kakaoUserData] = await Promise.all([
-      regularUser.findOne({_id: memberId}),
-      kakaoUser.findOne({_id: memberId})
-    ])
-    
-    const user = regularUserData || kakaoUserData
-    
+      regularUser.findOne({ _id: memberId }),
+      kakaoUser.findOne({ _id: memberId }),
+    ]);
+
+    const user = regularUserData || kakaoUserData;
+
     if (!user) {
       return res.status(404).json({ message: "User is not found" });
     }
@@ -202,7 +372,9 @@ const getPtCount = async (req, res) => {
   } catch (error) {
     console.log("error", error);
     if (!res.headersSent) {
-      return res.status(500).json({ success: false, message: "Interndal Server Error" });
+      return res
+        .status(500)
+        .json({ success: false, message: "Interndal Server Error" });
     }
   }
 };
@@ -212,7 +384,8 @@ module.exports = {
   getChatRooms,
   sendMessage,
   getMessages,
-  setPtCount,
+  addPtCount,
+  subtractPtCount,
   getPtCount,
-  uploadFile
+  uploadFile,
 };

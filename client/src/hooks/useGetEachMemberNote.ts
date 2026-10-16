@@ -1,14 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
-import { getMemberNotes } from "../api/noteApi";
+import { axiosInstance } from "./useAxiosInterceptor";
+import { useRecoilValue } from "recoil";
+import { userState } from "../state/userState";
+
 
 // *멤버 로그인시 노트 페이지 
+const getMemberNotes = async () => {
+    const res = await axiosInstance.get(`/records/member`);
+    return res.data.records;
+};
 
-const useGetEachMemberNote = (memberId: string | null)=> {
+
+export function useGetEachMemberNote(){
+    const user = useRecoilValue(userState)
     return useQuery({
-        queryKey: ['memberNote', memberId],
-        queryFn: () => getMemberNotes(memberId!),
-        enabled: !!memberId
+        queryKey: ['trainerMemberNotes', user.objectId],
+        queryFn: getMemberNotes,
+        enabled: user.role === 'member' && !!user.objectId
     })
 }
-
-export default useGetEachMemberNote

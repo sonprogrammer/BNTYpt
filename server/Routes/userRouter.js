@@ -1,5 +1,5 @@
 const express = require('express');
-const { checkEmail, signupUser, loginRegularUser, loginKakaoUser, logout } = require('../Controller/userController');
+const { checkEmail, signupUser, loginRegularUser, loginKakaoUser, logout,getMe } = require('../Controller/userController');
 const { refreshToken } = require('../middleware/refresh');
 const { authenticate } = require('../middleware/authenticate');
 const userRouter = express.Router();
@@ -12,6 +12,7 @@ userRouter.get('/check-email', checkEmail)
 userRouter.post('/signup', signupUser)
 userRouter.post('/refresh', refreshToken)
 userRouter.post('/logout', authenticate, logout)
+userRouter.get('/me', authenticate, getMe)
 
 
 module.exports = userRouter

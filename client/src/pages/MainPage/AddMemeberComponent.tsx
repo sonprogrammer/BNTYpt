@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { StyledBox, StyledBtn, StyledContainer, StyledInput, StyledMember, StyledSelect, StyledXIcon } from './style'
 import { X, UserPlus, ArrowUp10 } from 'lucide-react';
-import { useRecoilValue } from 'recoil';
 
 import { createPortal } from 'react-dom';
 import toast from 'react-hot-toast'
 import { useGetMemberByT } from '../../hooks/useGetMemberByT';
 import { useAddPtCount } from '../../hooks/useAddPtCount';
-import { userState } from '../../state/userState';
 
 
 interface AddMemeberComponentProps {
@@ -18,9 +16,9 @@ interface AddMemeberComponentProps {
 const AddMemeberComponent = ({ closeModal }: AddMemeberComponentProps) => {
   const [selectedMember, setSelectedMember] = useState<string | null>(null);
   const [ptCount, setPtCount] = useState<number>(0);
-  const user = useRecoilValue(userState)
 
-  const { data, isPending } =useGetMemberByT(user?.objectId)
+
+  const { data, isPending } =useGetMemberByT()
   const { mutate: addPtCount, isPending: isSaving} = useAddPtCount()
 
   const chatRooms = data?.chatRooms ?? []

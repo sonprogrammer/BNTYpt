@@ -1,18 +1,19 @@
 
 import { StyledTitle } from './style'
 import { Link, useNavigate } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useResetRecoilState } from 'recoil'
 
 import { usePostLogout } from '../../hooks/usePostLogout';
 import { useState } from 'react';
 import LogoutModal from '../LogoutModalComponent/LogoutModalComponent';
 import { LogOut } from 'lucide-react';
-import { userState } from '../../state/userState';
+import { accessTokenState, userState } from '../../state/userState';
 
 
 
 const LogoComponent = () => {
-  const [, setUser] = useRecoilState(userState)
+  const resetUser = useResetRecoilState(userState)
+  const resetAccessToken = useResetRecoilState(accessTokenState)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const logoutMutation =usePostLogout()
@@ -27,8 +28,8 @@ const LogoComponent = () => {
   const handleLogoutConfirm = async () => {
     try {
       await logoutMutation.mutateAsync();
-      setUser(null);
-      localStorage.clear();
+      resetUser();
+      resetAccessToken()
       navigate('/');
     } catch (e) {
       console.error("logout error", e);

@@ -6,8 +6,7 @@ const calendarRouter = express.Router()
 
 
 calendarRouter.post('/',authenticate, createPost)
-calendarRouter.get('/user/email/:email',authenticate, getUserCalendar)
-calendarRouter.get('/user/kakao/:kakaoId',authenticate, getUserCalendar)
+calendarRouter.get('/user',authenticate, getUserCalendar)
 
 
 module.exports = calendarRouter

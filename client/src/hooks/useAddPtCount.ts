@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "../utils/axiosInstance";
+import { axiosInstance } from "./useAxiosInterceptor";
 
-const apiUrl = process.env.REACT_APP_API_URL;
 
 interface AddPtCountParams{
     memberId: string;
@@ -14,7 +13,7 @@ interface AddPtCountRes{
 }
 
 const addPtCount = async({memberId, ptCount}: AddPtCountParams) => {
-    const res = await axiosInstance.post<AddPtCountRes>(`${apiUrl}/api/chat/pt`, {
+    const res = await axiosInstance.post<AddPtCountRes>(`/chat/pt/add`, {
           memberId,
           ptCount,
         });

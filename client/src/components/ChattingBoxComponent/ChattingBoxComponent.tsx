@@ -1,19 +1,15 @@
 import { useMemo} from 'react'
 import { StyledContainer, StyledContent, StyledProfile, StyledNotMember, LastMsgWrapper, UnreadBadge } from './style'
 import { useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
-
 import { BeatLoader } from 'react-spinners'
 import { MessageSquareText, ChevronRight } from 'lucide-react'
 import { useChatRooms } from '../../hooks/useChatRooms'
-import { userState } from '../../state/userState'
 
 
 const ChattingBoxComponent = () => {
     const navigate = useNavigate()
-    const user = useRecoilValue(userState)
 
-    const { chatRooms, isLoading } = useChatRooms(user?.objectId)
+    const { chatRooms, isLoading } = useChatRooms()
 
 
     const orderedChatRooms = useMemo(() => {

@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { axiosInstance } from "../utils/axiosInstance"
+
+import { useRecoilValue } from "recoil";
+import { userState } from "../state/userState";
+import { axiosInstance } from "./useAxiosInterceptor";
 
 
-const apiUrl = process.env.REACT_APP_API_URL;
+
 
 type Records = {
     date: string;
     diet?: string;
     workout?: string;
-    kakaoId?: string;
-    email?: string;
-    userType?: string;
 }
 
 interface AddCalendarRes { 
@@ -18,18 +18,19 @@ interface AddCalendarRes {
 }
 
 const addCalendar = async(formData: Records) => {
-    const res = await axiosInstance.post<AddCalendarRes>(`${apiUrl}/api/calendar`, formData)
+    const res = await axiosInstance.post<AddCalendarRes>(`/calendar`, formData)
     return res.data
 
 }
 
 export function useAddCalendarRecord(){
     const queryClient = useQueryClient()
+    const user = useRecoilValue(userState)
 
     return useMutation({
         mutationFn: addCalendar,
         onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({queryKey:['calendar', variables.email, variables.kakaoId]})
+            queryClient.invalidateQueries({queryKey:['calendar', user.objectId]})
         }
     })
 }

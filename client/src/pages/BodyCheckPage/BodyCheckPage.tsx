@@ -1,7 +1,9 @@
 import { lazy, Suspense, useState } from 'react'
 import { AddPhotoComponent, PostForm } from '../../components'
 import { StyledCloseBtn, StyledModalOverlay, StyledPageContainer, StyledPostFormContainer } from './style'
-import { X } from 'lucide-react';
+import { User, X } from 'lucide-react';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../../state/userState';
 const BodyCheckComponent = lazy(() => import('../../components/BodyCheckComponent/BodyCheckComponent'));
 
 
@@ -17,6 +19,8 @@ const AlbumSkeleton = () => (
 );
 
 const BodyCheckPage = () => {
+  const user = useRecoilValue(userState)
+  console.log('user', user)
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
 
 

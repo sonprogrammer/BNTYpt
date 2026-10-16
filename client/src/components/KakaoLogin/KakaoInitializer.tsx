@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 
-const kakaoClientId = process.env.VITE_KAKAO_CLIENT_ID || '';
+const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID || '';
 export function KakaoInitializer() {
     useEffect(() => {
         const initialize = () => {

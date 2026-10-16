@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { axiosInstance } from "../utils/axiosInstance";
+import { axiosInstance } from "./useAxiosInterceptor";
+import { userState } from "../state/userState";
+import { useRecoilValue } from "recoil";
 
 interface CalendarsData{
     _id: string;
@@ -15,28 +17,20 @@ interface CalendaRes{
     calendars: CalendarsData[]
 }
 
-const apiUrl = process.env.REACT_APP_API_URL;
 
-const getCalendarRecords = async(email?: string, kakaoId?: string ) => {
-    let url= ''
-    if(email){
-        url = `${apiUrl}/api/calendar/user/email/${email}`
-    } else if(kakaoId){
-        url = `${apiUrl}/api/calendar/user/kakao/${kakaoId}`
-    }
-    
-    const res = await axiosInstance.get<CalendaRes>(url)
+const getCalendarRecords = async( ) => {
+    const res = await axiosInstance.get<CalendaRes>('/calendar/user')
     return res.data
 
 }
 
-export function useGetCalendarRecords(email?: string, kakaoId?: string) {
+export function useGetCalendarRecords() {
+    const user = useRecoilValue(userState)
     return useQuery({
-        queryKey: ['calendar', email, kakaoId],
-        queryFn: () => getCalendarRecords(email, kakaoId),
+        queryKey: ['calendar', user.objectId],
+        queryFn: () => getCalendarRecords(),
         staleTime: 1_000 * 60 * 10,
         gcTime: 1_000 * 60 * 30,
-        enabled: !!email || !!kakaoId
     })
 }
 

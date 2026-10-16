@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "../utils/axiosInstance"
-
-const apiUrl = process.env.REACT_APP_API_URL;
+import { axiosInstance } from "./useAxiosInterceptor";
+import { useRecoilValue } from "recoil";
+import { userState } from "../state/userState";
 
 interface ChatRoom{
     memberId: string
@@ -12,17 +12,18 @@ interface MemberByTRes{
     chatRooms: ChatRoom[]   
 }
 
-const getMemberByT = async (objectId: string) => {
-    const res = await axiosInstance.get<MemberByTRes>(`${apiUrl}/api/chat/chatrooms/${objectId}`)
+const getMemberByT = async () => {
+    const res = await axiosInstance.get<MemberByTRes>(`/chat/chatrooms`)
     return res.data
 }
 
-export function useGetMemberByT(objectId: string) {
+export function useGetMemberByT() {
+    const user = useRecoilValue(userState)
     return useQuery({
-        queryKey: ['membersByTrainer', objectId],
-        queryFn: () => getMemberByT(objectId!),
+        queryKey: ['membersByTrainer', user.objectId],
+        queryFn: () => getMemberByT(),
         staleTime: 1_000 * 60 * 10,
         gcTime: 1_000 * 60 * 30,
-        enabled: !!objectId
+        enabled: !!user.objectId
     })
 }

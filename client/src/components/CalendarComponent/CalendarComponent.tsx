@@ -15,9 +15,6 @@ type Records = {
     date: string;
     diet?: string;
     workout?: string;
-    kakaoId?: string;
-    email?: string;
-    userType?: string;
 }
 
 const CalendarComponent = () => {
@@ -28,10 +25,11 @@ const CalendarComponent = () => {
     const [diet, setDiet] = useState<string>('')
 
     const user = useRecoilValue(userState)
+    console.log('user', user)
 
 
 
-    const { data } = useGetCalendarRecords(user.email, user.kakaoId)
+    const { data } = useGetCalendarRecords()
     const { mutate: addRecord, isPending: isAdding } = useAddCalendarRecord()
 
 
@@ -74,12 +72,7 @@ const CalendarComponent = () => {
             workout: workout,
             diet: diet,
         }
-        if (user.kakaoId) {
-
-            formData.kakaoId = user.kakaoId
-        } else if (user.email) {
-            formData.email = user.email
-        }
+      
         addRecord(formData, {
             onSuccess: () => {
                 toast.success('오늘의 기록이 저장되었습니다!')

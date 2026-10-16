@@ -1,96 +1,40 @@
-import React, { useState, lazy, Suspense } from 'react'
-import { OnResultFunction } from 'react-qr-scanner'
+import {lazy, Suspense } from 'react'
 import { StyledContainer, StyledMemberBox, StyledTrainerBox } from './style'
-import { useRecoilState } from 'recoil';
-
-import toast from 'react-hot-toast'
-import { axiosInstance } from '../../utils/axiosInstance';
-import { userState } from '../../state/userState';
-const apiUrl = process.env.REACT_APP_API_URL;
+import { useQrCheckIn } from '../../hooks/useQrCheckIn';
 
 const QRCodeCanvas = lazy(() => import('qrcode.react').then(module => ({ default: module.QRCodeCanvas })))
 const StyledQrReader = lazy(() => import('./style').then(module => ({ default: module.StyledQrReader })))
 interface QrcodeComponentProps {
-    role: string;
+    role: string | null;
+}
+
+const videoConstraints = {
+    audio: false,
+    video: {
+        facingMode: 'environment'
+    }
 }
 
 
 const QrcodeComponent = ({ role }: QrcodeComponentProps) => {
-    const [, setScannedData] = useState<string>('');
-    const [isScanning, setIsScanning] = useState<boolean>(false)
-    const [memberClicked, setMemberClicked] = useState<boolean>(false)
-    const [user, setUser] = useRecoilState(userState)
+    const { user, isScanning, isCameraOpen, handleResult, handleQrError, openCamera, closeCamera } = useQrCheckIn()
 
-    const handleScan = async (trainerId: string) => {
-        if (isScanning) return
-        if (trainerId) {
-            setIsScanning(true)
-            setScannedData(trainerId);
-            try {
-                await axiosInstance.post(`${apiUrl}/api/chat`, {
-                    trainerInfo: trainerId,
-                    memberInfo: user.email || user.kakaoId
-                })
-                const res = await axiosInstance.post(`${apiUrl}/api/chat/pt`, {
-                    ptCount: -1,
-                    memberId: user.objectId
-                });
-
-                setUser((prev: any) => ({
-                    ...prev,
-                    ptCount: res.data.ptCount
-                }))
-
-                toast.success('수업 시작')
-                setMemberClicked(false)
-            } catch (error) {
-                console.error('error', error)
-                toast.error('다시 스캔해주세요')
-            } finally {
-                setIsScanning(false)
-            }
-        }
-    }
-
-
-
-    const handleResult: OnResultFunction = (result: any, error: any) => {
-        if (isScanning) return
-        if (result) {
-            const text = result.text;
-            handleScan(text);
-
-        }
-        if (error) {
-            console.error('error 발생', error)
-        }
-    };
-    const handleQrError = (err: any) => {
-        console.error('QR error', err);
-    };
-
-    const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-        setMemberClicked(!memberClicked)
-    }
-
-    const videoConstraints = {
-        audio: false,
-        video: {
-            facingMode: 'environment',
-        }
-    };
 
     return (
         <StyledContainer className='hi'>
             <Suspense fallback={<div className="py-4 text-center text-sm text-gray-400">QR 모듈 로딩 중...</div>}>
                 {role === 'trainer' ? (
                     <StyledTrainerBox>
-                        <QRCodeCanvas value={user.email || user.kakaoId} />
+                        {user.role === 'trainer' && user.objectId ? (
+                            <QRCodeCanvas value={user.objectId} />
+                        ) : (
+                            <p className="text-sm text-gray-400">로그인 정보를 확인해주세요.</p>
+                        )}
 
                     </StyledTrainerBox>
-                ) : (
+                ) : role === 'member' ? (
                     <StyledMemberBox className='camera'>
-                        {memberClicked ?
+                        {isCameraOpen ?
                             <div>
                                 <StyledQrReader
                                     onScan={handleResult}
@@ -98,20 +42,29 @@ const QrcodeComponent = ({ role }: QrcodeComponentProps) => {
                                     onError={handleQrError}
                                     constraints={videoConstraints}
                                 />
-                                <div className='m-7 text-center hover:font-bold hover:text-red-500 hover:cursor-pointer' onClick={handleClick}>
-                                    Exit camera
-                                </div>
+                                <p role="status" className="mt-4 text-center text-sm text-gray-400">
+                                    {isScanning ? '수업 정보를 처리하고 있어요...' : '트레이너의 QR코드를 스캔해주세요.'}
+                                </p>
+                                <button
+                                    type="button"
+                                    onClick={closeCamera}
+                                    disabled={isScanning}
+                                    className="mx-auto my-7 block text-sm text-gray-400 transition hover:text-red-500 disabled:opacity-50"
+                                >
+                                    카메라 닫기
+                                </button>
                             </div>
                             :
-                            <div
-                                onClick={handleClick}
+                            <button
+                                type='button'
+                                onClick={openCamera}
                                 className='font-bold text-xl hover:cursor-pointer hover:text-red-900'
                             >
-                                scan Qr code
-                            </div>
+                                QR코드 스캔하기
+                            </button>
                         }
                     </StyledMemberBox>
-                )}
+                ) : null}
             </Suspense>
         </StyledContainer>
     )

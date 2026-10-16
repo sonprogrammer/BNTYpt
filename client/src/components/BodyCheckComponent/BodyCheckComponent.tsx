@@ -1,24 +1,20 @@
 import React, { useCallback, useMemo } from 'react'
 import { ImageWrapper, StyledBox, StyledContainer, StyledDelete, StyledImgContainer, StyledNothing, StyledText, StyledTitle } from './style'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
-
 import { Trash2, Camera } from 'lucide-react'
 import toast from 'react-hot-toast'
 import useDeletePhoto from '../../hooks/useDeletePhoto'
 import { BeatLoader } from 'react-spinners'
 import { useGetBodyCheckPhotos } from '../../hooks/useGetBodyCheckPhotos'
-import { userState } from '../../state/userState'
 
 
 function BodyCheckComponent() {
-  const user = useRecoilValue(userState)
   const [clickedForDelete, setClickedForDelete] = useState<string | null>(null)
 
   const deleteMutation = useDeletePhoto()
 
   
-  const { data: photos=[], isPending} = useGetBodyCheckPhotos(user.email, user.kakaoId)
+  const { data: photos=[], isPending} = useGetBodyCheckPhotos()
 
   const handleDelete = useCallback ((e: React.MouseEvent, photoId: string) => {
     e.stopPropagation()

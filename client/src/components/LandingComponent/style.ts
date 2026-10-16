@@ -71,10 +71,13 @@ export const StyledLoginInput = styled.div`
             text-white
             border
             border-gray-700
-            focus:border-red-800
-            focus:outline-none
             transition-all
         `}
+         &:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 2px rgb(220 38 38 / 20%);
+        }
   }
 `;
 
@@ -116,9 +119,8 @@ export const StyledRadios = styled.div`
 `;
 
 export const StyledLoginBtn = styled.button`
-  ${tw`
+    ${tw`
         bg-red-800
-        hover:bg-red-700
         text-white
         font-bold
         py-3
@@ -127,9 +129,40 @@ export const StyledLoginBtn = styled.button`
         w-full
         transition-all
         shadow-lg
-
+        cursor-pointer
     `}
+    &:hover:not(:disabled) {
+        ${tw`bg-red-700 brightness-95`}
+    }
+    &:active:not(:disabled) {
+        ${tw`scale-[0.98]`}
+    }
   
+`;
+
+export const StyledKakaoLoginBtn = styled.button`
+    ${tw`
+        cursor-pointer
+        w-full
+        py-3
+        bg-[#FEE500]
+        text-[#191919]
+        rounded-xl
+        text-sm
+        font-medium
+        transition-all
+        flex
+        items-center
+        justify-center
+        gap-2
+    `}
+    &:hover:not(:disabled) {
+        ${tw`brightness-95`}
+    }
+    &:active:not(:disabled) {
+        ${tw`scale-[0.98]`}
+    }
+
 `;
 
 export const StyledSignUpBtn = styled.button`

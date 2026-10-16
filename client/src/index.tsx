@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import { AxiosInterceptor } from './components/AxiosInterceptor';
+import { SocketConnection } from './utils/SocketConnection';
 
 
 const root = ReactDOM.createRoot(
@@ -19,13 +20,23 @@ const queryClient = new QueryClient()
 
 root.render(
   <QueryClientProvider client={queryClient}>
-  <RecoilRoot>
-    <BrowserRouter>
-    <AxiosInterceptor />
-    <Toaster position="top-center" reverseOrder={false} />
-      <App />
-    </BrowserRouter>
-  </RecoilRoot>
+    <RecoilRoot>
+      <BrowserRouter>
+          <Toaster position="top-center" reverseOrder={false} />
+        <SocketConnection />
+        <AxiosInterceptor>
+          <Suspense fallback={
+            <div role="status" className="flex min-h-screen items-center justify-center bg-[#111111] text-sm text-gray-400">
+              화면을 불러오는 중...
+            </div>
+          }>
+
+
+          <App />
+          </Suspense>
+        </AxiosInterceptor>
+      </BrowserRouter>
+    </RecoilRoot>
   </QueryClientProvider>
 );
 

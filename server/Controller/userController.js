@@ -5,9 +5,46 @@ const kakaoUser = require("../Models/kakaoUserModel");
 const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
 
+//*유저정보다시 가져오기
+const getMe = async (req, res) => {
+  const userId = req.user?.id;
+  if (!userId) {
+    return res.status(401).json({ message: "login required", success: false });
+  }
+
+  try {
+    const user =
+      (await regularUser.findById(userId)) ||
+      (await kakaoUser.findById(userId));
+
+    if (!user) {
+      return res.status(404).json({ message: "no user found", success: false });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user: {
+        objectId: user._id,
+        email: user.email,
+        kakaoId: user.kakaoId,
+        name: user.name,
+        role: user.role,
+        ptCount: user.ptCount,
+      },
+    });
+  } catch (error) {
+    console.error("getMe", error);
+    return res.status(500).json({
+      success: false,
+      message: "회원 정보 조회에 실패했습니다.",
+    });
+  }
+};
+
 //*일반 로그인
 const loginRegularUser = async (req, res) => {
   const { role, email, password } = req.body;
+  console.log('role', role,email)
 
   try {
     const user = await regularUser.findOne({ email });
@@ -41,7 +78,7 @@ const loginRegularUser = async (req, res) => {
         role: user.role,
         name: user.name,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_ACCESS_SECRET,
       { expiresIn: "1h" },
     );
 
@@ -52,7 +89,7 @@ const loginRegularUser = async (req, res) => {
         role: user.role,
         name: user.name,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" },
     );
 
@@ -86,6 +123,8 @@ const loginRegularUser = async (req, res) => {
 const loginKakaoUser = async (req, res) => {
   const { code, selectedRole } = req.body;
 
+  console.log("code", code, selectedRole);
+
   if (selectedRole !== "member" && selectedRole !== "trainer") {
     return res
       .status(400)
@@ -114,9 +153,8 @@ const loginKakaoUser = async (req, res) => {
       body: params,
     });
 
-    
     const tokenData = await tokenRes.json();
-    
+
     if (!tokenRes.ok || !tokenData.access_token) {
       return res.status(400).json({ message: "failed to issue kakao token" });
     }
@@ -148,7 +186,7 @@ const loginKakaoUser = async (req, res) => {
         role: user.role,
         name: user.name,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_ACCESS_SECRET,
       { expiresIn: "1h" },
     );
 
@@ -159,7 +197,7 @@ const loginKakaoUser = async (req, res) => {
         role: user.role,
         name: user.name,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" },
     );
 
@@ -173,16 +211,20 @@ const loginKakaoUser = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "login successful",
-      objectId: user._id,
-      kakaoId: user.kakaoId,
-      name: user.name,
-      role: user.role,
-      ptCount: user.ptCount,
-      token,
+      user: {
+        objectId: user._id,
+        kakaoId: user.kakaoId,
+        name: user.name,
+        role: user.role,
+        ptCount: user.ptCount,
+        token,
+      },
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: "internal server errro" });
+    return res
+      .status(500)
+      .json({ success: false, message: "internal server errro" });
   }
 };
 
@@ -237,6 +279,7 @@ const logout = async (req, res) => {
 };
 
 module.exports = {
+  getMe,
   signupUser,
   checkEmail,
   loginRegularUser,

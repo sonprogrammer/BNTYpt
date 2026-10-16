@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyledBox, StyledContainer, StyledLoginBtn, StyledLoginInput, StyledRadios, StyledSignUpBtn } from './style'
+import { StyledBox, StyledContainer, StyledLoginBtn,StyledKakaoLoginBtn, StyledLoginInput, StyledRadios, StyledSignUpBtn } from './style'
 import SignupComponent from './SignupComponent';
 import toast from 'react-hot-toast'
 import { useKakaoLogin } from '../../hooks/useKakaoLogin';
@@ -16,6 +16,7 @@ const LandingComponent = () => {
 
 
     const { mutate: regularLogin} = useRegularLogin()
+    const {handleKakaoLogin } = useKakaoLogin()
 
 
 
@@ -30,6 +31,15 @@ const LandingComponent = () => {
 
     const hanldeSignup = () => {
         setSignup(true)
+    }
+
+    const handleKakao = () => {
+        if(!selectedRole){
+            toast.error('역할을 선택하세요')
+            return
+        }
+        handleKakaoLogin()
+        
     }
 
     const handleLogin = async () => {
@@ -84,7 +94,10 @@ const LandingComponent = () => {
 
                             <div className="flex flex-col gap-3 w-full items-center">
 
-                                <StyledLoginBtn onClick={handleLogin}>로그인</StyledLoginBtn>
+                                <StyledLoginBtn disabled={!selectedRole} onClick={handleLogin}>로그인</StyledLoginBtn>
+                                <StyledKakaoLoginBtn   onClick={handleKakao}>
+                                    카카오 로그인
+                                </StyledKakaoLoginBtn>
                                 
 
                             </div>

@@ -18,8 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 postRouter.post('/', upload.array('images'),authenticate, createPost)
-postRouter.get('/user/email/:email',authenticate, getUserPosts)
-postRouter.get('/user/kakao/:kakaoId',authenticate, getUserPosts)
+postRouter.get('/user',authenticate, getUserPosts)
 postRouter.delete('/delete/:photoId',authenticate, deletePosts)
 
 module.exports = postRouter

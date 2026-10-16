@@ -1,12 +1,11 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { FileInputWrapper, PreviewContainer, StyledBtn, StyledContainerForm, StyledSubmitEl, StyledTitle, StyledTitleInput } from './style';
-import { useRecoilValue } from 'recoil';
 
 import { Image as ImageIcon, CloudUpload } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
 import { useCreateBodyCheckPost } from '../../hooks/useCreateBodyCheckPost';
-import { userState } from '../../state/userState';
+
 
 
 
@@ -15,7 +14,6 @@ const PostForm = ({onSuccess}: {onSuccess: () => void}) => {
   const [text, setText] = useState<string>('');
   const [images, setImages] = useState<File[]>([]);
   const [imagePreview, setImagePreview] = useState<string[]>([]);
-  const user = useRecoilValue(userState)
 
   const { mutate: createPost, isPending} = useCreateBodyCheckPost()
 
@@ -39,7 +37,7 @@ const PostForm = ({onSuccess}: {onSuccess: () => void}) => {
 
     const toastId = toast.loading('이미지를 업로드 중입니다...');
 
-    createPost({text,files: images, email: user?.email, kakaoId: user?.kakaoId}, {
+    createPost({text,files: images}, {
       onSuccess: () => {
         toast.success('저장 완료', {id: toastId})
         setText('')

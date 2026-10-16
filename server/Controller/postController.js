@@ -1,106 +1,87 @@
-const Post = require('../Models/postModel')
-const regularUser = require('../Models/regularUserModel')
-const kakaoUser = require('../Models/kakaoUserModel')
-const cloudinary = require('cloudinary')
+const Post = require("../Models/postModel");
+const regularUser = require("../Models/regularUserModel");
+const kakaoUser = require("../Models/kakaoUserModel");
+const mongoose = require("mongoose")
 
 const createPost = async (req, res) => {
-    try {
-        const { text, email, kakaoId, images } = req.body
-
-        let user
-
-        if(email){
-            user = await regularUser.findOne({ email })
-            if(!user){
-                return res.status(404).json({ success: false, message: 'user not found' })
-            }
-        }
-
-        if(kakaoId){
-            user = await kakaoUser.findOne({ kakaoId })
-            if(!user){
-                return res.status(404).json({ success: false, message: 'user not found' })
-            }
-        }
-
-        if(!user){
-            return res.status(404).json({ success: false, message: 'user not found'})
-        }
-
-
-    
-
-        const newPost = new Post({
-            text,
-            images,
-            userId : user._id,
-            createdAt: new Date()
-        })
-
-        await newPost.save()
-        res.status(200).json({ success: true, post: newPost })
-        
-    } catch (error) {
-        console.log('error in createPost', error)
-        res.status(500).json({ success: false, message: error.message })
+  const { text, images } = req.body;
+  const userId = req.user.id;
+  if (!userId) {
+    return res.status(401).json({ message: "login required", success: false });
+  }
+  try {
+    let user = await regularUser.findById(userId);
+    if (!user) {
+      user = await kakaoUser.findById(userId);
     }
-}
-
-const getPost = async(req, res) =>{
-    try {
-        const posts = await Post.find().populate('userId', 'name role')
-        res.status(200).json({ success: true, posts })
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message })
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "user not found",
+      });
     }
-}
+
+    const newPost = new Post({
+      text,
+      images,
+      userId: user._id,
+      createdAt: new Date(),
+    });
+
+    await newPost.save();
+    res.status(200).json({ success: true, post: newPost });
+  } catch (error) {
+    console.log("error in createPost", error);
+    res.status(500).json({ success: false, message: "fdsafsda" });
+  }
+};
 
 const getUserPosts = async (req, res) => {
-    try {
-        const { email, kakaoId } = req.params
-        
+  const userId = req.user?.id;
+  if (!userId) {
+    return res.status(401).json({ message: "login required", success: false });
+  }
+  try {
+    const posts = await Post.find({ userId });
 
+    return res.status(200).json({ success: true, posts });
+  } catch (error) {
+    console.error("Error in getUserPosts:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
 
-        let user
-        if(email){
-            user = await regularUser.findOne({ email})
-        }else if(kakaoId){
-            user = await kakaoUser.findOne({ kakaoId })
-        }
-        
-        if(!user){
-            return res.status(404).json({ success: false, message: 'user not found' })
-        }
-        
-        const posts = await Post.find({ userId: user._id }).populate('userId', 'name role')
+const deletePosts = async (req, res) => {
+  const { photoId } = req.params;
+  const userId = req.user?.id;
+  if (!userId) {
+    return res.status(401).json({ message: "login required", success: false });
+  }
+  if (!mongoose.isValidObjectId(photoId)) {
+    return res.status(400).json({
+      success: false,
+      message: "유효하지 않은 게시물 ID입니다.",
+    });
+  }
 
-        if (!posts) {
-            return res.status(404).json({ success: false, message: 'No posts found for this user' });
-        }
-
-        res.status(200).json({ success: true, posts})
-    } catch (error) {
-        console.error('Error in getUserPosts:', error); 
-        res.status(500).json({ success: false, message: error.message })
+  try {
+    const photo = await Post.findOneAndDelete({
+      _id: photoId,
+      userId,
+    });
+    if (!photo) {
+      return res
+        .status(404)
+        .json({ success: false, message: "there is no photo" });
     }
-}
 
-const deletePosts = async(req, res) => {
-    const { photoId} = req.params
+    return res.status(200).json({ success: true, message: "success" })
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "internal server erorr" });
+  }
+};
 
-    try {
-        
-        const photo = await Post.findById(photoId)
-        if(!photo){
-            return res.status(404).json({success: false,message: 'there is no photo'})
-        }
-        
-        await Post.findByIdAndDelete(photoId)
-        res.status(200).json({success:true, message: 'success'})
-    } catch (error) {
-        console.log(error)    
-        return res.status(500).json({success: false, message: 'internal server erorr'})
-    }
-}
-
-module.exports = { createPost, getPost, getUserPosts, deletePosts}
+module.exports = { createPost, getUserPosts, deletePosts };

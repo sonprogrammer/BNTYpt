@@ -27,10 +27,10 @@ const ChatRoomComponent = () => {
     const [preview, setPreview] = useState<string | null>(null)
 
 
-    const { data: chatRoomId, isPending: isRoomPending } = useGetChatRoomId(user.objectId, opponentName)
-    const { data: messages = [], isPending: isMsgPending } = useGetChatMsgs(chatRoomId ?? undefined, user.objectId)
+    const { data: chatRoomId, isPending: isRoomPending } = useGetChatRoomId(opponentName)
+    const { data: messages = [], isPending: isMsgPending } = useGetChatMsgs(chatRoomId ?? undefined)
 
-    useChatRealtime(chatRoomId ?? undefined, user.objectId)
+    useChatRealtime(chatRoomId ?? undefined)
 
     const { mutateAsync: sendMsg, isPending: isSending } = useSendChatMsg()
 
@@ -55,7 +55,7 @@ const ChatRoomComponent = () => {
         if ((!input.trim() && !selectedFile) || !chatRoomId || !user?.objectId) return
 
         try {
-            await sendMsg({ chatRoomId, senderId: user.objectId, text: input, file: selectedFile })
+            await sendMsg({ chatRoomId, text: input, file: selectedFile })
             setInput('')
             setSelectedFile(null)
             setPreview(null)

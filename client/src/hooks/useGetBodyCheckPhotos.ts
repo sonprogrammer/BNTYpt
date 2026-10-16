@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "../utils/axiosInstance";
+import { axiosInstance } from "./useAxiosInterceptor";
 import dayjs from "dayjs";
-
-const apiUrl = process.env.REACT_APP_API_URL;
+import { userState } from "../state/userState";
+import { useRecoilValue } from "recoil";
 
 interface BodyCheckPost {
   _id: string;
@@ -22,31 +22,23 @@ export interface BodyCheckPhoto {
 }
 
 
-const getBodyCheckPhotos = async (email?: string , kakaoId?: string): Promise<BodyCheckPhoto[]> => {
-  let url = ``
-
-  if (email) {
-    url = `${apiUrl}/api/posts/user/email/${email}`
-  } else if (kakaoId) {
-    url = `${apiUrl}/api/posts/user/kakao/${kakaoId}`
-  }
-
-  const res = await axiosInstance.get<BodyCheckRes>(url)
+const getBodyCheckPhotos = async (): Promise<BodyCheckPhoto[]> => {
+  const res = await axiosInstance.get<BodyCheckRes>('/posts/user')
   return res.data.posts.map(post => ({
     imageUrl: post.images[0],
     uploadTime: dayjs(post.date).format('YYYY-MM-DD'),
     text: post.text,
     imageId: post._id
-  })).sort((a,b) => new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime())
+  })).sort((a, b) => new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime())
 
 }
 
-export function useGetBodyCheckPhotos(email?: string, kakaoId?: string){
+export function useGetBodyCheckPhotos() {
+  const user = useRecoilValue(userState)
   return useQuery({
-    queryKey: ['bodyCheckPhotos', email, kakaoId],
-    queryFn: () => getBodyCheckPhotos(email, kakaoId),
+    queryKey: ['bodyCheckPhotos', user.objectId],
+    queryFn: () => getBodyCheckPhotos(),
     staleTime: 1000 * 60 * 10,
-    gcTime: 1000 * 60 * 30,
-    enabled: !!email || !!kakaoId
+    gcTime: 1000 * 60 * 30
   })
 }

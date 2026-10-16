@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "../utils/axiosInstance";
-const apiUrl = process.env.REACT_APP_API_URL;
+import { axiosInstance } from "./useAxiosInterceptor";
+import { useRecoilValue } from "recoil";
+import { userState } from "../state/userState";
 
 interface ChatMessage {
   _id: string;
@@ -30,9 +31,9 @@ interface ResponseData{
     userName: string;
 }
 
-const getMembers = async(userId: string) => {
+const getMembers = async() => {
     try {
-        const res = await axiosInstance.get<ResponseData>(`${apiUrl}/api/chat/chatrooms/${userId}`)
+        const res = await axiosInstance.get<ResponseData>(`/chat/chatrooms`)
         if(res.data){
             const memebersName = res.data.chatRooms.map((room) => ({
                 memberId: room.memberId,
@@ -47,10 +48,12 @@ const getMembers = async(userId: string) => {
     }
 }
 
-const useGetMembers = (userId: string) => {
+const useGetMembers = () => {
+    const user = useRecoilValue(userState)
+    
     return useQuery({
-        queryKey: ['Trainermembers', userId],
-        queryFn: () => getMembers(userId),
+        queryKey: ['Trainermembers', user.objectId],
+        queryFn: () => getMembers(),
         
     })
 }

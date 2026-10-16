@@ -19,14 +19,12 @@ interface Post {
   text: string;      
   images: string[];  
   uploadTime: string;
-  trainerId: string; 
   memberId: string;  
   __v: number;       
   imageUrl?: string; 
 }
 interface PostListProps {
   eachMember: Post[]
-  refetch: () => void
 }
 
 const getOptimizedImageUrl = (url: string) => {
@@ -34,7 +32,7 @@ const getOptimizedImageUrl = (url: string) => {
   return url.replace('/upload/', '/upload/f_auto,q_auto,w_600/');
 };
 
-const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
+const PostListComponent = ({ eachMember }: PostListProps) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [editMode, setEditMode] = useState<boolean>(false)
@@ -43,11 +41,10 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
 
   const currentUserRole = useRecoilValue(userRoleSelector)
 
-  const trainerId = selectedPost?.trainerId || ''
   const memberId = selectedPost?.memberId || ''
 
-  const deletMutation = useDeleteNote(memberId, trainerId)
-  const editMutation = usePutNote(memberId, trainerId)
+  const deletMutation = useDeleteNote(memberId)
+  const editMutation = usePutNote(memberId)
 
 
   const orderedPosts = useMemo(() => {
@@ -70,7 +67,6 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
   const handleDelete = async(noteId: string) => {
       deletMutation.mutate(noteId, {
         onSuccess: () => {
-          refetch()
           toast.success('삭제되었습니다!')
           setModalOpen(false)
         }
@@ -93,9 +89,6 @@ const PostListComponent = ({ eachMember, refetch }: PostListProps) => {
           setEditMode(false)
           toast.success('수정 완료')
         },
-        onError: () => {
-          toast.error('수정 실패')
-        }
       }
     )
   }

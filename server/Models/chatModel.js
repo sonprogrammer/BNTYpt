@@ -47,5 +47,8 @@ const chatSchema = new mongoose.Schema({
     }]
 }, { timestamps: true})
 
+chatSchema.index({ trainerId: 1, memberId: 1 }, { unique: true })
+
+
 const ChatRoom = mongoose.model('ChatRoom', chatSchema)
 module.exports = ChatRoom

@@ -1,15 +1,11 @@
-import { axiosInstance } from './../utils/axiosInstance';
+import { axiosInstance } from "./useAxiosInterceptor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 
-const apiUrl = process.env.REACT_APP_API_URL;
-
 interface CreatePostParams {
     text: string;
     files: File[];
-    email?: string;
-    kakaoId?: string;
 }
 
 interface CreatePostRes {
@@ -35,12 +31,12 @@ const uploadImageToCloudinary = async (file: File): Promise<string> => {
     return res.data.secure_url
 }
 
-const createBodyCheckPost = async({text, files, email, kakaoId}: CreatePostParams) => {
+const createBodyCheckPost = async({text, files}: CreatePostParams) => {
     const uploadImageUrls = await Promise.all(files.map(file => uploadImageToCloudinary(file)))
 
-    const body = {text,images: uploadImageUrls, ...(kakaoId ? { kakaoId} : { email})}
+    const body = {text,images: uploadImageUrls}
 
-    const res = await axiosInstance.post<CreatePostRes>(`${apiUrl}/api/posts`, body)
+    const res = await axiosInstance.post<CreatePostRes>(`/posts`, body)
 
     return res.data
 }

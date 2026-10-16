@@ -1,11 +1,8 @@
 import React, { FormEvent, useState } from 'react'
 import { ImagePreviewWrapper, StyledBtn, StyledContainerForm, StyledRecord, StyledMemberName, StyledSubmitEl, StyledTextArea, StyledTitle, StyledUpper } from './style';
-import { useRecoilValue } from 'recoil';
-
 import axios from 'axios';
 import { Image as ImageIcon, CloudUpload } from 'lucide-react';
 import toast from 'react-hot-toast'
-import { userState } from '../../state/userState';
 import { usePostNote } from '../../hooks/usePostNote';
 
 
@@ -15,7 +12,6 @@ interface Record {
     images: string[];
     uploadTime: string;
     imageUrl?: string;
-    userObjectId: string;
     memberId: string
 }
 
@@ -35,9 +31,6 @@ const NotePostFormComponent = ({ closeModal, selectedMember }: NotePostFormCompo
     const [title, setTitle] = useState<string>('');
     const [images, setImages] = useState<File[]>([]);
     const [previewImages, setPreviewImages] = useState<string[]>([]);
-
-
-    const user = useRecoilValue(userState)
 
     const { mutateAsync: createNote, isPending} = usePostNote()
 
@@ -81,7 +74,6 @@ const NotePostFormComponent = ({ closeModal, selectedMember }: NotePostFormCompo
                 text,
                 images: uploadedImageUrls,
                 uploadTime: new Date().toISOString(),
-                userObjectId: user.objectId,
                 memberId: selectedMember.memberId
             }
             await createNote(formData)

@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { axiosInstance } from "../utils/axiosInstance";
+import { axiosInstance } from "./useAxiosInterceptor";
 
 
 const logoutUser = async() => {
-    const res = await axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/user/logout`)
+    const res = await axiosInstance.post(`/user/logout`)
     return res.data
 }
 
