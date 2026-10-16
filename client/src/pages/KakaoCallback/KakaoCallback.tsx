@@ -3,7 +3,7 @@ import { useSetRecoilState } from "recoil"
 import { accessTokenState, userState } from "../../state/userState"
 import { useEffect, useRef } from "react"
 import toast from "react-hot-toast"
-import axios from "axios"
+import { axiosInstance } from "../../hooks/useAxiosInterceptor"
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -31,7 +31,7 @@ export function KakaoCallbackPage() {
             }
 
             try {
-                const res = await axios.post(`${apiUrl}/api/user/login/kakao`, { code, selectedRole }, { withCredentials: true })
+                const res = await axiosInstance.post(`/user/login/kakao`, { code, selectedRole }, { withCredentials: true })
                 if (res.status === 200 && res.data.success) {
                     const userData = res.data.user
                     setUser(userData)
