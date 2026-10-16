@@ -7,29 +7,29 @@ import { useMutation } from "@tanstack/react-query";
 import { userState, accessTokenState } from "../state/userState";
 
 const apiUrl = process.env.REACT_APP_API_URL;
-interface RegularLoginParams{
+interface RegularLoginParams {
     email: string;
     password: string;
     role: string
 }
 
 interface RegularLoginResponse {
-  success: boolean;
-  message?: string;
-  user: {
-    email: string;
-    name: string;
-    role: string;
-    objectId: string;
-    ptCount: number;
-    token: string;
-  };
+    success: boolean;
+    message?: string;
+    user: {
+        email: string;
+        name: string;
+        role: string;
+        objectId: string;
+        ptCount: number;
+        token: string;
+    };
 }
 
-const regularLogin = async ({email,password,role}:RegularLoginParams) => {
+const regularLogin = async ({ email, password, role }: RegularLoginParams) => {
     const res = await axios.post<RegularLoginResponse>(`${apiUrl}/api/user/login/regular`, {
         email, password, role
-    },{withCredentials: true})
+    }, { withCredentials: true })
     return res.data
 }
 
@@ -41,12 +41,12 @@ export const useRegularLogin = () => {
 
     return useMutation({
         mutationFn: regularLogin,
-        onSuccess: (data) =>{
-            if(!data.success){
+        onSuccess: (data) => {
+            if (!data.success) {
                 toast.error(data.message ?? '로그인에 실패했습니다')
-                return 
+                return
             }
-            
+
             const newUser = {
                 email: data.user.email,
                 name: data.user.name,
