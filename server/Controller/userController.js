@@ -44,7 +44,6 @@ const getMe = async (req, res) => {
 //*일반 로그인
 const loginRegularUser = async (req, res) => {
   const { role, email, password } = req.body;
-  console.log('role', role,email)
 
   try {
     const user = await regularUser.findOne({ email });
@@ -122,8 +121,6 @@ const loginRegularUser = async (req, res) => {
 //* 카카오톡 로그인
 const loginKakaoUser = async (req, res) => {
   const { code, selectedRole } = req.body;
-
-  console.log("code", code, selectedRole);
 
   if (selectedRole !== "member" && selectedRole !== "trainer") {
     return res

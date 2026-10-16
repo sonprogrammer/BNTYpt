@@ -20,7 +20,6 @@ const AlbumSkeleton = () => (
 
 const BodyCheckPage = () => {
   const user = useRecoilValue(userState)
-  console.log('user', user)
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
 
 

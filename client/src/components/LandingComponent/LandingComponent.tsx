@@ -95,7 +95,7 @@ const LandingComponent = () => {
                             <div className="flex flex-col gap-3 w-full items-center">
 
                                 <StyledLoginBtn disabled={!selectedRole} onClick={handleLogin}>로그인</StyledLoginBtn>
-                                <StyledKakaoLoginBtn   onClick={handleKakao}>
+                                <StyledKakaoLoginBtn type="button"  onClick={handleKakao}>
                                     카카오 로그인
                                 </StyledKakaoLoginBtn>
                                 

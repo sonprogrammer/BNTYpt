@@ -11,14 +11,11 @@ const QrcodeComponent = lazy(() => import('../../components').then(module => ({ 
 const MainPage = () => {
   const [addMemeber, setAddMember] = useState<boolean>(false)
   const user = useRecoilValue(userState)
-  console.log('user', user)
 
   const { data, isPending } = useGetUserPtCount(user?.objectId, user?.role === 'member')
 
   const ptCount = data?.data
-// if (!user.role) return (
-//   <p>hi</p>
-// )
+
   return (
     <StyledMainContainer>
       <StyledDashboardCard>

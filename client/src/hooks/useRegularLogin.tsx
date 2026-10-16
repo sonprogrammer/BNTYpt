@@ -30,7 +30,6 @@ const regularLogin = async ({email,password,role}:RegularLoginParams) => {
     const res = await axios.post<RegularLoginResponse>(`${apiUrl}/api/user/login/regular`, {
         email, password, role
     },{withCredentials: true})
-    console.log('res', res.data)
     return res.data
 }
 

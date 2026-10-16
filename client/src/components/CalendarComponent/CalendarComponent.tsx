@@ -25,7 +25,6 @@ const CalendarComponent = () => {
     const [diet, setDiet] = useState<string>('')
 
     const user = useRecoilValue(userState)
-    console.log('user', user)
 
 
 
@@ -61,7 +60,7 @@ const CalendarComponent = () => {
 
 
     const handlePostClick = () => {
-        if (!user?.email && !user?.kakaoId) {
+        if (!user) {
             toast.error('사용자 정보를 확인할 수 없습니다.')
             return
         }
