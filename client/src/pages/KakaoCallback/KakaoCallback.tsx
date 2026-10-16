@@ -5,8 +5,6 @@ import { useEffect, useRef } from "react"
 import toast from "react-hot-toast"
 import { axiosInstance } from "../../hooks/useAxiosInterceptor"
 
-const apiUrl = process.env.REACT_APP_API_URL;
-
 export function KakaoCallbackPage() {
     const navigate = useNavigate()
     const setUser = useSetRecoilState(userState)
