@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import toast from "react-hot-toast";
 import { useSetRecoilState } from "recoil";
 
@@ -7,7 +7,6 @@ import { useMutation } from "@tanstack/react-query";
 import { userState, accessTokenState } from "../state/userState";
 import { axiosInstance } from "./useAxiosInterceptor";
 
-const apiUrl = process.env.REACT_APP_API_URL;
 interface RegularLoginParams {
     email: string;
     password: string;
