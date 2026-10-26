@@ -3,7 +3,7 @@
  
 
  ### [Go to BNTY](https://bnty.netlify.app/)
- ⚠️ 현재 Render 무료 사용량 소진으로 백엔드 서버가 일시 중단(Suspended)되어 일부 기능이 정상적으로 동작하지 않을 수 있습니다. ⚠️
+ ⚠️ 2026년 10월 기준, Render 무료 사용량 소진으로 백엔드 서버가 일시 중단(Suspended)되어 일부 기능이 정상적으로 동작하지 않을 수 있습니다. ⚠️
 
  communication between member and trainer.
  <br>
