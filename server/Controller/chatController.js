@@ -51,19 +51,26 @@ const createChatRoom = async (req, res) => {
     }
     const existingRoom = await ChatRoom.findOne({ trainerId, memberId });
 
-    if (!existingRoom) {
-      const chatRoom = new ChatRoom({
-        trainerId: trainer._id,
-        trainerName: trainer.name,
-        memberId: member._id,
-        memberName: member.name,
-        messages: [],
+    if (existingRoom) {
+      return res.status(200).json({
+        success: true,
+        newlyConnected: false,
+        message: "이미 연결된 트레이너입니다.",
       });
-      await chatRoom.save();
     }
+
+    const chatRoom = new ChatRoom({
+      trainerId: trainer._id,
+      trainerName: trainer.name,
+      memberId: member._id,
+      memberName: member.name,
+      messages: [],
+    });
+
+    await chatRoom.save();
     return res
-      .status(200)
-      .json({ success: true, message: "chatroom is ready" });
+      .status(201)
+      .json({ success: true, message: "트레이너 연결 완료", newlyConnected: true });
   } catch (error) {
     console.error("createChatRoom", error);
     return res.status(500).json({
@@ -335,7 +342,7 @@ const subtractPtCount = async (req, res) => {
     if (!updatedMember) {
       return res.status(409).json({
         success: false,
-        message: "차감 가능한 PT 횟수가 없습니다.",
+        message: "수업일수가 끝났습니다.",
       });
     }
     return res
@@ -351,9 +358,9 @@ const subtractPtCount = async (req, res) => {
 
 const getPtCount = async (req, res) => {
   const { memberId } = req.params;
-  const userId = req.user?.id
-  if(!userId){
-    return res.status(401).json({message: 'login required', success: false})
+  const userId = req.user?.id;
+  if (!userId) {
+    return res.status(401).json({ message: "login required", success: false });
   }
 
   try {

@@ -3,6 +3,8 @@ import { useRecoilState } from 'recoil'
 import toast from 'react-hot-toast'
 import { axiosInstance } from "./useAxiosInterceptor";
 import { userState } from '../state/userState'
+import axios from 'axios';
+import { useQueryClient } from '@tanstack/react-query'
 
 interface ScanResult {
     text: string
@@ -14,6 +16,7 @@ export function useQrCheckIn() {
     const [isCameraOpen, setIsCameraOpen] = useState(false)
     const scanLock = useRef(false)
     const requesting = useRef(false)
+    const queryClient = useQueryClient()
 
     const handleScan = async (trainerId: string) => {
         if (scanLock.current || !trainerId) return
@@ -25,17 +28,32 @@ export function useQrCheckIn() {
         setIsScanning(true)
         requesting.current = true
         try {
-            await axiosInstance.post('/chat', { trainerId })
-            const res = await axiosInstance.post<{ ptCount: number }>('/chat/pt/check-in', { trainerId })
-            setUser(prev => ({
-                ...prev,
-                ptCount: res.data.ptCount
-            }))
+            const { data } = await axiosInstance.post('/chat', { trainerId })
+            if (data.newlyConnected) {
+                toast.success('트레이너 연결이 완료 되었습니다.')
+            } else {
+                const res = await axiosInstance.post<{ ptCount: number }>('/chat/pt/check-in', { trainerId })
+                const ptCount = res.data.ptCount
+                queryClient.setQueryData(
+                    ['userPtCount', user.objectId],
+                    (previous: { success: boolean; message?: string; data?: number } | undefined) => ({
+                        ...previous,
+                        success: true,
+                        data: ptCount
+                    })
+                )
+                setUser(prev => ({
+                    ...prev,
+                    ptCount: res.data.ptCount
+                }))
+                toast.success('수업 시작')
+            }
             setIsCameraOpen(false)
-            toast.success('수업 시작')
         } catch (error) {
             console.error('QR 체크인 실패', error)
-            toast.error('처리에 실패했습니다. 잠시 후 다시 시도해주세요.')
+            const message = axios.isAxiosError<{ message?: string }>(error) ? error.response?.data.message : undefined
+            setIsCameraOpen(false)
+            toast.error(message || '처리에 실패했습니다. 잠시 후 다시 시도해주세요.')
         } finally {
             setIsScanning(false)
             requesting.current = false
