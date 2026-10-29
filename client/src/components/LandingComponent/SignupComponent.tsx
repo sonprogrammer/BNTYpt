@@ -47,7 +47,7 @@ const SignupComponent = () => {
             <h1>BNTY</h1>
             <StyledLoginInput>
                 <StyledEmail>
-                    <input type="email" placeholder='ID (Email)' onChange={(e) => setEmail(e.target.value)} />
+                    <input type="text" placeholder='ID' onChange={(e) => setEmail(e.target.value)} />
                     <StyledCheckBtn>
                         {isLoading ? (
                             <Loader2
