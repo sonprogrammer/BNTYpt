@@ -1,9 +1,11 @@
-import {lazy, Suspense } from 'react'
-import { StyledContainer, StyledMemberBox, StyledTrainerBox } from './style'
+import { lazy, Suspense, useEffect } from 'react'
+import { StyledContainer, StyledTrainerBox } from './style'
 import { useQrCheckIn } from '../../hooks/useQrCheckIn';
+import { QrReader } from './QrReader';
+import { createPortal } from 'react-dom';
 
 const QRCodeCanvas = lazy(() => import('qrcode.react').then(module => ({ default: module.QRCodeCanvas })))
-const StyledQrReader = lazy(() => import('./style').then(module => ({ default: module.StyledQrReader })))
+// const StyledQrReader = lazy(() => import('./style').then(module => ({ default: module.StyledQrReader })))
 interface QrcodeComponentProps {
     role: string | null;
 }
@@ -19,6 +21,20 @@ const videoConstraints = {
 const QrcodeComponent = ({ role }: QrcodeComponentProps) => {
     const { user, isScanning, isCameraOpen, handleResult, handleQrError, openCamera, closeCamera } = useQrCheckIn()
 
+    useEffect(() => {
+        if (!isCameraOpen) return
+        const previousOverflow = document.body.style.overflow
+        document.body.style.overflow = 'hidden'
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && !isScanning) closeCamera()
+        }
+        document.addEventListener('keydown', handleKeyDown)
+        return () => {
+            document.body.style.overflow = previousOverflow
+            document.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [isCameraOpen, isScanning, closeCamera])
+
 
     return (
         <StyledContainer className='hi'>
@@ -33,38 +49,25 @@ const QrcodeComponent = ({ role }: QrcodeComponentProps) => {
 
                     </StyledTrainerBox>
                 ) : role === 'member' ? (
-                    <StyledMemberBox className='camera'>
-                        {isCameraOpen ?
-                            <div>
-                                <StyledQrReader
-                                    onScan={handleResult}
-                                    delay={500}
-                                    onError={handleQrError}
-                                    constraints={videoConstraints}
-                                />
-                                <p role="status" className="mt-4 text-center text-sm text-gray-400">
-                                    {isScanning ? '수업 정보를 처리하고 있어요...' : '트레이너의 QR코드를 스캔해주세요.'}
-                                </p>
-                                <button
-                                    type="button"
-                                    onClick={closeCamera}
-                                    disabled={isScanning}
-                                    className="mx-auto my-7 block text-sm text-gray-400 transition hover:text-red-500 disabled:opacity-50"
-                                >
-                                    카메라 닫기
-                                </button>
-                            </div>
-                            :
-                            <button
-                                type='button'
-                                onClick={openCamera}
-                                className='font-bold text-xl hover:cursor-pointer hover:text-red-900'
-                            >
-                                QR코드 스캔하기
-                            </button>
-                        }
-                    </StyledMemberBox>
+                    <button
+                        type="button"
+                        onClick={openCamera}
+                        className="flex w-full items-center justify-center gap-3 rounded-2xl bg-blue-600 px-6 py-4 font-semibold text-white transition hover:bg-blue-500"
+                    >
+                        QR 코드 스캔
+                    </button>
                 ) : null}
+
+                {role === 'member' && isCameraOpen && createPortal(
+                    <QrReader
+                        closeCamera={closeCamera}
+                        isScanning={isScanning}
+                        handleResult={handleResult}
+                        handleQrError={handleQrError}
+                        videoConstraints={videoConstraints}
+                    />,
+                    document.body
+                )}
             </Suspense>
         </StyledContainer>
     )
