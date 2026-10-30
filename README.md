@@ -1,15 +1,32 @@
 # BNTY (Be Next To You) 
-
+ communication between member and trainer. <br /><br />
  
 
  ### [Go to BNTY](https://bnty.netlify.app/)
  ⚠️ 2026년 10월 기준, Render 무료 사용량 소진으로 백엔드 서버가 일시 중단(Suspended)되어 일부 기능이 정상적으로 동작하지 않을 수 있습니다. ⚠️
 
- communication between member and trainer.
- <br>
- ✨ Website updated ✨ 
- -> you can check what features have been updated in the update section below
+<br /><br />
 
+<details>
+<summary>🎬 주요 기능 시연 보기</summary>
+
+### 1. QR로 트레이너 연결
+
+https://github.com/user-attachments/assets/bd6d1660-c649-4f09-861b-f2c78b5eb899
+
+### 2. 트레이너가 PT 횟수 추가
+
+https://github.com/user-attachments/assets/9b0ea4e2-1c03-42c9-8b45-4052fb8e76e5
+
+### 3. 회원 QR 체크인 및 PT 1회 차감
+
+https://github.com/user-attachments/assets/3d7ff0af-ae7e-49b0-bd48-8fffc5614b0b
+
+</details>
+
+-----
+
+ 
 
 ## Persona
 ![스크린샷 2024-10-18 14 42 44](https://github.com/user-attachments/assets/5b5a981d-00c5-4290-928f-92ae454d2bdc)
@@ -70,24 +87,6 @@ Actually i study and work part time as a trainer now, and i or members was incon
 - Notification
   - rebuilt alert and notification popups 
 
-
-<!--
-## Major color 
-1. gray
-2. dark red
-3. dark blue
--->
-
-<!-- ## Pages
- <p align="center" justify-contents="center">
-  <p>when role is member</p>
-  <img src="https://github.com/user-attachments/assets/7ada0cb3-68df-42b2-a857-ee2464a884f2" alt="Member Page" width="400"/>
-  <p>when role is trainer</p>
-  <img src="https://github.com/user-attachments/assets/a19c650c-96d0-48df-a0cd-c41f6b172663" alt="Trainer Page" width="400"/>
-  <p>login</p>
-  <img src="https://github.com/user-attachments/assets/1f120099-ca50-43d1-bea2-9ae89ce6639f" alt="Login Page" width="400"/>
-
-</p> -->
 
 
 ## troubleshooting  🔫
